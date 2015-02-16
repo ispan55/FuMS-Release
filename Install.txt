@@ -1,0 +1,67 @@
+Installation:
+#Assumes you have your headless client up and running
+1) place the 'HC' folder and all its subfolders into your mpmissions mission folder.
+2) Modify your 'init.sqf'
+             [] execVM "HC\Init.sqf";  
+
+3)Update your BattlEye filters form the included BattlEye_Filters.txt
+
+4) Modify your 'descriptions.ext':
+
+If CfgSounds and/or RscTitles are already defined in your descriptions.ext, then just add the code between the //************  comments to the appropriate 'class' code.
+class CfgSounds
+{
+//*******************
+    sounds[] = {};
+    class radio1
+    {
+        name = "radio01";
+        // filename, volume, pitch
+        sound[] = {"radio01.ogg",1,1};
+        titles[] = {0,""};
+    };
+//**********************
+};
+class RscTitles
+{
+//************************
+    class radioChatterBar {
+        idd = -1;
+        onLoad = "uiNamespace setVariable ['radioChatterBar', _this select 0]";
+        onUnload = "uiNamespace setVariable ['radoiChatterBar', objNull]";
+        onDestroy = "uiNamespace setVariable ['radioChatterBar', objNull]";
+        fadein = 0;
+        fadeout = 10;
+        duration = 10e10;
+        movingEnable = 0;
+        controlsBackground[] = {};
+        objects[] = {};
+        class controls {
+            class statusBarText {
+                idc = 1010;
+                x = safezoneX;
+                y = safezoneY; // upper left hand corner
+                //x = safezoneX + safezoneW - 1.5;
+                //y = safezoneY + safezoneH - 0.4; //H
+                w = 1; 
+                h = 0.3;  //hopefully makes it 10 lines tall
+                shadow = 2;
+                colorBackground[] = { 1, 0.3, 0, 0.0 };  // uncomment and increase 4th number to have a 	background
+                font = "PuristaSemibold";
+                size = 0.03;
+                type = 13;// CT_TYPES = CT_STRUCTURED_TEXT
+                style = 1;
+                text="Loading server info...";
+                class Attributes {
+                    align="left";
+                    color = "#FFFFFF"; //"#00FF09";BrightGreen   //#FF8700
+                };
+            };
+        };
+    };
+//***********************************
+};
+
+
+5) Place FuMS.pbo located in github/FuMS_HC/ServerPBO into your SERVER's @EpochHive\Addons folder.
+All mission file configuration is done from this .pbo.  You can use a tool such as PBO manager to open the pbo in the addons folder, modify files, then rebuild the pbo.
