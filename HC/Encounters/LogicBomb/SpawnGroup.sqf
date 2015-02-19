@@ -21,7 +21,9 @@ PolygonPatrol = compile preprocessFileLineNumbers "HC\Encounters\AI_Logic\Polygo
 AreaPatrol = compile preprocessFileLineNumbers "HC\Encounters\AI_Logic\AreaPatrol.sqf";
 Convoy = compile preprocessFileLineNumbers "HC\Encounters\AI_Logic\Convoy.sqf";
 ScriptPatrol = compile preprocessFileLineNumbers "HC\Encounters\AI_Logic\ScriptPatrol.sqf";
- private ["_data","_side","_behaviour","_combat","_form","_units","_patrol","_spawnpos","_patternOptions","_silentcheckin",
+ValidateAILogic = compile preprocessFileLineNumbers "HC\Encounters\AI_Logic\ValidateAILogic.sqf";
+
+ private ["_data","_side","_behaviour","_combat","_form","_units","_patrol","_spawnpos","_patternOptions","_silentcheckin","_validOptions",
 "_aiLogic","_patrolSpawnLoc","_patrolPatrolLoc","_groupData","_groups","_eCenter","_group","_encounterSize","_themeIndex", "_missionName"];
 _groupData = _this select 0;
 _eCenter = _this select 1;
@@ -31,7 +33,7 @@ _silentcheckin = _this select 4;
 _missionName = _this select 5;
 if (isNil "_silentcheckin") then
 {
-    _silentcheckin = (((THEMEDATA select _themeIndex) select 3) select 0) select 1;
+    _silentcheckin = (((FuMS_THEMEDATA select _themeIndex) select 3) select 0) select 1;
 };
 _groups = [];
 if (!isNil "_groupData") then
@@ -59,8 +61,9 @@ if (!isNil "_groupData") then
                 case "WEST": {_group = createGroup WEST;};
                 case "EAST": {_group = createGroup EAST;};
                 case "CIV" : {_group = createGroup CIVILIAN;};
-                default { diag_log format ["#Spawn Group: ###ERROR###: Invalid _side: %1. No group created!",_side];};
+                default { _group = [];};
             };
+            if (isNil "_group") exitWith {diag_log format ["#Spawn Group: ###ERROR###: Invalid _side: %1. No group created!",_side];};
             //   diag_log format ["#Spawn Group: _group:%1",_group];
             _group setBehaviour _behaviour;
             _group setCombatMode _combat;
@@ -72,80 +75,85 @@ if (!isNil "_groupData") then
             _patrol = toUpper _patrol;        
             // FuMS AI global initialization.
             {
-                _x setVariable ["AILOGIC", [ _patrol, _eCenter, _spawnpos, _patrolPatrolLoc, _patternOptions], false];
-                _x setVariable [ "XFILL", [_themeIndex, _side, "TRUE"], false];        
+                _x setVariable ["FuMS_AILOGIC", [ _patrol, _eCenter, _spawnpos, _patrolPatrolLoc, _patternOptions], false];
+                _x setVariable [ "FuMS_XFILL", [_themeIndex, _side, "TRUE"], false];      
+                _x setVariable ["FuMS_MSNTAG", [ ((FuMS_THEMEDATA select _themeIndex) select 0) select 0, _missionName], false];
                 [_x] execVM "HC\Encounters\AI_Logic\AIEvac.sqf";
                 
             }foreach units _group;    
-            switch (_patrol) do
+            _validOptions = [_group] call ValidateAILOGIC; 
+            if (_validOptions) then
             {
-                private ["_patrolRadius","_patrolDuration"];
-                case "PERIMETER":
-                { 
-                    _patrolRadius = _patternOptions select 0;
-                    if ( _patrolRadius == 0) then 
-                    { 
-                        _patrolRadius = .8* _encounterSize;
-                    };
-                    [_group, _patrolPatrolLoc, _patrolRadius,12,0,true] call PolygonPatrol;
-                };
-                case "BOXPATROL":
-                { 
-                    _patrolRadius = _patternOptions select 0;
-                    if ( _patrolRadius == 0) then 
-                    { 
-                        _patrolRadius = .8* _encounterSize;
-                    };  
-                    [_group, _patrolPatrolLoc, _patrolRadius, 0, true] call BoxPatrol;
-                };       
-                case "EXPLORE":
-                { 
-                    _patrolRadius = _patternOptions select 0;
-                    if ( _patrolRadius == 0) then 
-                    { 
-                        _patrolRadius = .8* _encounterSize;
-                    };    
-                    [_group, _patrolPatrolLoc, _patrolRadius] call AreaPatrol;
-                };
-                case "BUILDINGS":
+                switch (_patrol) do
                 {
-                    _patrolRadius = _patternOptions select 0;
-                    _patrolDuration = _patternOptions select 1;     
-                    [_group, _patrolPatrolLoc,"AI_PB", [_patrolPatrolLoc, _patrolRadius, _patrolDuration]  ] call ScriptPatrol;
-                };
-                case "SENTRY":
-                {
-                    _patrolRadius = _patternOptions select 0;
-                    if ( _patrolRadius == 0) then 
+                    private ["_patrolRadius","_patrolDuration"];
+                    case "PERIMETER":
                     { 
-                        _patrolRadius = .8* _encounterSize;
+                        _patrolRadius = _patternOptions select 0;
+                        if ( _patrolRadius == 0) then 
+                        { 
+                            _patrolRadius = .8* _encounterSize;
+                        };
+                        [_group, _patrolPatrolLoc, _patrolRadius,12,0,true] call PolygonPatrol;
                     };
+                    case "BOXPATROL":
+                    { 
+                        _patrolRadius = _patternOptions select 0;
+                        if ( _patrolRadius == 0) then 
+                        { 
+                            _patrolRadius = .8* _encounterSize;
+                        };  
+                        [_group, _patrolPatrolLoc, _patrolRadius, 0, true] call BoxPatrol;
+                    };       
+                    case "EXPLORE":
+                    { 
+                        _patrolRadius = _patternOptions select 0;
+                        if ( _patrolRadius == 0) then 
+                        { 
+                            _patrolRadius = .8* _encounterSize;
+                        };    
+                        [_group, _patrolPatrolLoc, _patrolRadius] call AreaPatrol;
+                    };
+                    case "BUILDINGS":
                     {
-                        [_x, true] execVM "HC\Encounters\AI_Logic\AI_GuardBuilding.sqf";
-                    } foreach units _group;
+                        _patrolRadius = _patternOptions select 0;
+                        //      _patrolDuration = _patternOptions select 1;     
+                        [_group, _patrolPatrolLoc,"AI_PB", [_patrolPatrolLoc, _patrolRadius]  ] call ScriptPatrol;
+                    };
+                    case "SENTRY":
+                    {
+                        _patrolRadius = _patternOptions select 0;
+                        if ( _patrolRadius == 0) then 
+                        { 
+                            _patrolRadius = .8* _encounterSize;
+                        };
+                        {
+                            [_x, true] execVM "HC\Encounters\AI_Logic\AI_GuardBuilding.sqf";
+                        } foreach units _group;
+                    };
+                    case "Loiter":{};
+                    case "CONVOY":
+                    {
+                        //"NORMAL",true,true, true
+                        private ["_wp","_speed","_rtb","_roads","_despawn"];
+                        //_speed = _patternOptions select 0; 
+                        //_rtb = _patternOptions select 1;
+                        //_roads = _patternOptions select 2;
+                        //_despawn = _patternOptions select 3;
+                        //_xfill = _patternOptions select 4;
+                        _wp = [_group, _patrolPatrolLoc, _patternOptions] call Convoy;            
+                    };
+                    case "PARADROP":
+                    {
+                        //pilotgroup, dropoff point, options!
+                        [_group, _patrolPatrolLoc, _patternOptions] execVM "HC\Encounters\AI_Logic\Paradrop.sqf";
+                    };
+                    case "PATROLROUTE":
+                    {
+                        [_group, _patrolPatrolLoc, _patternOptions] execVM "HC\Encounters\AI_Logic\PatrolRoute.sqf";
+                    };
+                    case "XCountry":{};
                 };
-                case "Loiter":{};
-                case "CONVOY":
-                {
-                    //"NORMAL",true,true, true
-                    private ["_wp","_speed","_rtb","_roads","_despawn"];
-                    //_speed = _patternOptions select 0; 
-                    //_rtb = _patternOptions select 1;
-                    //_roads = _patternOptions select 2;
-                    //_despawn = _patternOptions select 3;
-                    //_xfill = _patternOptions select 4;
-                    _wp = [_group, _patrolPatrolLoc, _patternOptions] call Convoy;            
-                };
-                case "PARADROP":
-                {
-                    //pilotgroup, dropoff point, options!
-                    [_group, _patrolPatrolLoc, _patternOptions] execVM "HC\Encounters\AI_Logic\Paradrop.sqf";
-                };
-                case "PATROLROUTE":
-                {
-                    [_group, _patrolPatrolLoc, _patternOptions] execVM "HC\Encounters\AI_Logic\PatrolRoute.sqf";
-                };
-                case "XCountry":{};
             };
             // _wp available here to permit further customization of the group's behavior at each waypoint.
             // _wp is set to the 1st waypiont the AI are to move too (ie not their spawn loc!))

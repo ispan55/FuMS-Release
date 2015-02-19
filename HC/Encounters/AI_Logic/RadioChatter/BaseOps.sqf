@@ -20,77 +20,73 @@
  */
 // Build the list of BaseOps that are active
 FormatAndBroadcast = compile preprocessFileLineNumbers "HC\Encounters\AI_Logic\RadioChatter\FormatAndBroadcast.sqf";
-AI_XMT_MsgQue = [];
-AI_RCV_MsgQue = [];
-GroupCount = [];
-private ["_radioChannel","_aiDeathMsg","_radioRange","_aiCallsign","_baseCallsign","_aiMsgs","_baseMsgs",
-"_numThemes","_options","_silentCheckIn","_startTime","_sitrepDelta","_msg"];
-_radioChannel = [];
-_silentCheckIn = [];
-_aiDeathMsg = [];
-_radioRange = [];
-_aiCallsign = [];
-_baseCallsign = [];
-_aiMsgs = [];
-_baseMsgs = [];
-{
-    private ["_data"];
-    _data = _x select 3;
-    //Theme Data elements : 0= config options, 1=AI messages, 2=base messages
-  //  diag_log format ["##BaseOps: Themedata select 3: _data:%1",_data];
-    _options = _data select 0;
-    _radioChannel = _radioChannel + [_options select 0];
-    _silentCheckIn = _silentCheckIn + [_options select 1];
-    _aiDeathMsg = _aiDeathMsg + [_options select 2];
-    _radioRange = _radioRange + [_options select 3];
-    _aiCallsign = _aiCallsign + [_options select 4];
-    _baseCallsign = _baseCallsign + [_options select 5];
-    _aiMsgs = _aiMsgs + [_data select 1];
-    _baseMsgs = _baseMsgs + [_data select 2]; // list of all bases messagess (array of arrays)
-    AI_XMT_MsgQue set [ (count _radioChannel -1), ["From","MsgType"] ]; // just using radiochannel array to get the 'count'
-    AI_RCV_MsgQue set [ (count _radioChannel -1), ["To", "MsgType"]  ];
-    GroupCount set [ (count _radioChannel -1), 0 ]; // set this themes group count to zero.
-} foreach THEMEDATA;
-_numThemes = count THEMEDATA;
-//diag_log format ["##BaseOps: AI_XMT_MsgQue:%1",AI_XMT_MsgQue];
-//diag_log format ["##BaseOps: _baeMsgs:%1",_baseMsgs];
-//run loop till end of server
+
+FuMS_AI_XMT_MsgQue = [];
+FuMS_AI_RCV_MsgQue = [];
+FuMS_GroupCount = [];
+private ["_startTime","_sitrepDelta","_msg","_i"];
+FuMS_radioChannel = [];
+FuMS_silentCheckIn = [];
+FuMS_aiDeathMsg = [];
+FuMS_radioRange = [];
+FuMS_aiCallsign = [];
+FuMS_baseCallsign = [];
+FuMS_aiMsgs = [];
+FuMS_baseMsgs = [];
+FuMS_radioChatInitialized = [];
+for [{_i=0},{_i < 1000},{_i=_i+1}] do
+{ FuMS_radioChatInitialized set [_i, false]; };
+
 _startTime = time;
 _sitrepDelta = _startTime;
 while {true} do
 {
-private ["_i", "_xmtQ","_basemsgtype"];
-    for [{_i=0},{_i< _numThemes},{_i = _i +1}] do
+    private ["_i", "_xmtQ","_basemsgtype","_siNit","_isInitialized"];
+    for [{_i=0},{_i< count FuMS_THEMEDATA},{_i = _i +1}] do
     {
-        // check msqQue
+       _isInitialized = FuMS_radioChatInitialized select _i;
+                              
+        if (_isInitialized) then
         {
-            _xmtQ = (AI_XMT_MsgQue select _i) select 1;
-            _basemsgtype = _x select 0;
-           // diag_log format ["##BaseOps: _xmtQ:%1  _basemsgtype:%2",_xmtQ, _basemsgtype];
-            if ( _xmtQ == _basemsgtype) then  // if received a message from a Grp.
-            {
-                // process the message and transmit it
-                // base callsign, aicallsign, message, radiochannel, range, position
-                // range is unlimited and position not needed for BaseOps!
-                [_baseCallsign select _i, (AI_XMT_MsgQue select _i) select 0, _x select 1,
-                _radioChannel select _i, 0, 0] call FormatAndBroadcast;	
-                // message sent so clear the que.
-                AI_XMT_MsgQue set [_i, ["",""]];
-                //Special Handling below!
+            if (_i != FuMS_GlobalDataIndex) then
+            {            
+                // check msqQue
+           //     diag_log format ["##BaseOps: baseMsgs:%1",FuMS_baseMsgs select _i];
+            //    diag_log format ["##BaseOps: XMT_MsgQue:%1",FuMS_AI_XMT_MsgQue select _i];
+                {
+                    _xmtQ = (FuMS_AI_XMT_MsgQue select _i) select 1;
+                    _basemsgtype = _x select 0;
+              //       diag_log format ["##BaseOps: _xmtQ:%1  _basemsgtype:%2",_xmtQ, _basemsgtype];
+                    if ( _xmtQ == _basemsgtype) then  // if received a message from a Grp.
+                    {
+                        // process the message and transmit it
+                        // base callsign, aicallsign, message, radiochannel, range, position
+                        // range is unlimited and position not needed for BaseOps!
+                        [FuMS_baseCallsign select _i, (FuMS_AI_XMT_MsgQue select _i) select 0, _x select 1,
+                        FuMS_radioChannel select _i, 0, 0] call FormatAndBroadcast;	
+                        // message sent so clear the que.
+                        FuMS_AI_XMT_MsgQue set [_i, ["",""]];
+                        //Special Handling below!
+                    };
+                    // Perform BaseOps communication duties!
+                    // These are communications sent out by Base Ops or if other action is needed based upon a communication!
+                }foreach (FuMS_baseMsgs select _i); 
+                
+                if (time > _sitrepDelta + 1800) then // ask for a SitRep every 30minutes
+                {
+                    _sitrepDelta = time;
+                    FuMS_AI_RCV_MsgQue set [_i, [FuMS_aiCallsign select _i, "SitRep"]];    //tell the AI
+                    _msg = ((FuMS_baseMsgs select _i) select 4) select 1; // get SitRep message text
+                    [FuMS_baseCallsign select _i, FuMS_aiCallsign select _i, _msg ,FuMS_radioChannel select _i, 0, 0] 
+                    call FormatAndBroadcast;	     //tell the player.
+                }; 
             };
-            // Perform BaseOps communication duties!
-            // These are communications sent out by Base Ops or if other action is needed based upon a communication!
-        }foreach (_baseMsgs select _i); 
-         
-        if (time > _sitrepDelta + 1800) then // ask for a SitRep every 30minutes
-        {
-            _sitrepDelta = time;
-            AI_RCV_MsgQue set [_i, [_aiCallsign select _i, "SitRep"]];    //tell the AI
-            _msg = ((_baseMsgs select _i) select 4) select 1; // get SitRep message text
-            [_baseCallsign select _i, _aiCallsign select _i, _msg ,_radioChannel select _i, 0, 0] 
-                            call FormatAndBroadcast;	     //tell the player.
-        };      
-    }; 
+        }; 
+    };
     sleep 2;
 };
+
+
+
+
 

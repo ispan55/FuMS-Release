@@ -24,7 +24,7 @@ if (!isNil "_unit") then
         if( _unit distance _lastPos< 3) then // veh has been in same proximity for at least 15 seconds!
         {
             private ["_var"];
-            _var = _unit getVariable "XFILL";
+            _var = _unit getVariable "FuMS_XFILL";
             if (!isNil "_var") then
             {
                 if (_var select 2 != "HOLD") then // not doing an evacuation, so must be stuck!

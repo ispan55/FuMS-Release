@@ -7,7 +7,7 @@
 // ALTIS
 private ["_hc"];
 _hc = _this select 0;
-ServerData =
+FuMS_ServerData =
 [
     [
         [15440, 15342, 0],    // Map Center
@@ -35,10 +35,11 @@ ServerData =
         // A folder matching the names below needs to exist in the ..\Encounters folder.
         // use this block to easily turn off/on your various mission sets.
        // "StressTest",
-		//"Test",
+		"Test",
 		"HeloPatrols",
 	    "SEM",
-        "TownRaid"
+        "TownRaid",
+		"Small"
         //"CloneHunters"
     ],
     [  // Event and AI Radio messsage behavior
@@ -51,4 +52,4 @@ ServerData =
     ]
 ];
 
-_hc publicVariableClient "ServerData";
+_hc publicVariableClient "FuMS_ServerData";

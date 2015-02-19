@@ -48,7 +48,7 @@ GetBuildingPositions =
 
 private ["_group","_unitcount","_unitHandle"];
 _group = _this select 0;
-if (count (_this select 1) != 3) exitWith {diag_log format ["##AI_PB: 'Buildings' Received %1, expecting 3 paramaters. Exiting!!!",count (_this select 1)];};
+if (count (_this select 1) != 2) exitWith {diag_log format ["##AI_PB: 'Buildings' Received %1, expecting 2 paramaters. Exiting!!!",count (_this select 1)];};
 _unitcount = 0;
 _unitHandle = [];
 {
@@ -62,8 +62,9 @@ _unitHandle = [];
         _params = _this select 1;
         _searchPos = _params select 0;
         _searchPos set [2,0];  // doing distance check on x/y plane only!
-        _timer = _params select 1;
-        _radius = _params select 2;
+       // _timer = _params select 1;
+        _timer = 100000;
+        _radius = _params select 1;
   //      diag_log format ["##AI_PB: SPAWN Starting for %1 at %2",_unit, _searchPos];
         if (_timer ==0) then { _forever = true;}else{_forever=false;};
         if (_radius ==0) then {_radius = 100;};
@@ -91,8 +92,10 @@ _unitHandle = [];
             {
                 private ["_nearest"];
                 _nearest = nearestBuilding _unit;
-                diag_log format ["##AI_PB :%2 No building found within radius.  %1 is the nearest at %3 meters!!!",_nearest,_unit, _unit distance _nearest];
-                _searchComplete = true;
+                
+                diag_log format ["##AI_PB :%2 No building found within radius.  %1(%4) is the nearest at %3 meters!!!",_nearest,_unit, _unit distance _nearest, _unit getVariable "FuMS_MSNTAG"];
+                _buildingList = [_nearest];
+                //_searchComplete = true;
             };  
         };
         while {alive _unit and !_searchComplete} do
@@ -107,7 +110,7 @@ _unitHandle = [];
             };
             _curBuilding = _buildingList call BIS_fnc_selectRandom;
             // **move to the building
-     //        diag_log format ["####AI_PB:%3: Exploring %1",_curBuilding, _unit];
+             //diag_log format ["####AI_PB:%2: Exploring %1",_curBuilding, _unit];
             _bPoss = [];
             _bPoss = _curBuilding call GetBuildingPositions;
     //        diag_log format ["####AI_PB:%3: Located %1 points to explore: %2",count _bPoss, _bPoss,_unit];
@@ -118,7 +121,7 @@ _unitHandle = [];
                 private ["_endpostime","_newPos","_lastPos","_lastPosTime"];
                 _newPos = _bPoss select _i2;
                 _unit doMove _newPos;
-    //            diag_log format ["####A_PB: %4:Moving to position %1 of %3 in bldg:%2.",_newPos,_curBuilding,count _bPoss, _unit];
+                //diag_log format ["####A_PB: %4:Moving to position %1 of %3 in bldg:%2.",_newPos,_curBuilding,count _bPoss, _unit];
                 _endpostime = time + 120; // if time > _starttime+120 may indicate AI attempting to 
                 //  get to a point that is blocked, so advance to next point.
                 _lastPos = _newPos;
@@ -126,7 +129,7 @@ _unitHandle = [];
                 waitUntil
                 {   
                     sleep 1; 
-                    _xfillStatus = _unit getVariable "XFILL";
+                    _xfillStatus = _unit getVariable "FuMS_XFILL";
                     if (!isNil "_xfillStatus") then
                     {
                         if ( _xfillStatus select 2 == "EVAC" ) then{ _forever=false; _endTime = 0;};
@@ -139,10 +142,9 @@ _unitHandle = [];
                                 _unit moveTo (getPos (_list select 0) );
                                 _i2 = count _bPoss;
                             };
-                        };
-                        (  unitReady _unit         || _unit distance _newPos < 1.5 || 
-                        time > _endpostime || (time > _endTime and !_forever) )
+                        };                    
                     };
+                    (  unitReady _unit         || _unit distance _newPos < 1.5 || time > _endpostime || (time > _endTime and !_forever) )
                 };
                 if (time < _endTIme) then {sleep random 5; _i2=_i2+1;}
                 else { _searchComplete = true; _i2 = count _bPoss;};
@@ -151,7 +153,7 @@ _unitHandle = [];
         };
         if (alive _unit) then
         {
-        //    diag_log format ["####AI_PB:  %1, search complete, moving to %2",_unit, _extractLoc];   
+            //diag_log format ["####AI_PB:  %1, search complete, moving to %2",_unit];   
             _unit setBehaviour "COMBAT";
             _unit forceSpeed 13;   
         };

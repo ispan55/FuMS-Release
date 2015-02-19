@@ -7,10 +7,12 @@
 _themeData =
 [
     [  // *******Options*********
-        "Basic", // Needs to match the folder name!
-        2,  //Mission Selection: 1=Random, 2=In order, 3=Random:once only until all missions run
+        "Test", // Needs to match the folder name!
+        4,  //Mission Selection: 1=Random, 2=In order, 3=Random:once only until all missions run
              // 4=Static: All missions in 'Mission List' will be created at server start!
-        60 // Respawn delay in seconds
+        60, // Respawn delay in seconds
+		true, // use Global Loot Data (GlobalLootData.sqf)
+		true  // use Global Soldier Data file (GlobalSoldierData.sqf)
     ],
     [  //***** Mission List *****
     // List of Missions. Value of '0' indicates random location ##NOT [0] ###, otherwise location indicated used for the encounter.
@@ -20,7 +22,11 @@ _themeData =
     //    ["BikeGang"],  // will spawn at any of the locations defined below!
 	      //["TestMission01","Charkia"] // mission will only spawn in the town of Charkia
          // ["CloneArmy",[8440, 25120]]
-		 ["TestHeloPatrol","Stavros"]
+		 //["TestHeloPatrol","Stavros"]
+		 ["MazeTest",[23587,18368.5]],
+		 ["MazeTest2",[12091.3, 10521.1]],
+		 ["MazeTest2",[23300,17800]],
+		 ["MazeTest2",[15500,20000]]
 		 
     ],
     [   //***** Locations *****
@@ -76,5 +82,4 @@ _themeData =
 		]
 	]	
 ];
-
-THEMEDATA set [_this select 0, _themeData];
+FuMS_THEMEDATA set [_this select 0, _themeData];

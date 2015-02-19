@@ -47,8 +47,8 @@ _mkr1 = format ["%1_%2_1",_missionTheme, _curMission];
 _mkr2 = format ["%1_%2_2",_missionTheme, _curMission];
 createMarker [_mkr1, [0,0] ];
 createMarker [_mkr2, [0,0]];
-_buildings = [_buildingData, _eCenter] call SpawnBuilding;
-_silentspawn = (((THEMEDATA select _themeIndex) select 3) select 0) select 1;
+_buildings = [_buildingData, _eCenter, _themeIndex, _curMission] call SpawnBuilding;
+_silentspawn = (((FuMS_THEMEDATA select _themeIndex) select 3) select 0) select 1;
 //diag_log format ["##MissionInit: SpawnGroup at center:%1",_eCenter];
 _groups = [_groupData, _eCenter, _encounterSize, _themeIndex, _silentspawn,_curMission] call SpawnGroup;
 _convoys = [_vehicleData, _eCenter, _encounterSize, _groups, [], _themeIndex, _curMission] call SpawnVehicle;
@@ -93,12 +93,24 @@ diag_log format ["##MissionInit: Preparing to delete loot: %1",_boxes];
     {
         [_x] spawn
         {
-            private ["_box","_timer"];
+            private ["_box","_timer","_count"];
             _box = _this select 0;
-            _timer = time + (GlobalLootOptions select 0)*60;
+            _timer = time + (FuMS_GlobalLootOptions select 0)*60;
             diag_log format ["##MissionInit: _box:%1 set to expire at %2",_box, _timer];
+            _count = 0;
             while {time < _timer} do
             {
+                if (_count == 1) then
+                {
+                    if (FuMS_GlobalLootOptions select 1 ) then
+                    { 
+                        _smoke = "SmokeShell" createVehicle (getPos _box);
+                        _smoke = "SmokeShellRed" createVehicle (getPos _box);
+                        _smoke = "SmokeShellBlue" createVehicle (getPos _box);
+                    };
+                    _count = 0;
+                };
+                _count = _count +1;
                 sleep 30;
             };
             deleteVehicle _box;
@@ -114,7 +126,7 @@ diag_log format ["##MissionInit: Preparing to delete loot: %1",_boxes];
         // this is not a root parent, so ensure evertyhing is preserved, as control is transfered to the parent mission.   
         _fragments = [_msnStatus, _buildingData, _buildings, _groups, _vehicles, _boxes];
        // diag_log format ["##MissionInit:%4: _phaseID:%1  _curMission:%2  _fragments:%3",_phaseID, _curMission, _fragments, _curMission];
-       PhaseMsn set [ _phaseID, _fragments];
+       FuMS_PhaseMsn set [ _phaseID, _fragments];
     }else
     {
         private ["_keep","_found"];

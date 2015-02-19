@@ -7,10 +7,15 @@
 private ["_victim","_killer"];
 _victim = _this select 0;
 _killer = _this select 1;
+
+_victim RemoveMagazines "RPG32_HE_F";
+_victim RemoveMagazines "RPG32_F";
+_victim RemoveWeapon "launch_RPG32_F";
+
 if (isPlayer _killer and _killer isKindOf "Man") then
 {
     private ["_data","_unitCallsign","_channel","_range","_themeIndex","_playername","_killerFullName","_findbrace"];
-    _data = _victim getVariable "RadioChat";
+    _data = _victim getVariable "FuMS_RadioChat";
     if (!isNil "_data") then
     {
         // diag_log format ["##Killed EH: RadioChat var=%1", _data];
@@ -63,19 +68,19 @@ if (isPlayer _killer and _killer isKindOf "Man") then
     };
     // get info on the unit.
     private ["_var"];
-    _var = _victim getVariable "XFILL";
+    _var = _victim getVariable "FuMS_XFILL";
     if (!isNil "_var") then
     {
         private ["_themeIndex"];
         _themeIndex = _var select 0;
-        BodyCount set [_themeIndex, ((BodyCount select _themeIndex) + 1)];
-        diag_log format ["##AI_Killed: BodyCount for Theme#%1 is:%2",_themeIndex, (BodyCount select _themeIndex)];
+        FuMS_BodyCount set [_themeIndex, ((FuMS_BodyCount select _themeIndex) + 1)];
+        diag_log format ["##AI_Killed: BodyCount for Theme#%1 is:%2",_themeIndex, (FuMS_BodyCount select _themeIndex)];
         diag_log format ["##AI_Killed: Player side = %1 Rating=%2 Victim Side:%3", side _killer, rating _killer, side _victim];
     };    
     if (side _victim == civilian) then
     { 
          // player killed a friendly!!!!!
-        _killer addRating (-5500); // make the player KOS to everyone!
+        //_killer addRating (-5500); // make the player KOS to everyone!
         // documentation seems to indicate you can do the following:
         // _killer joinSilent _group <-- where group is a badguy side to change the side of a unit!
         
@@ -85,6 +90,7 @@ if (isPlayer _killer and _killer isKindOf "Man") then
     //SPLAT CODE if not killed by a player!
     removeHeadgear _victim;
     removeVest _victim;
+    removeBackpack _victim;
     removeAllWeapons _victim;
     _victim unassignItem "NVG_EPOCH";
     _victim removeItem "NVG_EPOCH";

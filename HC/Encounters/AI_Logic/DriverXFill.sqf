@@ -8,7 +8,7 @@ _wp = _this select 1;
 _wp2 = _this select 2;          
 _wpPos = getWPPos _wp;
 _wpPos set [2,0];
-_drvVar = _driver getVariable "XFILL";
+_drvVar = _driver getVariable "FuMS_XFILL";
 _drvTheme = _drvVar select 0;
 _drvSide = _drvVar select 1;
 // check for when vehicle gets to the XFILL/Pickup zone.
@@ -38,7 +38,7 @@ if (alive _driver) then
             if (vehicle _x == _x) then //do not try to evacuate guys already in vehicles!
             {
                 private ["_xfillVar","_themeIndex","_side","_status"];  
-                _xfillVar = _x getVariable "XFILL";
+                _xfillVar = _x getVariable "FuMS_XFILL";
                 // If find AI in the area with an XFILL variable.
                 if (!isNil "_xfillVar") then
                 {
@@ -53,9 +53,9 @@ if (alive _driver) then
                         _status = "EVAC";
                         _cargoslots = _cargoslots - 1;
                         //pass back the vehicle and evac loc for the 'unit' to exac into!
-                        _driverVar = _driver getVariable "AILOGIC";
+                        _driverVar = _driver getVariable "FuMS_AILOGIC";
                         _evacLoc = _driverVar select 2;
-                        _x setVariable ["XFILL", [_themeIndex, _side, _status, vehicle _driver, _evacLoc],false];
+                        _x setVariable ["FuMS_XFILL", [_themeIndex, _side, _status, vehicle _driver, _evacLoc],false];
                         _xfillList = _xfillList + [_x];
                     };
                 };
@@ -71,7 +71,7 @@ if (alive _driver) then
  //   diag_log format ["##DriverXFill: Driver AILOGIC: %1", _driver getVariable "AILOGIC"];
     _driver forceSpeed 0;
     _drvVar set [2,"HOLD"]; // set in the event vehicle has to be abondon, transition to EVACONFOOT
-    _driver setVariable ["XFILL", _drvVar, false];
+    _driver setVariable ["FuMS_XFILL", _drvVar, false];
     _veh = vehicle _driver;
     // wait while those contacted board vehicle.
     _trackList = _xfillList;
@@ -97,16 +97,16 @@ if (alive _driver) then
      //   diag_log format ["## DriverXFill: All XFill contacted units aboard. Heading out!"];
         _driver forceSpeed -1; // returns to normal behaviour
         _drvVar set [2,"TRUE"];
-        _driver setVariable ["XFILL", _drvVar, false];
+        _driver setVariable ["FuMS_XFILL", _drvVar, false];
         (group _driver) setCurrentWaypoint _wp2;
         // and tell units that did not get loaded to evaconfoot
         {
             if (alive _x) then
             {
                 private ["_var"];
-                _var = _x getVariable "XFILL";
+                _var = _x getVariable "FuMS_XFILL";
                 _var set [2, "EVACONFOOT"];
-                _x setVariable ["XFILL", _var, false];
+                _x setVariable ["FuMS_XFILL", _var, false];
             };
         }foreach _xfillList;
     };

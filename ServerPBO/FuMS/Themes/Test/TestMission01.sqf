@@ -70,6 +70,8 @@ _initData =
 //---------------------------------------------------------------------------------
 //-----Building Configuration-----       
 //BUILDINGS: persist = 0: building deleted at event completion, 1= building remains until server reset.
+// NOTE: if using 3D coordinates for buildings, if the 1st building uses a location of [0,0,0] 
+// ALL other buildings will assume their locations are offsets!
     // building name                 | offset   |rotation|persist flag
     ["Land_BagBunker_Tower_F",  [0,0],     0,         0],  
     ["Land_BarrelWater_F",          [-7,-7], 0,         0],

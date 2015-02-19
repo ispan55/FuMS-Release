@@ -28,8 +28,8 @@ if (!isServer) exitWith {};
 					// loads HC server level variables.
 					waitUntil {ScriptDone _handle};
 					HC_HAL_Initialized = true;
-					ServerFuMsnInitData = true;
-					HCHAL_ID publicVariableClient "ServerFuMsnInitData";
+					FuMS_ServerInitData = true;
+					HCHAL_ID publicVariableClient "FuMS_ServerInitData";
 				};
                 // HC_HAL_CLEANUP set to false by the HC when it connects and after waiting for it to be set TRUE by this routine.
                 // since the HC is dirty, now need to listen for its heartbeat.
@@ -170,13 +170,13 @@ if (!isServer) exitWith {};
         }else
         {
             //diag_log format ["###EH:GetIn: %1 with ID:%4 entering %2 on %3",_owner, _vehseat, _vehactual, _idowner];
-            TEMPVEHICLE = true;
-            _idowner publicVariableClient "TEMPVEHICLE";
+            FuMS_TEMPVEHICLE = true;
+            _idowner publicVariableClient "FuMS_TEMPVEHICLE";
             // If a player enters the vehicle, update the HCTEMP, so server will not delete vehicle on  an HC disconnect!
             _value = _vehobj getVariable "HCTEMP";
-			if (_value != "PLAYER" and (GlobalLootOptions select 2) ) then // make vehicle purchasable, and save it to the Hive!
+			if (_value != "PLAYER" and (FuMS_GlobalLootOptions select 2) ) then // make vehicle purchasable, and save it to the Hive!
 			{
-				// Possibly needed to keep from breaking normal vehicle limts?    
+				// Possibly needed to keep from breaking normal vehicle limits?    
 				EPOCH_VehicleSlotsLimit = EPOCH_VehicleSlotsLimit + 1;
 				EPOCH_VehicleSlots pushBack str(EPOCH_VehicleSlotsLimit);
 				// Code below is used when a vehicle is 'purchased' off a vendor!
@@ -195,22 +195,57 @@ if (!isServer) exitWith {};
  
 };
 
-    "RADIOCHATTER_Server" addPublicVariableEventHandler
+    "FuMS_RADIOCHATTER_Server" addPublicVariableEventHandler
     {
         private[];
         _data = _this select 1;
         _msg = _data select 0;
         _receivers = _data select 1;
         //diag_log format ["#FuMsnInit: RadioChatter for:%1",_receivers];
-        RADIOCHATTER = _msg;
+        FuMS_RADIOCHATTER = _msg;
         {
-            (owner (vehicle _x)) publicVariableClient "RADIOCHATTER";
+            (owner (vehicle _x)) publicVariableClient "FuMS_RADIOCHATTER";
         }foreach _receivers;
     };
 	
-"GetMissionData" addPublicVariableEventHandler
+"FuMS_GetMissionData" addPublicVariableEventHandler
 {
-  _missionFile = format ["\FuMS\Themes\%1.sqf",_this select 1];
-  diag_log format ["##ServerInit : Pushing information on mission %1 to %2",_missionFile,HCHAL_ID];
-  [] execVM _missionFile;
+    _filename = _this select 1;
+    if (isNil "_filename") exitWith { diag_log format ["##ServerInit: FuMS_GetMissionData PVEH called with NO DATA!"];};
+    [_filename] spawn 
+    {
+        private ["_missionFile","_hold"];
+        _missionFile = format ["\FuMS\Themes\%1.sqf",_this select 0];  
+        MissionData = [];
+        _hold = [] execVM _missionFile;
+        waitUntil {scriptDone _hold};
+        if (isNil "_hold" or ( count MissionData <9 or count MissionData > 10) ) exitWith
+        {
+            diag_log format ["-------------------------------------------------------------------------------------"];
+            diag_log format ["----------------            Fulcrum Mission System                    -----------------"];
+            diag_log format ["-------------------------------------------------------------------------------------"];
+            diag_log format ["##FuMsnInit: ERROR in Fulcrum Mission Data. Mission will be aborted."];
+            diag_log format ["    Recommend verifying data in file %1 on your server!",_missionFile];        
+            diag_log format ["             -ABORT- -ABORT- -FORMAT ERROR- -ABORT- -ABORT-"];   
+            diag_log format ["                            Fulcrum Mission System %1 aborted!",_missionFile];
+            diag_log format ["REASON: Format error in %1",_missionFile];
+            diag_log format ["-------------------------------------------------------------------------------------"];
+            diag_log format ["-------------------------------------------------------------------------------------"];    	
+        };
+        diag_log format ["##ServerInit : Pushing information on mission %1 to %2",_missionFile,HCHAL_ID];
+    };
 };
+/*
+//PVEH WATCHDOG
+[] spawn
+{
+    while {true} do
+    {
+        waitUntil { MissionData select 0 == "PULL"};
+        
+        
+        
+    };
+};
+*/
+

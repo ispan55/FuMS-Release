@@ -7,29 +7,16 @@
 //private ["_hc","_ListofVarNames"];
 //_hc = _this select 0;
 //NOTE: Do not use box_ind_ammoveh_f as a loot option if you use InfiStar's admin tools.
-GlobalLootOptions =
+FuMS_GlobalLootOptions =
 [
 	20, // number of minutes after being accessed that loot box is deleted
 	true, // true= smoke created with box for ease of location.
 	true  // vehicles occupied by players persist through server reset and are sellable!
 ];
-BOXSIDE =
-[
-    "east", // yellow with arabic writing
-    "ind", // grey with greek writing
-    "nato" // green with english writing
-];
-BOXTYPE =
-[
-    "ammoveh_f",    //shoulder high square metal box
-    "ammo_f",     //shin high long square box
-    "wpslaunch_f",//shin high flat rectangular box
-    "wps_f"        //knee high rectangular box
-];
-STORAGE =
+FuMS_STORAGE =
    // each is 3 boxes in canvas that look to be para dropped
 [    
-    "B_supplyCrate_F","O_supplyCrate_F","I_supplyCrate_F"
+    "B_supplyCrate_F","O_supplyCrate_F","I_supplyCrate_F","CargoNet_01_box_F"
 ]; 
 OTHERSTORAGE =
 [

@@ -7,31 +7,37 @@
 _themeData =
 [
     [
-        "SEM",   // Needs to match the folder name!
+        "Small",   // Needs to match the folder name!
         3,  //Mission Selection: 1=Random, 2=In order, 3=Random, once only until all missions run
         60, // Respawn delay in seconds
-		true, // global loot
-		true // global soldier data
+		true,
+		true
     ],
     [  
         // List of Missions. Value of '0' indicates random location, otherwise location indicated used for the encounter.
         // The below missions MUST be in the same folder as this file! 
-        ["BanditCamp"],
-		["HeloCrash"],
-		["NukeDevice"],
-		["PlaneCrash"],
-		["VanCrash"]
+		//["PlaneCrash"],
+		["small1"],
+		["small2"],
+		["small3"],
+		["small4"]
+		
     ],
-    [   
-        // List of Encounter locations to be used if Global random locations are not desired
+    [   //***** Locations *****
+
+		// Ex: ["Charkia"], ["Neochori"]
+		
+		//["Villages"],["Cities"],["Capitals"];  //Encounter will only spawn in urban areas!
+		 ["Villages"]
+		
         
     ],
 	[
 		[ // AI Radio Chatter configuration
-			1, // radio channel used by AI - "ALL"= messages heard w/o radio
-			false, // silent Check-in =true: AI squads will NOT check-in with BaseOps when they spawn.
-			true, // AI death messages enabled.
-			1500, // Radio Range (for AI. BaseOps's high power radio has unlimited range)
+			0, // radio channel used by AI - "ALL"= messages heard w/o radio
+			true, // silent Check-in =true: AI squads will NOT check-in with BaseOps when they spawn.
+			false, // AI death messages enabled.
+			500, // Radio Range (for AI. BaseOps's high power radio has unlimited range)
 			"Sudo",    // AI callsign, groups will be numbered..ie Bear01, Bear02
 			"Kiwi" // BaseOps call sign
 		],

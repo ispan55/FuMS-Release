@@ -9,8 +9,9 @@ _themeData =
     [  // *******Options*********
         "RaidTown", // Needs to match the folder name!
         1,  //Mission Selection: 1=Random, 2=In order, 3=Random, once only until all missions run
-        60 // Respawn delay in seconds
-    
+        60, // Respawn delay in seconds
+		false, // Global loot data
+		false // Global soldier data  
     ],
     [  //***** Mission List *****
         // List of Missions. Value of '0' indicates random location, otherwise location indicated used for the encounter.
@@ -72,4 +73,4 @@ _themeData =
 	]	
 ];
 
-THEMEDATA set [_this select 0, _themeData];
+FuMS_THEMEDATA set [_this select 0, _themeData];

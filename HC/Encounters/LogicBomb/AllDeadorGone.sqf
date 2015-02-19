@@ -21,7 +21,7 @@ if (count _dataarray == 1) then
 	// for each AI object, look for the XFILL variable
 	{
 	// if XFILL select 0 == "themeIndex" => result = 0;	
-		_var = _x getVariable "XFILL";
+		_var = _x getVariable "FuMS_XFILL";
 		if (!isNil "_var") then
 		{
            // diag_log format ["##AllDeadorGone: Unit: %2 _var:%1",_var,_x];

@@ -9,10 +9,24 @@ GetQuantity = compile preprocessFileLineNumbers format ["HC\Encounters\Functions
 GetBox = compile preprocessFileLineNumbers format ["HC\Encounters\Functions\GetBox.sqf"];
 
 private ["_lootOption","_pos","_options","_typeLoot","_boxtype","_box","_weapons","_magazines","_items","_backpacks","_found","_isVehicle",
-"_item","_number","_lootData","_randomLootData"];
+"_item","_number","_lootData","_randomLootData","_themeIndex"];
 _lootOption = _this select 0;
 _pos = _this select 1;
-_lootData = LOOTDATA select (_this select 2); //themeIndex
+_themeIndex = _this select 2;
+
+if (((FuMS_THEMEDATA select _themeIndex) select 0) select 3) then
+{
+   _lootData = FuMS_LOOTDATA select FuMS_GlobalDataIndex;   
+}else
+{
+   _lootData = FuMS_LOOTDATA select _themeIndex;      
+};
+if (isNil "_lootData") exitWith
+{
+    diag_log format ["FillLoot: ERROR: no theme specific LootData.sqf for theme #%1",_themeIndex];
+    diag_log format ["Check options in ThemeData.sqf for theme %1",((FuMS_THEMEDATA select _themeIndex) select 0) select 0];
+};
+
 _isVehicle = false;
 if ( (TypeName _pos) == "OBJECT") then
 {
@@ -49,11 +63,16 @@ if (_lootOption != "NONE") then
             {             
                 if (count _pos ==2) then //offset being used so find something nearby that is Safe.
                 {
-                 _pos = [_pos, 0, 30, 1,0, 8,0,[],[]] call BIS_fnc_findSafePos; // 1m clear, terraingradient 8 pretty hilly
+                    _pos = [_pos, 0, 30, 1,0, 8,0,[],[]] call BIS_fnc_findSafePos; // 1m clear, terraingradient 8 pretty hilly
                 }; //else leave the 3d solution because person making the mission knows what they are doing!
                diag_log format ["##FillLoot : Creating %1 at %2",_boxtype, _pos];
                 _box = createVehicle [_boxtype, _pos,[],0,"NONE"];
-                if (GlobalLootOptions select 1 ) then{ _smoke = "SmokeShell" createVehicle (_pos);};
+                if (FuMS_GlobalLootOptions select 1 ) then
+                { 
+                    _smoke = "SmokeShell" createVehicle (_pos);
+                    _smoke = "SmokeShellRed" createVehicle (_pos);
+                    _smoke = "SmokeShellBlue" createVehicle (_pos);
+                };
                 clearWeaponCargoGlobal _box;
                 clearMagazineCargoGlobal _box;
                 clearItemCargoGlobal _box;              
@@ -111,10 +130,8 @@ if (_lootOption != "NONE") then
                 _box addBackpackCargoGlobal [_item, _number]; 
                 _numItems = _numItems + _number;
             }foreach _backpacks;
-            //get count of items in the container      
             //initialize FuMSLoot variable
-            _box setVariable ["FuMSLoot", [0, _numItems], true];            
-            // spawn loot box monitor!
+            _box setVariable ["FuMS_Loot", [0, _numItems], true];            
         };   
     }foreach _lootData;
     if (!_found) then

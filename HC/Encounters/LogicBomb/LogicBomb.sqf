@@ -154,7 +154,7 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out.
                     _numAI = _x select 1;
                     _bodyCount set [_state, [_numAI, _themeIndex]];
                     _stateMax set [_state, (_stateMax select _state) + 1];
-                    BodyCount set [_themeIndex, 0]; // common counter for all states!
+                    FuMS_BodyCount set [_themeIndex, 0]; // common counter for all states!
                 };
                 case "ALLDEADORGONE":
                 {
@@ -250,15 +250,15 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
                         if (isNil "_phase01") exitWith
                         {
                             diag_log format ["************************************************************"];
-                            diag_log format ["##LogicBomb: ERROR: %1\%2.sqf! Phase trigger found w/o a phase mission to execute!", (((THEMEDATA select _themeIndex) select 0) select 0), _curMission];
+                            diag_log format ["##LogicBomb: ERROR: %1\%2.sqf! Phase trigger found w/o a phase mission to execute!", (((FuMS_THEMEDATA select _themeIndex) select 0) select 0), _curMission];
                             diag_log format ["************************************************************"];
                         };
                         private ["_waitPhase01","_phase01ID","_childData"];
                         // Now that the phase has been triggered, set this phases MaxTriggers so it will not continue to run.
                         _stateMax set [_i, -1];      
-                        PhaseMsnID = PhaseMsnID + 1;
+                        FuMS_PhaseMsnID = FuMS_PhaseMsnID + 1;
                         // retain the phaseID so the child's objects can be referenced by this mission after the child exits.
-                        _phase01ID = PhaseMsnID;
+                        _phase01ID = FuMS_PhaseMsnID;
                         diag_log format ["************************************************************"];
                        diag_log format ["##LogicBomb: PHASE TRANSITION: %3: Starting %1:%2",_phase01ID, _phase01,_curMission];
                         diag_log format ["************************************************************"];    
@@ -271,31 +271,34 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
                             _msnPhaseName = _phase01;
                             _msnPhaseLoc = _eCenter;
                         };
-                        waitUntil {OkToGetData};
-                        OkToGetData = false;
+                        waitUntil {FuMS_OkToGetData};
+                        FuMS_OkToGetData = false;
                         _dataFromServer = [_missionTheme, _msnPhaseName] call PullData;
-                        OkToGetData = true;
+                        FuMS_OkToGetData = true;
                         diag_log format ["##LogicBomb:Phase01  Misssion Data from Server :%1",_dataFromServer];
-                        _waitPhase01 = [_dataFromServer, [_msnPhaseLoc, _missionTheme, _themeIndex, _phase01ID, _curMission]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";                             
-                       // _waitPhase01 = [[_eCenter, _missionTheme, _themeIndex, _phase01ID,_curMission]] execVM _phase01;
-                        waitUntil {scriptDone _waitPhase01};
-                        diag_log format ["************************************************************"];
-                        diag_log format ["##LogicBomb: PHASE TRANSITION COMPLETE: %3: Completed %1:%2",_phase01ID, _phase01,_curMission];
-                        diag_log format ["************************************************************"];                        
-                        // transfer all objects held by the child to this parent!
-                        // HC values should be preserved, no need to update those values here!
-                        // mission return format: (this is the data stored in PhaseMsn[_phase01ID])
-                        // ["status",_buildings, _vehicles, _groups, _boxes]
-                        _childData = PhaseMsn select _phase01ID;
-                        _phase01Status = _childData select 0;
-                        _buildings = _buildings + (_childData select 2);
-                        _buildingData = _buildingData + (_childData select 1);
-                        if (count (_childData select 3) > 0) then {_groups = _groups + (_childData select 3);};
-                        if (count (_childData select 4) > 0) then {_vehicles = _vehicles + (_childData select 4);};
-                       // _boxes = _boxes + (_childData select 5);                        
-                      //  diag_log format ["##LogicBomb: %2: after child-add: _buildingData:%1",_buildingData, _curMission];
-                        // clear out the data. It is no longer needed.
-                        PhaseMsn set [_phase01ID, [] ];
+                        if (!isNil "_dataFromServer") then
+                        {
+                            _waitPhase01 = [_dataFromServer, [_msnPhaseLoc, _missionTheme, _themeIndex, _phase01ID, _curMission]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";                             
+                            // _waitPhase01 = [[_eCenter, _missionTheme, _themeIndex, _phase01ID,_curMission]] execVM _phase01;
+                            waitUntil {scriptDone _waitPhase01};
+                            diag_log format ["************************************************************"];
+                            diag_log format ["##LogicBomb: PHASE TRANSITION COMPLETE: %3: Completed %1:%2",_phase01ID, _phase01,_curMission];
+                            diag_log format ["************************************************************"];                        
+                            // transfer all objects held by the child to this parent!
+                            // HC values should be preserved, no need to update those values here!
+                            // mission return format: (this is the data stored in PhaseMsn[_phase01ID])
+                            // ["status",_buildings, _vehicles, _groups, _boxes]
+                            _childData = FuMS_PhaseMsn select _phase01ID;
+                            _phase01Status = _childData select 0;
+                            _buildings = _buildings + (_childData select 2);
+                            _buildingData = _buildingData + (_childData select 1);
+                            if (count (_childData select 3) > 0) then {_groups = _groups + (_childData select 3);};
+                            if (count (_childData select 4) > 0) then {_vehicles = _vehicles + (_childData select 4);};
+                            // _boxes = _boxes + (_childData select 5);                        
+                            //  diag_log format ["##LogicBomb: %2: after child-add: _buildingData:%1",_buildingData, _curMission];
+                            // clear out the data. It is no longer needed.
+                            FuMS_PhaseMsn set [_phase01ID, [] ];
+                        };
                     };
                     case 3:
                     {
@@ -303,15 +306,15 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
                         if (isNil "_phase02") exitWith
                         {
                             diag_log format ["************************************************************"];
-                            diag_log format ["##LogicBomb: ERROR: %1\%2.sqf! Phase trigger found w/o a phase mission to execute!", (((THEMEDATA select _themeIndex) select 0) select 0), _curMission];
+                            diag_log format ["##LogicBomb: ERROR: %1\%2.sqf! Phase trigger found w/o a phase mission to execute!", (((FuMS_THEMEDATA select _themeIndex) select 0) select 0), _curMission];
                             diag_log format ["************************************************************"];
                         };
                         private ["_waitPhase02","_phase02ID","_childData"];
                         // Now that the phase has been triggered, set this phases MaxTriggers so it will not continue to run.
                         _stateMax set [_i, -1];      
-                        PhaseMsnID = PhaseMsnID + 1;
+                        FuMS_PhaseMsnID = FuMS_PhaseMsnID + 1;
                         // retain the phaseID so the child's objects can be referenced by this mission after the child exits.
-                        _phase02ID = PhaseMsnID;
+                        _phase02ID = FuMS_PhaseMsnID;
                         diag_log format ["************************************************************"];
                        diag_log format ["##LogicBomb: PHASE TRANSITION: %3: Starting %1:%2",_phase02ID, _phase02,_curMission];
                         diag_log format ["************************************************************"];   
@@ -324,23 +327,26 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
                             _msnPhaseName = _phase02;
                             _msnPhaseLoc = _eCenter;
                         };
-                         waitUntil {OkToGetData};
-                        OkToGetData = false;
+                         waitUntil {FuMS_OkToGetData};
+                        FuMS_OkToGetData = false;
                         _dataFromServer = [_missionTheme, _msnPhaseName] call PullData;
-                        OkToGetData = true;
+                        FuMS_OkToGetData = true;
                         diag_log format ["##LogicBomb:Phase02:  Misssion Data from Server :%1",_dataFromServer];
-                        _waitPhase02 = [_dataFromServer, [_msnPhaseLoc, _missionTheme, _themeIndex, _phase02ID, _curMission]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";     
-                        waitUntil {scriptDone _waitPhase02};
-                        diag_log format ["************************************************************"];
-                        diag_log format ["##LogicBomb: PHASE TRANSITION COMPLETE: %3: Completed %1:%2",_phase02ID, _phase02,_curMission];
-                        diag_log format ["************************************************************"];
-                        _childData = PhaseMsn select _phase02ID;
-                        _phase02Status = _childData select 0;
-                        _buildings = _buildings + (_childData select 2);
-                        _buildingData = _buildingData + (_childData select 1);
-                        if (count (_childData select 3) > 0) then {_groups = _groups + (_childData select 3);};
-                        if (count (_childData select 4) > 0) then {_vehicles = _vehicles + (_childData select 4);};
-                        PhaseMsn set [_phase02ID, [] ];
+                        if (!isNil "_dataFromServer") then
+                        {
+                            _waitPhase02 = [_dataFromServer, [_msnPhaseLoc, _missionTheme, _themeIndex, _phase02ID, _curMission]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";     
+                            waitUntil {scriptDone _waitPhase02};
+                            diag_log format ["************************************************************"];
+                            diag_log format ["##LogicBomb: PHASE TRANSITION COMPLETE: %3: Completed %1:%2",_phase02ID, _phase02,_curMission];
+                            diag_log format ["************************************************************"];
+                            _childData = FuMS_PhaseMsn select _phase02ID;
+                            _phase02Status = _childData select 0;
+                            _buildings = _buildings + (_childData select 2);
+                            _buildingData = _buildingData + (_childData select 1);
+                            if (count (_childData select 3) > 0) then {_groups = _groups + (_childData select 3);};
+                            if (count (_childData select 4) > 0) then {_vehicles = _vehicles + (_childData select 4);};
+                            FuMS_PhaseMsn set [_phase02ID, [] ];
+                        };
                     };
                     case 4:
                     {
@@ -348,15 +354,15 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
                         if (isNil "_phase03") exitWith
                         {
                             diag_log format ["************************************************************"];
-                            diag_log format ["##LogicBomb: ERROR: %1\%2.sqf! Phase trigger found w/o a phase mission to execute!", (((THEMEDATA select _themeIndex) select 0) select 0), _curMission];
+                            diag_log format ["##LogicBomb: ERROR: %1\%2.sqf! Phase trigger found w/o a phase mission to execute!", (((FuMS_THEMEDATA select _themeIndex) select 0) select 0), _curMission];
                             diag_log format ["************************************************************"];
                         };
                         private ["_waitPhase03","_phase03ID","_childData"];
                         // Now that the phase has been triggered, set this phases MaxTriggers so it will not continue to run.
                         _stateMax set [_i, -1];      
-                        PhaseMsnID = PhaseMsnID + 1;
+                        FuMS_PhaseMsnID = FuMS_PhaseMsnID + 1;
                         // retain the phaseID so the child's objects can be referenced by this mission after the child exits.
-                        _phase03ID = PhaseMsnID;
+                        _phase03ID = FuMS_PhaseMsnID;
                         diag_log format ["************************************************************"];
                        diag_log format ["##LogicBomb: PHASE TRANSITION: %3: Starting %1:%2",_phase03ID, _phase03,_curMission];
                         diag_log format ["************************************************************"];  
@@ -369,35 +375,38 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
                             _msnPhaseName = _phase03;
                             _msnPhaseLoc = _eCenter;
                         };
-                         waitUntil {OkToGetData};
-                        OkToGetData = false;
+                         waitUntil {FuMS_OkToGetData};
+                        FuMS_OkToGetData = false;
                         _dataFromServer = [_missionTheme, _msnPhaseName] call PullData;
-                        OkToGetData = true;
+                        FuMS_OkToGetData = true;
                         diag_log format ["##LogicBomb:Phase03:  Misssion Data from Server :%1",_dataFromServer];
-                        _waitPhase03 = [_dataFromServer, [_msnPhaseLoc, _missionTheme, _themeIndex, _phase03ID, _curMission]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";     
-                        waitUntil {scriptDone _waitPhase03};
-                        diag_log format ["************************************************************"];
-                        diag_log format ["##LogicBomb: PHASE TRANSITION COMPLETE: %3: Completed %1:%2",_phase03ID, _phase03,_curMission];
-                        diag_log format ["************************************************************"];
-                        _childData = PhaseMsn select _phase03ID;
-                        _phase03Status = _childData select 0;
-                        _buildings = _buildings + (_childData select 2);
-                        _buildingData = _buildingData + (_childData select 1);
-                        if (count (_childData select 3) > 0) then {_groups = _groups + (_childData select 3);};
-                        if (count (_childData select 4) > 0) then {_vehicles = _vehicles + (_childData select 4);};
-                        PhaseMsn set [_phase03ID, [] ];
+                        if (!isNil "_dataFromServer") then
+                        {
+                            _waitPhase03 = [_dataFromServer, [_msnPhaseLoc, _missionTheme, _themeIndex, _phase03ID, _curMission]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";     
+                            waitUntil {scriptDone _waitPhase03};
+                            diag_log format ["************************************************************"];
+                            diag_log format ["##LogicBomb: PHASE TRANSITION COMPLETE: %3: Completed %1:%2",_phase03ID, _phase03,_curMission];
+                            diag_log format ["************************************************************"];
+                            _childData = FuMS_PhaseMsn select _phase03ID;
+                            _phase03Status = _childData select 0;
+                            _buildings = _buildings + (_childData select 2);
+                            _buildingData = _buildingData + (_childData select 1);
+                            if (count (_childData select 3) > 0) then {_groups = _groups + (_childData select 3);};
+                            if (count (_childData select 4) > 0) then {_vehicles = _vehicles + (_childData select 4);};
+                            FuMS_PhaseMsn set [_phase03ID, [] ];
+                        };
                     };
                 };
             };
             if (_reinforcements > 0) then  // if this mission supports reinforcements
             {      
                // diag_log format ["##LogicBomb: Reinforcements active."];
-                if (count RC_REINFORCEMENTS == 3) then // have reinforcements been requested from RadioChatter?
+                if (count FuMS_RC_REINFORCEMENTS == 3) then // have reinforcements been requested from RadioChatter?
                 {
                     private ["_helpCenter","_index","_callsign"];
-                    _helpCenter = RC_REINFORCEMENTS select 0;
-                    _index = RC_REINFORCEMENTS select 1;
-                    _callsign = RC_REINFORCEMENTS select 2;
+                    _helpCenter = FuMS_RC_REINFORCEMENTS select 0;
+                    _index = FuMS_RC_REINFORCEMENTS select 1;
+                    _callsign = FuMS_RC_REINFORCEMENTS select 2;
                    // diag_log format ["##LogicBomb: Call Recieved from %1",_callsign];
                    // diag_log format ["##LogicBomb: %1==%2  %3==%4",_helpCenter, _eCenter, _index, _themeIndex];                    
                     if ((_helpCenter select 0 == _eCenter select 0) and 
@@ -405,41 +414,44 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
                          (_helpCenter select 1== _eCenter select 1)) then   // Help called for on this encounter
                     {
                         private ["_waitPhase01","_phase01ID","_childData","_activeMission", "_chance","_dataFromServer"];
-                        RC_REINFORCEMENTS = [];                    
+                        FuMS_RC_REINFORCEMENTS = [];                    
                         _chance = floor (random 100);
                         //make the roll
                         if (_chance < _reinforcements) then
                         {
                             private ["_reinfID","_waitreinf","_reinfstatus","_msn"];
-                            AI_RCV_MsgQue set [_index, [_callsign, "HELP"]];
-                            PhaseMsnID = PhaseMsnID + 1;
+                            FuMS_AI_RCV_MsgQue set [_index, [_callsign, "HELP"]];
+                            FuMS_PhaseMsnID = FuMS_PhaseMsnID + 1;
                             // retain the phaseID so the child's objects can be referenced by this mission after the child exits.
-                            _reinfID = PhaseMsnID;
+                            _reinfID = FuMS_PhaseMsnID;
                             if (_reinforceMsn == "Random") then
                             {
                                 _msn = ["Help_Ground","Help_Vehicle","Help_Helo"]call BIS_fnc_selectRandom;
                             } else {_msn = _reinforceMsn;};
-                            waitUntil {OkToGetData};
-                            OkToGetData = false;
+                            waitUntil {FuMS_OkToGetData};
+                            FuMS_OkToGetData = false;
                             _dataFromServer = [_missionTheme, _msn] call PullData;
-                            OkToGetData = true;
+                            FuMS_OkToGetData = true;
                             diag_log format ["##LogicBomb:Reinforcement:  Misssion Data from Server :%1",_dataFromServer];
-                            _waitreinf = [_dataFromServer, [_eCenter, _missionTheme, _themeIndex, _reinfID, _curMission]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";     
-                          //  _activeMission = format ["HC\Encounters\%1\%2.sqf", _missionTheme, _msn];
-                           // _waitreinf = [[_eCenter, _missionTheme, _themeIndex, _reinfID, _curMission]] execVM _activeMission ;
-                            waitUntil {scriptDone _waitreinf};
-                            // transfer all objects held by the child to this parent!
-                            // mission return format: (this is the data stored in PhaseMsn[_phase01ID])
-                            // ["status",_buildings, _vehicles, _groups, _boxes]
-                            _childData = PhaseMsn select _reinfID;
-                            _reinfStatus = _childData select 0;
-                            _buildings = _buildings + (_childData select 2);
-                            _buildingData = _buildingData + (_childData select 1);
-                            _groups = _groups + (_childData select 3);
-                            _vehicles = _vehicles + (_childData select 4);
-                            // _boxes = _boxes + (_childData select 5);
-                            // clear out the data. It is no longer needed.
-                            PhaseMsn set [_reinfID, [] ]; 
+                            if (!isNil "_dataFromServer") then
+                            {
+                                _waitreinf = [_dataFromServer, [_eCenter, _missionTheme, _themeIndex, _reinfID, _curMission]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";     
+                                //  _activeMission = format ["HC\Encounters\%1\%2.sqf", _missionTheme, _msn];
+                                // _waitreinf = [[_eCenter, _missionTheme, _themeIndex, _reinfID, _curMission]] execVM _activeMission ;
+                                waitUntil {scriptDone _waitreinf};
+                                // transfer all objects held by the child to this parent!
+                                // mission return format: (this is the data stored in PhaseMsn[_phase01ID])
+                                // ["status",_buildings, _vehicles, _groups, _boxes]
+                                _childData = FuMS_PhaseMsn select _reinfID;
+                                _reinfStatus = _childData select 0;
+                                _buildings = _buildings + (_childData select 2);
+                                _buildingData = _buildingData + (_childData select 1);
+                                _groups = _groups + (_childData select 3);
+                                _vehicles = _vehicles + (_childData select 4);
+                                // _boxes = _boxes + (_childData select 5);
+                                // clear out the data. It is no longer needed.
+                                FuMS_PhaseMsn set [_reinfID, [] ]; 
+                            };
                         };
                     };
                 };

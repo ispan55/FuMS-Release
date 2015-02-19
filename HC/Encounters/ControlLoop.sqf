@@ -5,12 +5,14 @@
 // Event/Mission Control loop:
 // This code provides core mission functionality for a group of missions
 PullData = compile preprocessFileLineNumbers "HC\Encounters\Functions\PullData.sqf";
+StaticMissionControlLoop = compile preprocessFileLineNumbers "HC\Encounters\LogicBomb\StaticMissionControlLoop.sqf";
+
 private ["_missionTheme","_respawnDelay","_encounterLocations","_msnDone","_missionList",
 "_pos","_activeMission","_missionSelection","_trackList","_missionTheme","_themeIndex","_themeOptions","_themeData",
 "_locationAdditions","_missionNameOverride"];
 _missionTheme = _this select 0;
 _themeIndex = _this select 1;
-_themeData = THEMEDATA select _themeIndex;
+_themeData = FuMS_THEMEDATA select _themeIndex;
 _themeOptions = _themeData select 0;
 _missionList = _themeData select 1;
 _encounterLocations = _themeData select 2;
@@ -33,7 +35,7 @@ _locationAdditions = [];
                 _name = (text _x);
                 _loc = locationPosition _x;         
                 _locationAdditions = _locationAdditions + [[_loc, _name]];
-            } foreach VillageList;
+            } foreach FuMS_VillageList;
             _encounterLocations = _encounterLocations - [_x];
         };
         if (_curLoc == "Cities") then
@@ -42,7 +44,7 @@ _locationAdditions = [];
                 _name = (text _x);
                 _loc = locationPosition _x;         
                 _locationAdditions = _locationAdditions + [[_loc, _name]];
-            } foreach CityList;
+            } foreach FuMS_CityList;
             _encounterLocations = _encounterLocations - [_x];
         };
         if (_curLoc == "Capitals") then
@@ -51,7 +53,7 @@ _locationAdditions = [];
                 _name = (text _x);
                 _loc = locationPosition _x;         
                 _locationAdditions = _locationAdditions + [[_loc, _name]];
-            } foreach CapitalList;
+            } foreach FuMS_CapitalList;
             _encounterLocations = _encounterLocations - [_x];
         };
         // add individual city names if present!
@@ -63,7 +65,7 @@ _locationAdditions = [];
                 _locationAdditions = _locationAdditions + [[_loc, _name]];
                 _encounterLocations = _encounterLocations - [_value];
             };
-        }foreach (VillageList+CityList+CapitalList);     
+        }foreach (FuMS_VillageList+FuMS_CityList+FuMS_CapitalList);     
     };
 }foreach _encounterLocations;
 //_encounterLocations FORMAT: [[loc], Name]], or [array]
@@ -72,6 +74,30 @@ _locationAdditions = [];
 _encounterLocations = _encounterLocations + _locationAdditions;
 //diag_log format ["## Control Loop:Them Index:%3 Full Location List: %2:%1", _encounterLocations, count _encounterLocations, _themeIndex];
 _trackList = _missionList;
+
+//Initialize Radio Chatter and other THEME related global variables!
+private ["_data","_options"];
+_data = FuMS_THEMEDATA select 3;
+//Theme Data elements : 0= config options, 1=AI messages, 2=base messages
+//  diag_log format ["##BaseOps: Themedata select 3: _data:%1",_data];
+_options = _data select 0;
+FuMS_radioChannel set [ _themeIndex, [_options select 0]];
+FuMS_silentCheckIn set [ _themeIndex, [_options select 1]];
+FuMS_aiDeathMsg set [ _themeIndex,[_options select 2]];
+FuMS_radioRange set [ _themeIndex,[_options select 3]];
+FuMS_aiCallsign  set [ _themeIndex,[_options select 4]];
+FuMS_baseCallsign set [ _themeIndex, [_options select 5]];
+FuMS_aiMsgs  set [ _themeIndex,[_data select 1]];
+FuMS_baseMsgs set [ _themeIndex, [_data select 2]]; // list of all bases messagess (array of arrays)
+FuMS_AI_XMT_MsgQue set [ _themeIndex, ["From","MsgType"] ]; // just using radiochannel array to get the 'count'
+FuMS_AI_RCV_MsgQue set [ _themeIndex, ["To", "MsgType"]  ];
+FuMS_GroupCount set [ _themeIndex, 0 ]; // set this themes group count to zero.
+FuMS_radioChatInitialized set [_themeIndex, true];
+
+FuMS_BodyCount set [_themeIndex, 0];
+
+
+
 while {true} do
 {
     private ["_msnDoneList"];
@@ -113,10 +139,16 @@ while {true} do
         };
         case 4: // spawn all the missions in the missionList
         {
-            //this flow controlled by 
-            _activeMission = _trackList;
+            //this flow controlled by below, spawn ALL missions on the Theme's list!                     
         };
+    };    
+    
+    if (_missionSelection == 4) exitWith
+    {
+        _activeMission = _trackList;
+        [_activeMission,_themeIndex,_missionTheme] call StaticMissionControlLoop;    
     };
+    
     diag_log format ["##ControlLoop: _activeMission:%1",_activeMission];   
  {   
      // Get location for the mission
@@ -130,8 +162,8 @@ while {true} do
          _waterMode = 0;// 0=not in water, 1=either, 2=in water
          _terrainGradient = 2;  //10 is mountainous, 4 is pretty damn hilly too.
          _shoreMode = 0; // 0= either, 1=on shore	
-         _pos = [MapCenter, _minRange, MapRange, _minRange, _waterMode, _terrainGradient, 
-         _shoreMode, BlackList, Defaultpos] call BIS_fnc_findSafePos;		
+         _pos = [FuMS_MapCenter, _minRange, FuMS_MapRange, _minRange, _waterMode, _terrainGradient, 
+         _shoreMode, FuMS_BlackList, FuMS_Defaultpos] call BIS_fnc_findSafePos;		
      }else
      {
          private ["_location"];
@@ -172,21 +204,27 @@ while {true} do
                      _pos = locationPosition _x;
                      _missionNameOverride = _name;
                  };
-             }foreach (VillageList+CityList+CapitalList);  
+             }foreach (FuMS_VillageList+FuMS_CityList+FuMS_CapitalList);  
          };
      } else { _missionFileName = _x select 0;};    
       // ****GET MISSION DATA FROM SERVER ****
-     waitUntil {OkToGetData};
-     OkToGetData = false;
+     waitUntil {FuMS_OkToGetData};
+     FuMS_OkToGetData = false;
      _dataFromServer = [_missionTheme, _missionFileName] call PullData;
-     OkToGetData = true;
-     //diag_log format ["##ControlLoop: Misssion Data from Server :%1",_dataFromServer];
-     _msnDone = [_dataFromServer, [_pos, _missionTheme, _themeIndex, 0, _missionNameOverride]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";     
-     //_activeMissionFile = format ["HC\Encounters\%1\%2.sqf",_missionTheme,_missionFileName];
-     diag_log format ["##ControlLoop:  Theme: %1 : HC now starting mission %2 at %3",_missionTheme, _missionFileName, _pos];
-     // setting _phaseID = 0 implies this mission is a 'root parent' (it has no parents itself!)
-    // _msnDone =[[_pos, _missionTheme, _themeIndex, 0, _missionNameOverride]] execVM _activeMissionFile;
-     _msnDoneList = _msnDoneList + [_msnDone];
+     FuMS_OkToGetData = true;
+     if (count _dataFromServer > 0) then
+     {
+         //diag_log format ["##ControlLoop: Misssion Data from Server :%1",_dataFromServer];
+         _msnDone = [_dataFromServer, [_pos, _missionTheme, _themeIndex, 0, _missionNameOverride]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";     
+         //_activeMissionFile = format ["HC\Encounters\%1\%2.sqf",_missionTheme,_missionFileName];
+         diag_log format ["##ControlLoop:  Theme: %1 : HC now starting mission %2 at %3",_missionTheme, _missionFileName, _pos];
+         // setting _phaseID = 0 implies this mission is a 'root parent' (it has no parents itself!)
+         // _msnDone =[[_pos, _missionTheme, _themeIndex, 0, _missionNameOverride]] execVM _activeMissionFile;
+         _msnDoneList = _msnDoneList + [_msnDone];
+     }else
+     {
+         diag_log format ["##ControlLoop: Theme: %1 : HC skipped mission %2",_missionTheme, _missionFileName];
+     };
  }foreach _activeMission; 
  // wait for ALL missions started to complete, before restarting all missions that where started, or selecting a new one.
  {

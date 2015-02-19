@@ -10,12 +10,27 @@ AddIt = compile preprocessFileLineNumbers "HC\Encounters\Functions\AddIt.sqf";
 GetChoice = compile preprocessFileLineNumbers "HC\Encounters\LogicBomb\GetChoice.sqf";
 AttachMuzzle = compile preprocessFileLineNumbers "HC\Encounters\AI_Logic\AttachMuzzle.sqf";
 private ["_group","_type","_pos","_themeIndex","_unit","_typeFound","_aiName","_gear","_flags","_skills","_types","_i","_priweapon","_soldierData","_secweapon",
-"_radio"];
+"_radio", "_numPistolMags","_numRifleMags"];
 _group = _this select 0;
 _type = _this select 1;
 _pos = _this select 2;
 _themeIndex = _this select 3;
-_soldierData = SOLDIERDATA select _themeIndex;
+
+if (((FuMS_THEMEDATA select _themeIndex) select 0) select 4) then
+{
+   _soldierData = FuMS_SOLDIERDATA select FuMS_GlobalDataIndex;   
+}else
+{
+   _soldierData = FuMS_SOLDIERDATA select _themeIndex;      
+};
+if (isNil "_soldierData") exitWith
+{
+    diag_log format ["SpawnSoldier: ERROR: no theme specific SoldierData.sqf for theme #%1",_themeIndex];
+    diag_log format ["Check options in ThemeData.sqf for theme %1",((FuMS_THEMEDATA select _themeIndex) select 0) select 0];
+};
+_numRifleMags = FuMS_SoldierDefaults select 0;
+_numPistolMags = FuMS_SoldierDefaults select 1;
+
 //diag_log format ["##SpawnSoldier: Index:%2 _soldierData:%1",_soldierData,_themeIndex];
 _typeFound = false;
 // locate the data for 'type' soldier.
@@ -51,7 +66,7 @@ _typeFound = false;
         {
             _priweapon = _gear select 0;
             _unit addWeapon _priweapon;
-            _unit addMagazine (_gear select 1);
+            _unit addMagazine [(_gear select 1),_numRifleMags];
         }else
         {
             if (_gear != "") then
@@ -69,7 +84,7 @@ _typeFound = false;
         {
             _secweapon = _gear select 0;
             _unit addWeapon _secweapon;
-            _unit addMagazine (_gear select 1);
+            _unit addMagazine [(_gear select 1),_numPistolMags];
         }else
         {
             if (_gear != "") then
@@ -129,6 +144,18 @@ _typeFound = false;
         if (_flags select 0) then{if (surfaceIsWater _pos) then{_unit forceAddUniform "U_B_Wetsuit" ;_unit addVest "V_19_EPOCH";};};
         // give them unlimited ammo!
         if (_flags select 1) then{_unit addeventhandler ["fired", {(_this select 0) setvehicleammo 1;}];};
+        // give them some RPG's!
+        _rpg = _flags select 2;
+        if (!isNil "_rpg") then
+        {
+            if (_rpg) then
+            {
+                _unit addMagazines ["RPG32_HE_F", 1];
+                _unit addMagazines ["RPG32_F", 1];
+                _unit addWeapon "launch_RPG32_F";
+            };
+        };
+        
         // Set skills
         _skills = _x select 1;
         _types = ["aimingAccuracy","aimingShake","aimingSpeed","spotDistance","spotTime","courage","reloadSpeed","commanding"];

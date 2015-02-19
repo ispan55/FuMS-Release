@@ -7,10 +7,12 @@
 _themeData =
 [
     [  // *******Options*********
-        "Basic", // Needs to match the folder name!
+        "HeloPatrol", // Needs to match the folder name!
         1,  //Mission Selection: 1=Random, 2=In order, 3=Random:once only until all missions run
              // 4=Static: All missions in 'Mission List' will be created at server start!
-        60 // Respawn delay in seconds
+        60, // Respawn delay in seconds
+		true, // Use global loot data
+		true // Use global soldier data
     ],
     [  //***** Mission List *****
     // List of Missions. Value of '0' indicates random location ##NOT [0] ###, otherwise location indicated used for the encounter.
@@ -79,5 +81,4 @@ _themeData =
 		]
 	]	
 ];
-
-THEMEDATA set [_this select 0, _themeData];
+FuMS_THEMEDATA set [_this select 0, _themeData];

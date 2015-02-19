@@ -41,7 +41,7 @@ GetSafeSpawnVehPos =
     _spawnpos = [];
     if (!isNil "_driver") then
     {
-        _driverDat = _driver getVariable "AILOGIC";         
+        _driverDat = _driver getVariable "FuMS_AILOGIC";         
         //AILOGIC: "scriptName", ecenter, spawnloc, startloc, [options]
         if (!isNil "_driverDat") then
         {
@@ -140,7 +140,7 @@ if (!isNil "_vehicleData") then
                     {
                         private ["_driverLogic","_mode","_base","_air","_flyHeight","_options"];
                         //grab details from driver in case it impacts vehicle spawn paramaters (ie water only, airborne, roads only!
-                        _var = (_drivers select _drivercount) getVariable "AILOGIC";
+                        _var = (_drivers select _drivercount) getVariable "FuMS_AILOGIC";
                         _driverLogic = toupper (_var select 0);
                         _mode = "CAN_COLLIDE";
                         //_air = inheritsFrom (configFile >> "CfgVehicles" >> "Air");
@@ -176,9 +176,9 @@ if (!isNil "_vehicleData") then
                         };
                         (_drivers select _drivercount) moveinDriver _veh;
                         // need to update driver's spawn loc with the spawn loc of this vehicle!
-                        _var = (_drivers select _drivercount) getVariable "AILOGIC";
+                        _var = (_drivers select _drivercount) getVariable "FuMS_AILOGIC";
                         _var set [2,_pos];
-                        (_drivers select _drivercount) setVariable ["AILOGIC",_var,false];
+                        (_drivers select _drivercount) setVariable ["FuMS_AILOGIC",_var,false];
                         
                         [(_drivers select _drivercount)] execVM "HC\Encounters\AI_Logic\VehStuck.sqf";;
                         _drivercount = _drivercount +1;                
@@ -209,8 +209,9 @@ if (!isNil "_vehicleData") then
                                 _crew = [_driverGroup select 0,_type, getPos _veh, _themeIndex] call SpawnSoldier;
                                 //sloppy coding. Need to initialize advanced FuMS functionality here!
                                 _leader = leader (_driverGroup select 0); // ASSERT this guy is fully initialized!                                
-                                _crew setVariable ["AILOGIC", _leader getVariable "AILOGIC", false];
-                                _crew setVariable [ "XFILL", _leader getVariable "XFILL", false];        
+                                _crew setVariable ["FuMS_AILOGIC", _leader getVariable "FuMS_AILOGIC", false];
+                                _crew setVariable [ "FuMS_XFILL", _leader getVariable "FuMS_XFILL", false];   
+                                _crew setVariable ["FuMS_MSNTAG", _leader getVariable "FuMS_MSNTAG", false];
                                 [_crew] execVM "HC\Encounters\AI_Logic\AIEvac.sqf";
                                 //radio chatter only required for group leaders, so only requires init inside SpawnGroup                                                                
                                 //so copy the driver's variables, and exec necessary scripting!

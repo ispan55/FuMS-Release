@@ -6,13 +6,13 @@ Logic inherrient to all AI created by FuMS.
 *AI_Killed: RadioChat message on death. AI killed by vehicles or other AI have all their gear destroyed.
 *AI_Evac: If unit is within the call radius ~200m's of a unit conducting an XFILL operation, the unit will proceed to the XFILL'ing vehicle and board it (stopping all other 'patrol behaviours').  At this point the unit will remain in the vehicle until the vehicle reaches its destination. At this point the unit will despawn.  If the vehicle is disabled, or its driver killed, the unit will continue on foot to the vehicle's destination and then despawn.
 *DriverLogic: If a unit in a driver seat detects its vehicle's position does not change by more than 2m for more than 150 seconds, the vehicle will be deleted, under the assumption it is stuck. If the vehicle conducting an "XFILL" this behaviour is suspended while other units approach and board.
-
-["BUILDINGS", [spawnloc], [actionloc], [duration, range]]
-["EXPLORE   ",[spawnloc], [actionloc], [radius]]
-["BOXPATROL", [spawnloc], [actionloc], [radius]]
-["CONVOY",    [spawnloc], [actionloc], [speed, FlagRTB, FlagRoads, FlagDespawn, convoyType]]
-["SENTRY",    [spawnloc], [actionloc], [radius]]
-["PARADROP",  [spawnloc], [actionloc], [speed, altitude, FlagRTB, FlagSmokes]]
+  
+["BUILDINGS",   [spawnloc], [actionloc], [range] ]
+["EXPLORE   ",  [spawnloc], [actionloc], [radius]]
+["BOXPATROL",   [spawnloc], [actionloc], [radius]]
+["CONVOY",      [spawnloc], [actionloc], [speed, FlagRTB, FlagRoads, FlagDespawn, convoyType]]
+["SENTRY",      [spawnloc], [actionloc], [radius]]
+["PARADROP",    [spawnloc], [actionloc], [speed, altitude, FlagRTB, FlagSmokes]]
 ["PATROLROUTE", [spawnloc], [actionloc], [behaviour, speed, [locations], FlagRTB, FlagRoads, FlagDespawn, flyHeight]
 
 **All loc's can be defined via 3D map specific coordinates, 2D offsets, or a town name (ie "Starvos")
@@ -33,10 +33,9 @@ syntax: ["BOXPATROL", [spawnloc], [actionloc], [radius]]
 Behaviour: 4 waypoints are built at the corners of a square with a diagnol of 2*'radius'. The group will proceed to the eastern most waypiont then continue in a counterclockwise pattern.
 
 "BUILDINGS":
-syntax: ["BUILDINGS", [spawnloc], [actionloc], [duration, range]]
+syntax: ["BUILDINGS", [spawnloc], [actionloc], [range]]
 -spawnloc: offset or specific map location group will spawn.
 -actionloc: offset or specific map location at which group will begin their patrol.
--duration: time, in seconds, the search will be performed. 0=unlimited.
 -range: range from 'actionloc' that the group will look for buildings to search.
 Behaviour: Units within the group will wait until they are on foot. At this piont they will proceed to 'actionloc'. Upon arrival, all buildings inside of 'range' radius will be identified. A random search of these buildings will begin, and continue until 'duration' time passes. When a unit gets to a building, it will inspect all locations within the building before continuing onto another random building on its list. At this point, the group will continue onto its active waypoint (if any).
 Note: There is a tendancy for units to get 'stuck' on certain structures. A routine has been added to try and identify when a unit is stuck and teleport it to a nearby road segment.
@@ -90,5 +89,7 @@ is of type 'air' it will spawn airborne.
 
 
 Custom Variables:
-AILOGIC [patrolType, msnCenter, spawnLoc, patrolLoc, patrolpatternoptions]
-XFILL [themeIndex, side, "xfillstatus"]
+FuMS_AILOGIC [patrolType, msnCenter, spawnLoc, patrolLoc, patrolpatternoptions]
+FuMS_XFILL [themeIndex, side, "xfillstatus"]
+FuMS_MSNTAG [theme, mission]
+

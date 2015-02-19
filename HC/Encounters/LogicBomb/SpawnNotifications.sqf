@@ -67,12 +67,12 @@ if (_notify) then
     if (!isnil "_msnText") then
     {      
         _ogjstr = "";
-        if (count _msnText >0) then {_ogjstr = format ["<t align='center' size='2.0'>%1</t>",_msnText select 0];};
-        if (count _msnText >1) then {_ogjstr = format ["%1<br />%2",_ogjstr,_msnText select 1];};
+        if (count _msnText >0) then {_ogjstr = format ["<t align='center' size='2.0' color='#f29420'>%1</t>",_msnText select 0];};
+        if (count _msnText >1) then {_ogjstr = format ["%1<br /><t size='1.10' color='#f22b20'>%2</t>",_ogjstr,_msnText select 1];};
         _ogjstr =  format ["%1<br />__________", _ogjstr];
-        if (count _msnText >2) then {_ogjstr = format["%1<br /><t size='0.5'>%2</t>",_ogjstr, _msnText select 2];};
-    GlobalHint = _ogjstr;
-    publicVariable "GlobalHint";  
+        if (count _msnText >2) then {_ogjstr = format["%1<br /><t size='1.25' color='#ffff00'>%2</t>",_ogjstr, _msnText select 2];};
+    FuMS_GlobalHint = _ogjstr;
+    publicVariable "FuMS_GlobalHint";  
     };
 };  
 if (_showMap) then 

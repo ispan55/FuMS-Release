@@ -16,6 +16,8 @@ _numAlive = _actionData select 2;
 _maxAlive = _actionData select 3;
 //KRON_StrToArray (Kronzky)
 private["_i","_arr","_out"];
+if (isNil "_msg") then { _msg = " ";};
+
 _arr = toArray(_msg);
 _out=[];
 for "_i" from 0 to (count _arr)-1 do {

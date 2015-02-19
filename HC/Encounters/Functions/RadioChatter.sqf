@@ -22,12 +22,12 @@ if (isNil "_msg") then
 }else
 {
     //diag_log format ["##RadioChatter: Generating message %1,%2,%3,%4", _channel, _range, _pos, _msg];
-    if (RC_EnableRadioChatterSystem) then
+    if (FuMS_RC_EnableRadioChatterSystem) then
     {
         _messageheard = false;
         //set up the radio
         _radio = format ["EpochRadio%1",_channel];
-        if (!RC_RadioRequired) then {_radio = "EpochRadioALL";}; // Can hear messages without a radio!
+        if (!FuMS_RC_RadioRequired) then {_radio = "EpochRadioALL";}; // Can hear messages without a radio!
         // find all players
         _receivers = [];
         {
@@ -39,7 +39,7 @@ if (isNil "_msg") then
         // find all players with the matching radio.
         if (_radio != "EpochRadioALL") then  // this sends it to everyone, even folks without a radio!
         {
-            if (RC_RadioFollowTheme) then
+            if (FuMS_RC_RadioFollowTheme) then
             {
                 {
                     _hasRadio = _radio in (assignedItems _x);
@@ -73,8 +73,8 @@ if (isNil "_msg") then
         };
         // send it to server to be able to utilize 'owner' function
         //  diag_log format ["##RadioChatter: sent to PVEH: %1 :: %2",_msg,_receivers];
-        RADIOCHATTER_Server = [_msg, _receivers];
-        publicVariableServer "RADIOCHATTER_Server";
+        FuMS_RADIOCHATTER_Server = [_msg, _receivers];
+        publicVariableServer "FuMS_RADIOCHATTER_Server";
         if (count _receivers > 0) then { _messageheard = true;};
     };
 };

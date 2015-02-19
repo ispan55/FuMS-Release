@@ -57,7 +57,7 @@ _initData =
   ],[   
      // Troops : These are distributed across all vehicles in this convoy.                                                         
      //  Troop behaviour and side options                        # and type of Troops     Patrol logic |  spawn     |dest |'Patrol' options
-      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Buildings",[0,-600],[0,-50],[2400,100]]] // [timer, radius]
+      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Buildings",[0,-600],[0,-50],[100]]] // [timer, radius]
   //    [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Explore",[0,-600],[0,-50],[2400,100]]] // [timer, radius]
      ]
    ],
@@ -70,7 +70,7 @@ _initData =
   ],[   
      // Troops : These are distributed across all vehicles in this convoy.                                                         
      //  Troop behaviour and side options                        # and type of Troops     Patrol logic |  spawn     |dest |'Patrol' options
-      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Buildings",[0,600],[0,50],[2400,100]]] // [timer, radius]
+      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Buildings",[0,600],[0,50],[100]]] // [timer, radius]
 //      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Explore",[0,-600],[0,-50],[2400,100]]] // [timer, radius]
      ]
    ],
@@ -83,7 +83,7 @@ _initData =
   ],[   
      // Troops : These are distributed across all vehicles in this convoy.                                                         
      //  Troop behaviour and side options                        # and type of Troops     Patrol logic |  spawn     |dest |'Patrol' options
-      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Buildings",[600,0],[50,0],[2400,100]]] // [timer, radius]
+      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Buildings",[600,0],[50,0],[100]]] // [timer, radius]
 //      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Explore",[0,-600],[0,-50],[2400,100]]] // [timer, radius]
      ]
    ],
@@ -96,7 +96,7 @@ _initData =
   ],[   
      // Troops : These are distributed across all vehicles in this convoy.                                                         
      //  Troop behaviour and side options                        # and type of Troops     Patrol logic |  spawn     |dest |'Patrol' options
-      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Buildings",[-600,0],[-50,0],[2400,100]]] // [timer, radius]
+      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Buildings",[-600,0],[-50,0],[100]]] // [timer, radius]
 //      [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"] ,[5, "Rifleman"]],["Explore",[0,-600],[0,-50],[2400,100]]] // [timer, radius]
      ]
    ]
@@ -164,4 +164,3 @@ _initData =
 //*******************************************************************************
 MissionData = _initData;
 HCHAL_ID publicVariableClient "MissionData";
-diag_log format ["##MSN DATA: MissionData sent to %1  : %2", HCHAL_ID, MissionData];

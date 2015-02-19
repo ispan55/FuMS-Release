@@ -10,7 +10,7 @@ while {alive _unit} do
     private ["_xfillStatus","_status"];
     sleep 5;
     // [themeIndex, side, "status", vehicle, evacLoc]
-    _xfillStatus = _unit getVariable "XFILL";
+    _xfillStatus = _unit getVariable "FuMS_XFILL";
     if (!isNil "_xfillStatus") then // otherwise script just timed out for a removed unit!
     {
         _status = _xfillStatus select 2;        
@@ -29,7 +29,7 @@ while {alive _unit} do
                 private ["_lastpos","_lastPosTime"];
                 _unit assignAsCargo _veh;
                 [_unit] orderGetIn true;
-                _unit setCombatMode "WHITE"; // hold fire, engage at will
+                //_unit setCombatMode "WHITE"; // hold fire, engage at will
                 _unit setBehaviour "AWARE"; // mostly roads, occasional cover, upright most of the time
                // diag_log format ["####AIEvac: %1 moving to %2 for extraction to %3", _unit, _veh, _evacLoc];
                 // while drivr is alive and vehicle mobile, move to the vehicle and get in.
@@ -70,7 +70,7 @@ while {alive _unit} do
             if (alive _unit) then  // unit has evacuated! so reset his status
             {
                 //diag_log format ["####AIEvac: %1 has evacuated to %2",_unit, _evacLoc];
-                _unit setVariable ["XFILL",[_themeIndex, _side, "TRUE"],false];
+                _unit setVariable ["FuMS_XFILL",[_themeIndex, _side, "TRUE"],false];
                 _unit forceSpeed -1;  // return to previous movement speed.
             };
             // unit will now resume normal waypoint behaviour, as it has reached its evac point

@@ -23,43 +23,26 @@ _lootData =
 //******** CloneHunter Loot****************************
  [
 // Loot Option title, and box to be used.  Use of array names is permitted. 
-  ["TownLoot", "box_nato_ammoveh_f"],
+  ["CloneHunter", "box_nato_ammoveh_f"],
   [// All weapons and quantity 
-     [Rifle_ALL, 1],
-     [Rifle_ALL, 1],
-     [Rifle_ALL, 1],
-     [Rifle_ALL, 1],
-     [Pistols, 1],
-     [Pistols, 1]
+      ["LMG_Mk200_F", 2],
+      ["arifle_MXM_Black_F", 2]
   ],
   [// All magazines and quantity
-    [Ammo_ALL, [1,2,4]],
-    [Ammo_ALL, [1,2,4]],
-    [Ammo_ALL, [1,2,4]],
-    [Ammo_ALL, [1,2,4]],
-    [Ammo_ALL, [1,2,4]]
+      ["30Rnd_65x39_caseless_mag_Tracer", 4],
+      ["200Rnd_65x39_cased_Box_Tracer", 4]
   ],
   [// All items and quantity
-  [Food_ALL, [1,2,4]],
-  [Food_ALL, [1,2,4]],
-  [Food_ALL, [1,2,4]],
-  [Food_ALL, [1,2,4]],
-  [Drink, [1,2,4]],
-  [Drink, [1,2,4]],
-  [Drink, [1,2,4]],
-  [Drink, [1,2,4]],
-  [BuildingComponents, [1,2,4]],
-  [BuildingComponents, [1,2,4]],
-  [BuildingComponents, [1,2,4]],
-  [CraftingComponents, [1,2,4]],
-  [CraftingComponents, [1,2,4]],
-  [CraftingComponents, [1,2,4]],
-  [Medical, [1,2,4]],
-  [Medical, [1,2,4]]
-  
+      ["NVG_EPOCH", 2],
+      ["FAK", 3],
+      ["optic_Arco", 2],
+      ["ItemKiloHemp", 3],
+      ["meatballs_epoch", 2],
+      ["HeatPack", 3],
+      ["ItemSodaOrangeSherbet", 2] 
   ],
   [// All backpacks and quantity
-    [Backpacks_ALL, 3]
+    [Backpacks_ALL, 1]
   ]
  ],//********** Loot**********************
 //**********************************************************************************************************
@@ -78,7 +61,7 @@ _lootData =
 	  [Food_Cooked, 3],
       ["ItemSodaOrangeSherbet", [1,2,4]],  // 1 plus a random amount between 2-4 : 3-5 items!
       ["MultiGun",1],
-      ["EnergyPackLg",1],
+      ["EnergyPackLg",3],
       ["Repair_EPOCH",1],
       ["Defib_EPOCH",1],
       ["Heal_EPOCH",1]
