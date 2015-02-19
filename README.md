@@ -1,0 +1,239 @@
+#Fulcrum Mission System (FuMS)
+v 1.2
+- Themes:
+	* AirPatrol
+	- 4 Separate missions designed to scout the towns of ALTIS.
+	- Each mission is a division of 3 armed helicopters.
+	- The Helo's will patrol their route, return to their starting point and despawn, prompting the next patrol of helo's to spawn.
+
+- Fixes:
+	* PatrolRoute: adjusted 'completion radius' on waypoints for aircraft.
+             improvements to RTB and cyclic behaviour (see AI_Logic.txt in Docs folder)
+	* ControlLoop: corrected error in random and 'in order' mission selection not properly advancing to the next mission in the list.
+	* SpawnVehicle: vehicle crew members now carry mission specific variables, and now count in Trigger logics.
+	* LogicBomb: corrected a bug that was causing BodyCount trigger to terminate a theme's logic loop.
+   
+- New Trigger:
+	* ALLDEADorGone - true when all ai associated with a mission and its phase missions have been killed or have despawned. This check is done MAP wide, so may be more useful in detecting mission state on some large area missions.
+
+v 1.1b
+ - Phased missions can now use a location other than the parent mission's center
+	Ex:
+	// Phased Missions.
+	// Chaininig of missions is unlimited.
+	// Above triggers will 'suspend' when below phase starts. Phase launched will use its own triggers as specified in its mission script.
+	// If it is desired to continue to use the above Triggers instead of the 'launched mission's' triggers do the following:
+	//   uncomment the "NO TRIGGERS' line from the mission being launched (ie the child mission).
+	// The file needs to be located in the same theme folder as the mission launching them.
+- 	[
+-     	["NukeDevice",["Paros"]],  //Phase01 <-- as an array a 3dlocation, offset, or town name can be specified for the phase mission's center
+	// In the above example, based upon the phase01 trigger, when a player gets within 100m of the current encounter's center
+	//  The NukeDevice mission begins in the town of Paros.
+- 	"TestMission01Enemy", //Phase02 <-- just a file name, phased mission uses THIS mission's center!
+	// In this example, when the phase02 triggers become true (for this mission after 5 minutes of time), this mission
+	//  is started at the current mission's position.
+- 	"TestPhase3" //Phase03
+- 	],
+
+- AI of different factions will engage each other
+       East or West, Resistance, Civ are the three available sides. (East and West are friends under EPOCH)
+
+- Added ability to spawn AI of side "CIV"
+
+- Additional AI radio chatter added to identify when AI engage other AI
+(see ThemeData.sqf under 'Test' theme. "DetHostileAI" response pair added
+
+v 1.1a
+- Fixes:
+  - Tweaks to mission data files to reduce format errors (still need to be careful!)
+  - mission vehicles now only persist if a player captures it (ie gets into it).
+-Additions:
+  - GlobalLootOptions added to BaseLoot.sqf
+    20, //Loot box timer- 20minutes after mission completes all loot boxes associated with mission will despawn.
+    true, // produce smoke at location of a spawned loot box
+    true // vehicles occupied by players become sell-able and persist through server restart
+- Missions support multiple loot types/locations. See TestMission01.sqf for syntax!
+
+v 1.1
+ - Server Side PBO support.
+   - All themes and missions moved to a server side PBO to reduce client side mission file, and help protect mission authorship.
+   - See install instructions!  All themes and missions now contained in the FuMS.pbo
+  
+ - All 'offset' location types within mission files now support use of town names. Within the mission and theme files, town names located on the server's map may be used in place of actual locations to assist in mission creation.
+ 
+- PatrolRoute  AI logic added.  See docs/AI_LOGIC.txt for all other AI logic's available.
+"PATROLROUTE"
+syntax:["PATROLROUTE", [spawnloc], [actionloc], [behaviour, speed, [locations], FlagRTB, FlagRoads, FlagDespawn, flyheight]
+-spawnloc: offset or specific map location group will spawn
+-actionloc: offset or specific map location at which behaviour will start.
+-behaviour: "CARELESS", "SAFE", "AWARE", "COMBAT", "STEALTH" - impacts AI's tendency to follow roads, and use lights.
+-speed: "NORMAL", "FULL" or "LIMITED"
+-[locations] : array of 2d locations, 3d locations, OR town names. 
+-FlagRTB: true= group of pilots/drivers will cycle through all locations.
+-FlagRoads: true= group will attempt to use roads to get to the locations
+-FlagDespawn: true= group will despawn upon reaching final location.
+-flyheight: if 'air' vehicle, altitude to fly the route.
+Behaviour: group will patrol the locations specified, designed for longer distance, fixed location type patrols.  If vehicle 
+is of type 'air' it will spawn airborne.
+
+v 1.00a
+   Fixes:
+   - vehicles can now be sold to vendors.  Going to look into placing options in the mission files to permit this to be configurable by the admin.
+   - Offending infiSTAR box removed from mission data.
+   - 'Random' option added for  loot box creation.  If you replace the name of the box with "Random" in the LootData.sqf, a random box will be chosen for you.  List of 'box' options can be found in Encounters\GlobalConfig\BaseLoot.sqf.
+   - Undesired 'stock' objects no longer spawning in loot boxes.
+   
+v 1.00
+- Addtions:
+ - Aircraft support: All AI Logic now works with helicopters and other aircraft
+ - Paradrop AI Logic: aircraft, as well as supporting convoy drop off/pickup, all can perform paradrops. See Docs/AI_Logic for specifics.
+ - All loot boxes pop smoke to aid in location
+ - Theme Option 4: Can now specify a theme to spawn all the missions in its list at one time. See Basic/ThemeData.sqf for details. This feature will allow for setup of static spawn sites at server start.
+     - SEM has been configured to demonstate this new ability.
+ - Missions now support spawning by town name.  If a town name is provided with a mission name in the ThemeData.sqf, FuMS will locate the town and spawn the mission at that location. No need for looking up points! Supports all Maps!
+     Ex: ["TestMission01","Charkia"] will spawn the mission at the town of 'Charkia'. 
+
+v .95
+- Additions:
+-  Town Invasion Theme:
+ - FuMS now comes with a simple bandit mission theme, and a town invasion theme.
+ -  See documentation for description of Town Invasions.
+ - Convoy AI
+     - Added behaviour: If a driver with Convoy AI LOGIC and 'roadsonly' set to true is assigned to a vehicle, that  vehicle WILL spawn on the road nearest the spawn point in the mision file.
+     - Added behaviour: XFILL - vehicle designated with "XFILL" option will call for an evacuation once it gets near its destination waypoint. At this point, all units of the same side, and same Theme will proceed to the vehicle.  The vehicle driver will only call a number of AI based upon his vehicle's capacity. All other AI in the area will continue to operate as normal.
+ - All missions support mixture of offset and actual map locations when desired.
+ 
+ - Docs section:
+   - See documents for mission trigger definitions and usage
+   - See documents for mission AI patrol logic and usage
+   - See documents for building / modifying misions and themes
+   - See documents for details on themes included with FuMS.
+  
+- Fixes:
+ - Formatting of 'hint' window
+ - proper delay in end of mission cleanup
+ - proper translation of missions when using a mixture of offsets and actual map locations
+ - Corrected issue with SEM missions attempting to launch a phase mission upon mission timeout.
+ - 
+v .92
+- Mission File format change:
+     modified exec line at bottom if each mission. If you made any of your own missions, make sure you modify the line near the bottom to match the following:
+	_msnStatus = [_initData, _this select 0] call MissionInit;
+		
+- New mission Trigger: "Reinforce"
+  ["Reinforce", chance, <Mission File Name>]
+  Example: ["Reinforce", 100, "Reinforcements"]
+  Add this trigger to the 'Win' section of a mission.sqf to enable the AI's call for help to be responded too!
+  This trigger does not impact 'win' conditions for the mission.
+  "Reinforce" - keyword used by Logic Bomb
+  chance - percentage chance of BaseOps providing reinforcements
+  <Mission File Name> - name of the file in the mission's theme folder to execute. (do not include the .sqf)
+  
+  See the Reinforcements.sqf as an example.  Additional units, convoys, vehicles, even loot can be added to the reinforcement mission.
+  For proper mission dynamics, do not add other triggers to the reinforcement.sqf mission.
+  
+- Safe vehicle Spawning:
+	Vehicles now attempt to locate a spot that is 5m radius clear of objects before spawning. 
+	If a position is not found within 100m of the creation point, the vehicle will spawn on the nearest road.
+    (FuMS does not support boats or heli's yet!)
+	
+- Urban areas for Missions:
+ Each ThemeData.sqf now includes options to permit missions to be spawned in Villages, Cities, or Capital Cities.
+See the 'Basic\ThemeData.sqf' for details.
+This functionality will work on all maps, no extra work required. You want a Theme (mission set) that only spawns in villages, or only specific towns or cities?
+The capability is now there, without having to look up points. Just specify the town names, or use keywords: "Villages", "Cities", "Capitals"!
+
+- Simple Epoch Missions:
+Mission files have been changed and theme enabled with Radio Chatter support
+SEM AI uses Radio channel #1 "EpochRadio1" by default. 
+
+v .9
+  - Added Radio Chatter system for AI
+  - Minor bug fixes with HC cleanup.
+  - Mission design system is working. See Install instructions for details on how to create your own themes and missions.
+
+v .8a
+   -Removed code checking for multiple HC's. Was casuing conflict on some systems
+   -Added BattlEye Filters to GitHub repo.
+
+
+
+
+##############################################################################################################  
+#Features
+Fully customizable and expandable headless client mission system.
+No coding necessary to build your own mission sets!
+Easily configurable to any map. 
+Supports multiple mission sets (Themes) simultaneously. Run multiple mission story lines at the same time.
+Mission configuration file that are easy to modify: Typical mission file includes the following::
+
+* Relative placement grid.  All buildings, groups, vehicles, and their patrols are designated via points relative to the mission center. This permits easy transport of your missions to other locations on the map, or even over to other maps!
+	- Absolute location placement also supported per mission.
+	- Global Random mission locations, and custom location lists for your mission supported.
+(see TestMission01.sqf for examples of each)#
+* Custom Notifications: Start, Success, Failure
+	- Map, Hint, and Radio notifications fully customizable by mission
+	- Change text, turn each on/off.
+* Loot : (see LootData.sqf)
+	- Spawn loot at mission start, and/or upon reaching failure or victory conditions
+	- Spawn mission loot inside vehicles.
+	- Loot database by type to permit easy generation of random loot based upon mission.
+	- Custom loot sets by theme, or random loot set selection is available.
+	- Ability to select random loot containers
+	- Loot boxes spawn with a smoke, to assist location in wilderness areas.
+* Buildings - Each mission can have its own set of buildings
+	- Option to clean up buildings after a mission or have them remain until server reset.
+	- EPOCH buildings will spawn loot too.
+* Groups AI Soldiers 
+	- Groups composed of any combination of 'soldier types'. (see SoldierData.sqf)
+		- 10 basic types included.
+		- Common sense randomization sets for gear.
+		- Simple to add different or additional AI types.
+	- Encounters that spawn AI over water automatically equip them with scuba gear.
+	- Configure side, formation, and group behavior by mission.
+	- Custom patrol patterns for each group:  
+		- Perimeter, Box, Explore, Guard, Sentry, Convoy patterns implemented, more to come!
+	- AI driver support for convoy, drop off, pick up/evac of troops, and paradrop!
+	- AI radio for help: When a group drops below 50%, the group leader will make 3 attempts to radio his base ops for assistance. The chance of a reinforcements, and what is sent, is controllable by each mission!
+* Vehicles
+	- Configure man and unmanned vehicles, with or without loot.
+	- Manned vehicles can be configured with troops.
+	- Vehicles have access to the same patrol patterns as AI
+	- Troops placed in vehicles can be set to use different patrol patterns when dropped off, or their vehicle is disabled.
+	- AI controlled vehicles immune to 'crash' damage for reliability of mission behavior.
+	- Vehicles still able to be damage by players or other AI.
+	- Player message upon entering a vehicle: 'vehicle is only available until server reset'.
+	- Vehicles sellable to Vendors.
+	- Mission cleanup: At mission end, AI controlled vehicles are removed when the associated AI are removed.
+*Triggers - configurable by mission to control its Victory, Failure, and Phasing conditions.
+	- Low Unit Count - trips when unit count within radius of mission drops below a value.
+	- Player Proximity-trips when set number of players get within radius of mission.
+	- Timer - trips after an elapsed set period of time.
+	- Detected - trips when AI detect a player.
+	- HighUnitCount - trips when unit count within radius of mission exceeds a value.
+	- NO Triggers- option to enable a mission to simply generate buildings, loot, ai, vehicles without any conditions, making them persist until server restart.
+	- **More triggers to follow!
+* Phasing- aka Mission branching and dynamic modification.
+	- Each mission supports up to three different branches.
+	- Missions can be chained together. 
+	- Used with triggers, dynamic mission sets can be created, simply through use of the 'configuration' files.
+
+Theme level Features: (ThemeData.sqf)
+* Radio communication support: AI can be configured by theme to utilize radios to communicate.
+	- Custom interface separate from game chat for display of radio messages.
+	- Control AI death messages independently of other radio use.
+	- Radio type and range they can be heard controlled via theme options.
+	- Option to make messages heard if player does not have a radio.
+	- Custom callsigns for Base operations and the AI in each theme.   
+	- Only spawned group leader has a radio. Kill him, the group stops talking with base Ops. Each group that is spawned has an incremental number on his call sign (Pride01, Pride02, ....etc).
+	- Configurable text and 'conversation' pairs between AI and base Ops.
+		- Check-In - Group leader checks in upon spawn, with details of his location.
+		- Detect - Group leader notifies base upon spotting clones (can occur once every 10mins per group leader)
+		- Less50 - Group call base ops for help when his group is below 50%. Chance Base ops will send help! (see Reinforce trigger in Docs for details!).
+		- SitRep - Every 30minutes base ops calls all the theme groups for a sitrep.
+		- Death- Group leader will notify base ops when his team starts to take casulties.
+		- More to come.
+      
+
+
+
