@@ -1,4 +1,74 @@
 #Fulcrum Mission System (FuMS)
+**FRESH INSTALL RECOMMENDED**
+v 1.2a,b,c
+Fixes:
+-Issue with HC hanging when restarted at the same time as the server corrected.
+Recommendation: Do not reboot your HC, but maybe once every couple days.
+Rebooting HC with server is not required under normal circumstances!
+And don't forget, you can 'kick' your HC just like a player to get FuMS to do a full reset!
+
+-Changed 'options' for AI "BUILDINGS" logic to mirror most of the other logic types:
+   See Docs\AI_Logic.txt for details before customizing your own missions!
+   
+-Enhanced error reporting to server and HC .rpt for mistakes in config files.
+-An error in a mission file will no longer cause FuMS to hang. FuMS will report the error, skip the mission
+  and continue to run all configured themes.
+
+-"Random" boxes for mission loot have been restricted to the following:
+"B_supplyCrate_F","O_supplyCrate_F","I_supplyCrate_F","CargoNet_01_box_F"
+  Other boxes can be used, but only if specified in the mission file's loot section:
+  ["Random",[0,0]]    -->>  ["<your box name>",[0,0]]
+
+- Corrected an error in building placement that was causing mission buildings to ignore 'rotation' settings.
+ 
+- Volume of radio static has been reduced to 60% (was at 100%). see your 'description.ext' 
+        sound[] = {"HC\Encounters\Sounds\radio01.ogg",.6,1};
+		
+**Contributor: MillerTime : http://hightimez-gamerz.enjin.com/home
+-Loot Box smoke now more patriotic.
+  Box smoke also persists through the duration of the box to aid in locating it.
+- Color enhancements to Global Hint message.
+-Adjusted location of AI radio message window to no longer interfere with 'Action' menu.
+-Small theme example.
+*************************
+
+-New Theme Options - 
+  Admins can now consolidate all loot and soldier specs into two common files for ALL mission themes.
+  Global Loot Data - theme will use server's master loot definitions
+  Global Soldier Data - theme will use server's master soldier definitions
+  See Themes/Test/ThemeData.sqf for syntax
+  No changes required to current mission or themes. Any Theme with the flag set to true will now use
+  the GlobalLootData.sqf or GlobalSoldierData.sqf located in the root /Themes folder.
+
+-New Soldier Options -
+ Admins can now specify default magazine counts when using the 'RifleXXXPairs' set of values in their SoldierData.sqf's.
+ See BaseSoldier.sqf. for settings. 
+ 
+-New AI Options -
+Anti-Tank!  See GlobalSoldierData.sqf for how to now include anti-tank weaponry to allow your ai to combat those armored vehicles!
+Ex: [ true, true, true], // DiverOverWater, UnlimitedAmmo, anti-tank! 
+Any AI with this gear will have it deleted upon death.
+
+-New Building Support -
+See MazeTest2.sqf for example:
+Building placement code modified to better support 3D offsets.
+In the building section if the 1st building in the list is designated at a position of [0,0,0], then all other building
+locations are treated as offsets.  This will provide the ability to import pre-designed bases and building layouts, and 
+move them around the map.
+
+-Global Variable Conforming:
+To reduce risk of conflict with other Mods and addons, FuMS global variables have been modified.
+********************************************************************
+**Admins: Make corrections to your files in the \FuMS\Themes folders for any custom missions you are currently using!
+** Missions distributed with FuMS are up to date.
+********************************************************************
+FuMS_ServerData - BaseServer.sqf - was ServerData
+FuMS_THEMEDATA - bottom of all ThemeData.sqf files - was THEMEDATA
+FuMS_LOOTDATA - bottom of all LootData.sqf - was LOOTDATA
+FuMS_SOLDIERDATA - bottom of all SoldierData.sqf - was SOLDIERDATA
+ <if you are using the new 'global' Data and Soldier files the above changes don't need to be made immediately>
+*******************************************************************
+
 v 1.2
 - Themes:
 	* AirPatrol
