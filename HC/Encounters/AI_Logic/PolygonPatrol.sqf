@@ -36,7 +36,8 @@ for [ {_i=0}, {_i < 360}, {_i = _i + _degsep}] do
     _xx = _xbase + _xmulti;
     _yy = _ybase + _ymulti;
     // diag_log format ["##HC: Rendering Waypoints:closeout=%3 X:%1, Y:%2",_xx, _yy,_closeout];
-    _wp = [_group, [_xx, _yy], 0] call HC_AddWaypoint;       
+    _wp = [_group, [_xx, _yy], 0] call HC_AddWaypoint;  
+     _wp setWaypointBehaviour "COMBAT";
     _wp setWaypointType "MOVE";
 };
 if (_closeout) then

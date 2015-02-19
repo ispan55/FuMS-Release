@@ -105,7 +105,7 @@ _unitHandle = [];
             if(isNull(_unit findNearestEnemy _unit))then
             {
                 _unit forceSpeed 1;
-                _unit setBehaviour "SAFE";
+                _unit setBehaviour "COMBAT";
                 // _unit action ["handGunOff", _unit];
             };
             _curBuilding = _buildingList call BIS_fnc_selectRandom;

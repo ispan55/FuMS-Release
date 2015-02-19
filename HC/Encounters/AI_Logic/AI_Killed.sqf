@@ -75,7 +75,7 @@ if (isPlayer _killer and _killer isKindOf "Man") then
         _themeIndex = _var select 0;
         FuMS_BodyCount set [_themeIndex, ((FuMS_BodyCount select _themeIndex) + 1)];
         diag_log format ["##AI_Killed: BodyCount for Theme#%1 is:%2",_themeIndex, (FuMS_BodyCount select _themeIndex)];
-        diag_log format ["##AI_Killed: Player side = %1 Rating=%2 Victim Side:%3", side _killer, rating _killer, side _victim];
+        diag_log format ["##AI_Killed: Player side = %1  Victim Side:%2", side _killer,  side _victim];
     };    
     if (side _victim == civilian) then
     { 

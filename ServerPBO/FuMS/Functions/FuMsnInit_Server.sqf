@@ -33,7 +33,7 @@ _hc = _this select 0;
 		if (isNil "_hold") then { diag_log format ["###FuMsnInit: ERROR in %1\ThemeData.sqf format in theme #%1",_x];}
 		else
 		{
-			waitUntil { scriptDone _hold};
+			waitUntil { scriptDone _hold}; 
 			diag_log format ["##FuMsnInit: ThemeData: %1 : %2",_x,FuMS_THEMEDATA select _themeNumber];
             if (!(((FuMS_THEMEDATA select _themeNumber) select 0) select 3) ) then //if theme using its own LootData
 			{

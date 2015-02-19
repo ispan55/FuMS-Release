@@ -35,11 +35,11 @@ FuMS_ServerData =
         // A folder matching the names below needs to exist in the ..\Encounters folder.
         // use this block to easily turn off/on your various mission sets.
        // "StressTest",
-		"Test",
-		"HeloPatrols",
+		//"Test",
+		//"HeloPatrols",
 	    "SEM",
-        "TownRaid",
-		"Small"
+        "TownRaid"
+		//"Small"
         //"CloneHunters"
     ],
     [  // Event and AI Radio messsage behavior

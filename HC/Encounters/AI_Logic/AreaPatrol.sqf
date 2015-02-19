@@ -29,7 +29,9 @@ _ybase = _centroid select 1;
     _ymulti = _radius * _sin;
     _xx = _xbase + _xmulti;
     _yy = _ybase + _ymulti;
-    _wp = [_group, [_xx, _yy], 0] call HC_AddWaypoint;       
+    _wp = [_group, [_xx, _yy], 0] call HC_AddWaypoint;   
+    _wp setWaypointBehaviour "COMBAT";
+    
 } foreach _degsep;
 //diag_log format ["##HC:AreaPatrol: %1 waypoints",_wp select 1];
     _cos = cos (_degsep select 0);

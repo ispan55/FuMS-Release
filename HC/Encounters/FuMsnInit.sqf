@@ -58,7 +58,8 @@ if (!isServer) then
 // Players only
 if (hasInterface) then
 {
-   
+    //player addEventHandler ["HandleDamage", {0}];
+   // player allowdamage false;
 };
 
 // If on the headless client

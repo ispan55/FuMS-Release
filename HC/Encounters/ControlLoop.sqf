@@ -77,18 +77,18 @@ _trackList = _missionList;
 
 //Initialize Radio Chatter and other THEME related global variables!
 private ["_data","_options"];
-_data = FuMS_THEMEDATA select 3;
+_data = (FuMS_THEMEDATA select _themeIndex)select 3;
 //Theme Data elements : 0= config options, 1=AI messages, 2=base messages
 //  diag_log format ["##BaseOps: Themedata select 3: _data:%1",_data];
 _options = _data select 0;
-FuMS_radioChannel set [ _themeIndex, [_options select 0]];
-FuMS_silentCheckIn set [ _themeIndex, [_options select 1]];
-FuMS_aiDeathMsg set [ _themeIndex,[_options select 2]];
-FuMS_radioRange set [ _themeIndex,[_options select 3]];
-FuMS_aiCallsign  set [ _themeIndex,[_options select 4]];
-FuMS_baseCallsign set [ _themeIndex, [_options select 5]];
-FuMS_aiMsgs  set [ _themeIndex,[_data select 1]];
-FuMS_baseMsgs set [ _themeIndex, [_data select 2]]; // list of all bases messagess (array of arrays)
+FuMS_radioChannel set [ _themeIndex, _options select 0];
+FuMS_silentCheckIn set [ _themeIndex, _options select 1];
+FuMS_aiDeathMsg set [ _themeIndex,_options select 2];
+FuMS_radioRange set [ _themeIndex,_options select 3];
+FuMS_aiCallsign  set [ _themeIndex,_options select 4];
+FuMS_baseCallsign set [ _themeIndex, _options select 5];
+FuMS_aiMsgs  set [ _themeIndex,_data select 1];
+FuMS_baseMsgs set [ _themeIndex, _data select 2]; // list of all bases messagess (array of arrays)
 FuMS_AI_XMT_MsgQue set [ _themeIndex, ["From","MsgType"] ]; // just using radiochannel array to get the 'count'
 FuMS_AI_RCV_MsgQue set [ _themeIndex, ["To", "MsgType"]  ];
 FuMS_GroupCount set [ _themeIndex, 0 ]; // set this themes group count to zero.

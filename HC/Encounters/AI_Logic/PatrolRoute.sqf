@@ -52,6 +52,7 @@ if (_returntoBase) then
       _wp SetWaypointSpeed _speed;
       _wp SetWaypointBehaviour _behaviour;
       _wp SetWaypointCompletionRadius _compRadius;
+       _wp setWaypointBehaviour "COMBAT";
       // if roadsOnly, force travel behaviour
       if (_roadsOnly) then {_wp SetWaypointBehaviour "SAFE";};
   };

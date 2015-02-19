@@ -34,6 +34,7 @@ _ybase = _centroid select 1;
     _yy = _ybase + _ymulti;    
     // diag_log format ["##HC: Rendering Waypoints:closeout=%3 X:%1, Y:%2",_xx, _yy,_closeout];
     _wp = [_group, [_xx, _yy], 0] call HC_AddWaypoint;       
+     _wp setWaypointBehaviour "COMBAT";
     _wp setWaypointType "MOVE";
 }foreach _basepoints;
 if (_closeout) then
