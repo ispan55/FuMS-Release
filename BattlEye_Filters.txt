@@ -5,3 +5,4 @@ scripts.txt
 7 assignItem !="victim"
 7 allowDamage !"_unit allowdamage false;" !"this enableSimulation false; this allowDamage false"
 7 allUnits !"(_radio != \"EpochRadioALL\")"
+7 showCommandingMenu !"showCommandingMenu \"#USER:FuMS_AdminToolsMenu\";"
