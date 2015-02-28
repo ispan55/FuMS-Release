@@ -1,5 +1,60 @@
 #Fulcrum Mission System (FuMS)
 **FRESH INSTALL RECOMMENDED**
+v1.3
++Headless Client Installation!
+	Install instructions now include basic instructions for setting up your Headless Client
+	
++VCOM_Driving V1.01 - Genesis92x
+http://forums.bistudio.com/showthread.php?187450-VCOM-AI-Driving-Mod
+Added to AI. See BaseServer.sqf for disabling it. 
+
++Stand alone vehicles:
+In addition to adding vehicles in the 'convoy' section of a mission. Vehicles can now also be added in the 'buildings'
+section. Vehicles placed in the 'buildings' section have additional flags to adjust their fuel, ammo, and damaged condition.
+
++AI only vehicles:
+See BaseServer.sqf for details (near bottom): Admins can now add AI only vehicles. Players attempting to access vehicles on this list
+will receive a 'curious' message and be removed from the vehicle.
+
++Admin Controls for Missions!
+See \Docs\AdminControls.txt for specifics.  This version allows admins to directly control the launching of missions through
+control of a theme's mission control loop. More options to come.
+--known bug: sometimes the addaction menu will disappear. Re-logging returns it. Not sure what is the cause..Please post a solution 
+if you know of one!
+
++Marine Locations:
+"Marine" is now available as a location. Similar to "Villages", "Cities", and "Capitals", this new location will automatically
+add all 'marine locations' on your map to a list for use in encounter location randomization.
+See the new Aquatic theme for example of usage!
+
+Fixes:
+-Optimized vehicle spawning, improving reliability of helo patrol and paradrop AI_Logic.
+
+-Modified HC's heartbeat to occur once per second instead of once every two seconds to eliminate false HC disconnects 
+being detected by some servers.
+
+Changes:
+* Moved configurable items out of SoldierData.sqf and BaseLootData.sqf and moved them to the more
+appropriate location of BaseServer.sqf. READ the new BaseServer.sqf!
+
+* Upon mission completion, AI engaged with players will remain until no longer engaged, effectively suspending cleanup
+for those AI and their vehicles. After a mission completes, any AI that was engaged will remain in play until it
+goes for 3 minutes without encountering players. AI Vehicles in this situation will remain for 3 minutes after
+the driver dies to provide an opportunity for players to 'get into' and claim those vehicles.
+Under normal circumstances, AI not engaged with players, and their vehicles will be removed at mission completion.
+
+***************************************************
+***  Admins, Theme folder files requiring update:
+**	 BaseServer.sqf
+		+Soldier Defaults section
+		+Loot Defaults section
+		+Map Definition: Admin controls enable flag
+**   All ThemeData.sqf's  -->see \Test\ThemeData.sqf for template.
+		+Options section: ThemeAutoStart flag
+		+AI to Base section: added 8th chat interaction
+		+Base to AI section: added 8th chat interaction
+**RECOMMEND USING NEW FILES OFF THE DISTRO AND MODIFYING TO MEET YOUR SERVER'S CONFIG.		
+*************************************************
 v 1.2a,b,c
 Fixes:
 -Issue with HC hanging when restarted at the same time as the server corrected.
