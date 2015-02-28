@@ -9,11 +9,6 @@
 #include "BaseLoot.sqf";
 private ["_hc","_ListOfVarNames"];
 _hc = _this select 0;
-FuMS_SoldierDefaults =
-[
-	3, // default rifle magazines
-	3 // default pistol magazines
-];
 
 Outfit_Military = ["U_O_CombatUniform_ocamo","U_O_PilotCoveralls","U_OG_Guerilla1_1","U_OG_Guerilla2_1",
 "U_OG_Guerilla2_3","U_OG_Guerilla3_1","U_OG_Guerilla3_2","U_OG_leader"];
@@ -141,7 +136,7 @@ Muzzles =[
 // NOTE: If you do not include the name, the HC will never learn of the new variable's data!!!
 _ListofVarNames =
 [
-"FuMS_GlobalLootOptions","FuMS_STORAGE","FuMS_OTHERSTORAGE","Backpacks_Assault","Backpacks_Carryall","Backpacks_Field","Backpacks_Kit",
+"Backpacks_Assault","Backpacks_Carryall","Backpacks_Field","Backpacks_Kit",
 "Backpacks_Tactical","Backpacks_Small","Backpacks_Other","Backpacks_All","Explosives","Gems","RareMetal","Medical",
 "Food_Canned","Food_Other","Food_Cooked","Food_Craft","Food_Fish","Food_All","Drink","OtherItems","BuildingKits",
 "BuildingComponents","CraftingTools","CraftingComponents","Grenades_Hand","Grenades_Smoke","Grenades_Light",
@@ -157,7 +152,7 @@ _ListofVarNames =
 
 _ListofVarNames =
 [
-"FuMS_SoldierDefaults", "Outfit_Military","Outfit_WetSuit","Outfit_Civilian","Outfit_Ghillie","Outfit_Female","Outfit_Any",
+"Outfit_Military","Outfit_WetSuit","Outfit_Civilian","Outfit_Ghillie","Outfit_Female","Outfit_Any",
 "Outfit_AnyMilitary","Helmet_ECH","Helmet_Combat","Helmet_SF","Helmet_Mich","Helmet_Crew",
 "Helmet_Pilot","Hat_Military","Helmet_Military","Helmet_Aviator","Helmet_Any","Hat_Boonie",
 "Hat_Ballcap","Hat_Bandanna","Hat_Brimmed","Hat_Binnie","Hat_Civilian","Helmet_Racing",

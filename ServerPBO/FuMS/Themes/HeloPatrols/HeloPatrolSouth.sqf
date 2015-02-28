@@ -12,7 +12,7 @@ _initData =
 [[
 //------------------------------------------------------------------------------------
 //-----Mission Area Setup-----
-    "TestHeloPatrol",  // Mission Title NOSPACES!
+    "HeloPatrolSouth",  // Mission Title NOSPACES!
     200                // encounter radius
 ],[ 
 //------------------------------------------------------------------------------------
@@ -147,6 +147,7 @@ _initData =
     ],
     [  
     // Pilots                                                          # and type  |         Patrol     |    spawn   | dest  | 'Patrol' options   
+																																					 //RTB, useRoads, despawn, FlyHieight
        [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [3, "Driver"]  ],   ["PatrolRoute",[0,0],[0,0],["COMBAT","NORMAL",["Selakano","Zaros","Panochori"],true,false,true,100   ]]]
   ],
   [   

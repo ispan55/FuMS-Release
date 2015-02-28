@@ -7,8 +7,8 @@
 // Theme will determine what folder mission specifics are read.
 private ["_eCenter","_missionTheme","_missionArea","_markers","_curMission","_mkr1","_mkr2","_initData","_silentspawn",
 "_notifications","_lootConfig","_buildingData","_groupData","_vehicleData","_phaseData","_encounterSize","_triggerData",
-"_buildings","_groups","_vehicles","_msnStatus","_i","_convoys","_delay","_themeIndex","_box","_phaseID","_fragments",
-"_missionNameOverride","_passthroughData","_boxes","_aircraftData"];
+"_buildings","_groups","_vehicles","_msnStatus","_convoys","_themeIndex","_phaseID","_fragments",
+"_missionNameOverride","_passthroughData","_boxes","_aircraftData","_dat"];
 LogicBomb = compile preprocessFileLineNumbers "HC\Encounters\LogicBomb\LogicBomb.sqf";
 SpawnBuilding = compile preprocessFileLineNumbers "HC\Encounters\LogicBomb\SpawnBuildings.sqf";
 SpawnGroup = compile preprocessFileLineNumbers "HC\Encounters\LogicBomb\SpawnGroup.sqf";
@@ -43,15 +43,18 @@ if ( _missionNameOverride != "") then
 }
 else { _curMission = _missionArea select 0;};
 _encounterSize = _missionArea select 1;
-_mkr1 = format ["%1_%2_1",_missionTheme, _curMission];
-_mkr2 = format ["%1_%2_2",_missionTheme, _curMission];
-createMarker [_mkr1, [0,0] ];
+_mkr1 = format ["%3_%1_%2_1",_missionTheme, _curMission,_eCenter];
+_mkr2 = format ["%3_%1_%2_2",_missionTheme, _curMission,_eCenter];
+createMarker [_mkr1, [0,0]];
 createMarker [_mkr2, [0,0]];
-_buildings = [_buildingData, _eCenter, _themeIndex, _curMission] call SpawnBuilding;
+
+_dat = [_buildingData, _eCenter, _themeIndex, _curMission] call SpawnBuilding;
+_buildings = _dat select 0;
+_vehicles = _dat select 1;
 _silentspawn = (((FuMS_THEMEDATA select _themeIndex) select 3) select 0) select 1;
 //diag_log format ["##MissionInit: SpawnGroup at center:%1",_eCenter];
 _groups = [_groupData, _eCenter, _encounterSize, _themeIndex, _silentspawn,_curMission] call SpawnGroup;
-_convoys = [_vehicleData, _eCenter, _encounterSize, _groups, [], _themeIndex, _curMission] call SpawnVehicle;
+_convoys = [_vehicleData, _eCenter, _encounterSize, _groups, _vehicles, _themeIndex, _curMission] call SpawnVehicle;
 _groups = _convoys select 0;
 _vehicles = _convoys select 1;
 if (!isNil "_aircraftData") then
@@ -60,15 +63,15 @@ if (!isNil "_aircraftData") then
     _groups = _convoys select 0;
     _vehicles = _convoys select 1;
 };
-_box= [_lootConfig, _eCenter, _msnStatus, _themeIndex] call SpawnMissionLoot;
-_boxes = _boxes + _box;
+_boxes = [_lootConfig, _eCenter, _msnStatus, _themeIndex, _boxes] call SpawnMissionLoot;
+
 [_markers, _notifications, _msnStatus, _mkr1, _mkr2, _eCenter, _missionNameOverride] call SpawnNotifications;
 // Mission Completion Logic
 _fragments = [_msnStatus,_buildingData, _buildings, _groups, _vehicles, _boxes];
 //diag_log format ["****************************************"];
 //diag_log format ["##MissionInit :%2 : Pre-LogicBomb: %1", _fragments, _curMission];
 _fragments = [[_missionTheme,_eCenter, _encounterSize, _phaseData, _themeIndex, _curMission],_triggerData, 
-                        [_buildingData,_buildings, _groups, _vehicles,_box]       ] call LogicBomb;
+                        [_buildingData,_buildings, _groups, _vehicles,_boxes]       ] call LogicBomb;
 // merge objects from child with this parent.
 //diag_log format ["##MissionInit :%2 Post-LogicBomb: %1", _fragments, _curMission];
 //diag_log format ["****************************************"];
@@ -77,13 +80,12 @@ _buildingdata = _fragments select 1;
 _buildings = _fragments select 2;
 _groups = _fragments select 3;
 _vehicles = _fragments select 4;
-_box = _fragments select 5;
+_boxes = _fragments select 5;
 // Mission complete: Take action based upon Trigger/Mission Logic above
 diag_log format ["## MissionInit: Mission %2 finished with status of :%1",_msnStatus, _curMission];
-_box = [_lootConfig, _eCenter, _msnStatus,_themeIndex] call SpawnMissionLoot;
-_boxes = _boxes + _box;
-_delay = [_markers, _notifications, _msnStatus, _mkr1, _mkr2,_eCenter, _missionNameOverride] call SpawnNotifications;
-//sleep _delay;
+_boxes = [_lootConfig, _eCenter, _msnStatus,_themeIndex, _boxes] call SpawnMissionLoot;
+
+[_markers, _notifications, _msnStatus, _mkr1, _mkr2,_eCenter, _missionNameOverride] call SpawnNotifications;
 // **********************************************************************
 // Common Mission clean up
 // For boxes: look to have a seperate timer, spawn a process to wait that timer period then delete them!
@@ -93,24 +95,12 @@ diag_log format ["##MissionInit: Preparing to delete loot: %1",_boxes];
     {
         [_x] spawn
         {
-            private ["_box","_timer","_count"];
+            private ["_box","_timer"];
             _box = _this select 0;
-            _timer = time + (FuMS_GlobalLootOptions select 0)*60;
-            diag_log format ["##MissionInit: _box:%1 set to expire at %2",_box, _timer];
-            _count = 0;
+            _timer = time + (FuMS_LootBoxTime)*60;
+       //     diag_log format ["##MissionInit: _box:%1 set to expire at %2",_box, _timer];    
             while {time < _timer} do
-            {
-                if (_count == 1) then
-                {
-                    if (FuMS_GlobalLootOptions select 1 ) then
-                    { 
-                        _smoke = "SmokeShell" createVehicle (getPos _box);
-                        _smoke = "SmokeShellRed" createVehicle (getPos _box);
-                        _smoke = "SmokeShellBlue" createVehicle (getPos _box);
-                    };
-                    _count = 0;
-                };
-                _count = _count +1;
+            {              
                 sleep 30;
             };
             deleteVehicle _box;
@@ -130,21 +120,20 @@ diag_log format ["##MissionInit: Preparing to delete loot: %1",_boxes];
     }else
     {
         private ["_keep","_found"];
-        _i = 0;
-       // diag_log format ["## MissionInit : %2: Removing Buildings: %1",_buildings, _curMission];
+        
+    //    diag_log format ["## MissionInit : %2: Removing Buildings: %1",_buildings, _curMission];
         {
             private ["_keep"];
-            _keep = _x select 3;
-            if (_keep == 0) then
+            _keep = _x getVariable "FuMS_PERSIST";       
+            if (!_keep) then
             {
-              //  diag_log format ["## MissionInit: %2: deleting building :%1", _buildings select _i, _curMission];
-                deleteVehicle (_buildings select _i);
+          //      diag_log format ["## MissionInit: %2: deleting building :%1", _x, _curMission];
+                deleteVehicle _x;
                 // store in HC variable.
-                HC_HAL_Buildings = HC_HAL_Buildings - [(_buildings select _i)];
+                HC_HAL_Buildings = HC_HAL_Buildings - [_x];
                 HC_HAL_NumBuildings = HC_HAL_NumBuildings - 1;
-            };
-            _i = _i +1;
-        } foreach _buildingData;        
+            };       
+        } foreach _buildings;        
         //Remove vehicles before Groups. Any vehicle occupied by AI will be removed!
        // diag_log format ["##MissionInit: Removing vehicles:%1",_vehicles];      
         //Flatten array...somehow getting arrays of arrays of objects, vs just a simple array of objects.
@@ -158,8 +147,57 @@ diag_log format ["##MissionInit: Preparing to delete loot: %1",_boxes];
                 _keep = driver _x;
                 if (! (isNull _keep) and !(isPlayer _keep) )then
                 { 
-                    HC_HAL_Vehicles = HC_HAL_Vehicles - [_x];
-                    deleteVehicle _x;
+                    private ["_enemy"];
+                    _enemy = _keep findNearestEnemy _keep;
+                    if (!isNull _enemy) then
+                    {
+// Vehicle persists spawn process                        
+                        [_keep] spawn
+                        {
+                            private ["_unit","_timer","_done","_veh","_enemy"];
+                            _unit = _this select 0;                            
+                            _timer = time;
+                            _done = false;
+                            _veh = vehicle _unit;
+                            diag_log format ["##MissionInit: %1 cleanup delayed because its driver, %2, is engaged with players!",_veh,_unit];
+                            while {alive _unit  and !_done} do
+                            {
+                                _enemy = _unit findNearestEnemy _unit;
+                                if (isNull _enemy) then 
+                                {
+                                    if (time > _timer + 180) then { _done = true;};
+                                }else{_timer = time;};
+                                sleep 15;
+                            };    
+                            if (alive _unit) then { deleteVehicle _veh;} // if driver was alive delete the vehicle
+                            else
+                            {
+                               //driver was dead, so wait 3 minutes for TEMPVAR to change on vehicle. If it does not, delete it!
+                                [_veh] spawn
+                                {
+                                    private ["_timer","_veh","_keep"];
+                                    _veh = _this select 0;
+                                    _timer = time+ 180;
+                                    _keep = false;
+                                    while {time < _timer} do
+                                    {
+                                        if ((_veh getVariable "HCTEMP") == "PLAYER") then
+                                        {
+                                            _keep = true;
+                                            _timer = time;
+                                        };
+                                        sleep 15;
+                                    };
+                                    if (!_keep) then { deleteVehicle _veh;};                                    
+                                };                                
+                            };                            
+                            deleteVehicle _unit;
+                        };
+                    }else
+                    {
+                        HC_HAL_Vehicles = HC_HAL_Vehicles - [_x];
+                        deleteVehicle _x;
+                    };
                 };
             };
         }foreach _vehicles;
@@ -167,10 +205,36 @@ diag_log format ["##MissionInit: Preparing to delete loot: %1",_boxes];
         // Remove Groups
         {
             {
-                deleteVehicle _x;
+                private ["_enemy"];
+                _enemy = _x findNearestEnemy _x;
+                if (!isNull _enemy) then                
+                {
+// start of unit spawn code.                    
+                    [_x] spawn
+                    {
+                        private ["_unit","_timer","_done","_enemy"];
+                        _unit = _this select 0;
+                        _timer = time;
+                        _done = false;
+                         diag_log format ["##MissionInit: %1 cleanup delayed because it is engaged with players!",_unit];
+                        while {alive _unit  and !_done} do
+                        {
+                            _enemy = _unit findNearestEnemy _unit;
+                            if (isNull _enemy) then 
+                            {
+                                if (time > _timer + 180) then { _done = true;};
+                            }else{_timer = time;};
+                            sleep 15;
+                        };    
+                        deleteVehicle _unit;
+                    };
+                }else { deleteVehicle _x;};
             } foreach units _x;
-            deletegroup _x;
-            HC_HAL_AIGroups = HC_HAL_AIGroups - [_x];
+            if ((count units _x) == 0) then
+            { 
+                deletegroup _x;
+                HC_HAL_AIGroups = HC_HAL_AIGroups - [_x];
+            };
         }foreach _groups;
         publicVariableServer "HC_HAL_AIGroups";
     };

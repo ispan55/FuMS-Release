@@ -68,48 +68,24 @@ if (count _keywords > 0) then
                     };
                     case "DIR":
                     {
-                        private ["_xcntr","_ycntr","_xldr","_yldr","_xdif","_ydif","_deg","_quad","_dir"];
-                        _xcntr = _position select 0;
-                        _ycntr = _position select 1;
-                        _xldr = (getPos _leader ) select 0;
-                        _yldr = (getPos _leader ) select 1;
-                        _xdif = _xldr - _xcntr; // + is quad I or IV
-                        _ydif = _yldr - _ycntr; // + is quad I or II
-                        if (_xldr >= _xcntr and _yldr >= _ycntr) then {_quad = 1;};
-                        if (_xldr >= _xcntr and _yldr < _ycntr ) then {_quad = 4;};
-                        if (_xldr < _xcntr and _yldr >= _ycntr) then {_quad = 2;};
-                        if (_xldr < _xcntr and _yldr < _ycntr) then {_quad = 3;};
-                        // arccos between 31-60 will be subcardinal
-                        _deg = acos (_ydif/_xdif);
-                        switch (_quad) do
-                        {
-                            case 1: 
-                            {
-                                if (_deg < 31) then {_dir = "East";};
-                                if (_deg < 61) then {_dir = "North East";}
-                                else {_dir = "North";  };       
-                            };
-                            case 2: 
-                            {
-                                if (_deg < 31) then {_dir = "West";};
-                                if (_deg < 61) then {_dir = "North West";}
-                                else {_dir = "North";  };       
-                            };
-                            case 3: 
-                            {
-                                if (_deg < 31) then {_dir = "West";};
-                                if (_deg < 61) then {_dir = "South West";}
-                                else {_dir = "South";  };       
-                            };
-                            case 4: 
-                            {
-                                if (_deg < 31) then {_dir = "East";};
-                                if (_deg < 61) then {_dir = "South East";}
-                                else {_dir = "South";};        
-                            };                      
-                        };
-                        _newMsg = format ["%1%2",_newMsg,_dir];
-                        _i = _i + 5;     
+                        private ["_vd","_xcntr","_ycntr","_xldr","_yldr","_xdif","_ydif","_deg","_quad","_dir"];
+                        _position;
+                        
+//                        _vd = _position vectorDiff (getPosASL _leader);
+                        if (count _position == 2) then { _position set [2,0];};
+                        _vd = (getPosASL _leader) vectorDiff  _position;
+                        _deg = (_vd select 0) atan2 (_vd select 1); //_dir range from -180 to +180 
+                        if (_deg < 0) then {_deg = 360 + _deg}; //_dir range from 0 to 360
+                        if (_deg < 23    or  _deg >= 337) then   {_dir = "N";};
+                        if (_deg >=23 and _deg <68) then   {_dir = "NE";};
+                        if (_deg >=68 and _deg <113) then  {_dir = "E";};
+                        if (_deg >=113 and _deg <158) then {_dir = "SE";};
+                        if (_deg >=158 and _deg <203) then {_dir = "S";};
+                        if (_deg >=203 and _deg <248) then {_dir = "SW";};
+                        if (_deg >=248 and _deg <293) then {_dir = "W";};
+                        if (_deg >=293 and _deg <337) then {_dir = "NW";};
+                        _newMsg = format ["%1%2", _newMsg, _dir];
+                        _i = _i +5;
                     };
                     case "POS":
                     {

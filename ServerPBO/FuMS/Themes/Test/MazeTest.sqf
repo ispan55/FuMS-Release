@@ -22,7 +22,7 @@ _initData =
      "mil_dot", // icon type:                                     https://community.bistudio.com/wiki/cfgMarkers for other options.
                      // mil_triangle, mil_objective, mil_box, group1, loc_Power, etc.
      "ELLIPSE", // "RECTANGLE". do not use "ICON", two markers are used in making each mission indicator.
-     "ColorRed",//                                                  https://community.bistudio.com/wiki/setMarkerColor
+     "ColorYellow",//                                                  https://community.bistudio.com/wiki/setMarkerColor
      "FDiagonal",// Cross, Vertical, Horizontal, etc      https://community.bistudio.com/wiki/setMarkerBrush 
        200           // size of the marker.    
 ],[[

@@ -22,7 +22,7 @@ _initData =
      "mil_dot", // icon type:                                     https://community.bistudio.com/wiki/cfgMarkers for other options.
                      // mil_triangle, mil_objective, mil_box, group1, loc_Power, etc.
      "ELLIPSE", // "RECTANGLE". do not use "ICON", two markers are used in making each mission indicator.
-     "ColorRed",//                                                  https://community.bistudio.com/wiki/setMarkerColor
+     "ColorYellow",//                                                  https://community.bistudio.com/wiki/setMarkerColor
      "FDiagonal",// Cross, Vertical, Horizontal, etc      https://community.bistudio.com/wiki/setMarkerBrush 
        200           // size of the marker.    
 ],[[
@@ -68,7 +68,7 @@ _initData =
      [0,0]                // Offset from mission center.
 ]],[
 //---------------------------------------------------------------------------------
-//-----Building Configuration-----       
+//-----Building  and stand alone vehicle Configuration-----       
 //BUILDINGS: persist = 0: building deleted at event completion, 1= building remains until server reset.
 // NOTE: if using 3D coordinates for buildings, if the 1st building uses a location of [0,0,0] 
 // ALL other buildings will assume their locations are offsets!
@@ -78,7 +78,11 @@ _initData =
     ["Land_Wreck_Car2_F",          [12,12],  0,         0],
     ["Land_Wreck_Offroad2_F",   [-10,-10],0,        0],
     ["Land_HighVoltageTower_F",    [20,-10],0,       0],
-    ["CamoNet_INDP_big_F",        [-20, 10],0,        0]
+    ["CamoNet_INDP_big_F",        [-20, 10],0,        0],
+	// Vehicle Name  | offset | rotation | Fuel, Ammo, DmgEngine, Dmg FuelTank, DmgHull
+	["I_UGV_01_rcws_F",[0,100],   0,       [.5,   0,     .5,         .5,         .5]]
+	// vehicles: 1 for fuel and ammo is full 100%, DmgEngine=1 is 100% damaged
+	
 ],[
 //---------------------------------------------------------------------------------
 //-----Group Configuration-----  see Convoy section for AI in vehicles! 
@@ -99,7 +103,7 @@ _initData =
 // **Start 'copy'****Spawn a Group of AI Config Data *********
 // 3 rifleman that will spawn NW of encounter center and patrol all buildings within 70m
 // Example below shows how town names can be used in place of spawn locations and offsets!
-[["RESISTANCE","COMBAT","RED","LINE"],[[3,"Rifleman"]],["Buildings",["Stavros"],["Stavros"],[0,70] ]], // 3 rifleman that will patrol all buildings within 70m for unlimited duration
+[["RESISTANCE","COMBAT","RED","LINE"],[[3,"Rifleman"]],["Buildings",["Stavros"],["Stavros"],[70] ]], // 3 rifleman that will patrol all buildings within 70m for unlimited duration
 // **End 'copy'******(see Patrol Options below for other AI behaviour)
 // Example of a 3D map location. This loc is specific to ALTIS
 [["RESISTANCE","COMBAT","RED","LINE"],[[5,"Rifleman"]],["BoxPatrol",[21520,11491.9,0],[0,0],[70] ]],
@@ -134,9 +138,9 @@ _initData =
     // These troops will be dropped off just south of encounter center, then the convoy will return to their spawn location and despawn.
  [         // Vehicle                                 Offset     Crew (only 1 type!)   CargoLoot (see Loot section below for more detail!)
    [  "B_Truck_01_transport_EPOCH",[-50,-610],[1,"Rifleman"],        "Truck01"      ], 
-   [  "C_Offroad_01_EPOCH"           ,[-50,-615],[1,"Rifleman"],     "None"      ], 
-   [  "C_Offroad_01_EPOCH"           ,[-50,-618],[1,"Rifleman"],     "None"      ], 
-   [  "C_Offroad_01_EPOCH"           ,[13300,14600,0],[ 0, ""          ],       "Truck01"]   
+   [  "C_Offroad_01_EPOCH"           ,[-50,-635],[1,"Rifleman"],     "None"      ], 
+   [  "C_Offroad_01_EPOCH"           ,[-50,-688],[1,"Rifleman"],     "None"      ]
+   //[  "C_Offroad_01_EPOCH"           ,[13300,14600,0],[ 0, ""          ],       "Truck01"]   
                  // If driver-less vehicles are desired, place them at the bottom of the list. 
 				 // Troops WILL be placed into 'driver-less' vehicles if the other vehicles are full!!!
     ],[  
@@ -189,7 +193,7 @@ _initData =
     [    //WIN Triggers and Controls
       ["LowUnitCount", "GUER", 0, 0, [0,0]], // all enemies are dead:  side options "EAST","WEST","GUER","CIV","LOGIC","ANY"
        ["ProxPlayer", [0,0], 50, 1], // 1 player is within 50 meters of encounter center.
-	   ["Reinforce", 100, "Random"] // %chance when requested, Mission to run
+	   ["Reinforce", 100, "Help_Helo"] // %chance when requested, Mission to run
 //  ["BodyCount", 10] // when at least 10 AI are killed by players
 	   // Note Reinforce trigger will not impact win/loss logic.
     ],
@@ -200,10 +204,10 @@ _initData =
     [    //Phase01 Triggers and Controls
 //        ["Timer", 180]  // Mission launches in 180 seconds
 //      ["Detected",0,0]    //Launch mission if any AI group or vehicle detects a player
-         ["ProxPlayer", [0,0], 100, 1] // 1 player is within 100 meters of encounter center.
+       //  ["ProxPlayer", [0,0], 100, 1] // 1 player is within 100 meters of encounter center.
     ],
     [    //Phase02 Triggers and Controls
-        ["Timer",120] // after 5 minutes Enemies to this AI arrive--town WAR!!!!!
+       // ["Timer",120] // after 5 minutes Enemies to this AI arrive--town WAR!!!!!
     ],
     [    //Phase03 Triggers and Controls
     
@@ -235,25 +239,27 @@ _initData =
      [  "O_Heli_Light_02_unarmed_EPOCH"           ,[0,-1700],[1,"Rifleman"],     "None"      ]
     ],[  
     // Pilots                                                          # and type  |         Patrol     |    spawn   | dest  | 'Patrol' options
-   [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [1, "Driver"]  ],   ["ParaDrop",[0,-1700],[0,0],["Normal", 100, true,true  ]   ]]
+   [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [1, "Driver"]  ],   ["ParaDrop",[0,-1700],[0,0],["Normal", 200, true,true  ]   ]]
   ],[   
      // Troops : These are distributed across all aircraft in the division. These lines are identical to the lines in the group section.
      //  Troop behaviour and side options                    # and type of Troops     Patrol logic |  spawn     |dest |'Patrol' options
  //   [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"],[6,"Rifleman"]],["BoxPatrol",[-70,-1900],[0,0],[0]]],
  //   [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"],[6,"Rifleman"]],["BoxPatrol",[-70,-1800],[50,0],[50]]],
-    [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"],[6,"Rifleman"]],["BoxPatrol",[0,-1700],[-50,0],[50]]]
+    [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"],[6,"Rifleman"]],["BoxPatrol",[0,-1700],[0,0],[150]]]
    // 'dest' for troops is where they will go to perform their 'Patrol Logic' once they get on deck
      ]
    ],
     [  // Division #2
    [         // Vehicle                                 Offset     Crew (only 1 type!)   CargoLoot (see Loot section below for more detail!)
-     [  "O_Heli_Light_02_unarmed_EPOCH",[0,-1700],[1,"Rifleman"],        "Truck01"      ], 
-     [  "O_Heli_Light_02_unarmed_EPOCH"           ,[0,-1750],[1,"Rifleman"],     "None"      ], 
-     [  "O_Heli_Light_02_unarmed_EPOCH"           ,[0,-1800],[1,"Rifleman"],     "None"      ]
+     [  "O_Heli_Light_02_unarmed_EPOCH",[200,-1700],[1,"Rifleman"],        "Truck01"      ], 
+     [  "O_Heli_Light_02_unarmed_EPOCH"           ,[200,-1750],[1,"Rifleman"],     "None"      ], 
+     [  "O_Heli_Light_02_unarmed_EPOCH"           ,[200,-1800],[1,"Rifleman"],     "None"      ]
     ],[  
     // Pilots                                                          # and type  |         Patrol     |    spawn   | dest  | 'Patrol' options
-   [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [3, "Driver"]  ],   ["PatrolRoute",[0,-1800],[0,0],["COMBAT","NORMAL",["Pyrgos","Stavros","Telos"],true, false, false,100]   ]]
+   [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [3, "Driver"]  ],   ["PatrolRoute",[0,-1800],[0,0],["COMBAT","NORMAL",["Pyrgos"],true, false, true,100]   ]]
+   //Patrol flys from spawn location to mission center [0,0] then  to Pyrgos, then returns to spawn location (RTB) and despawns!
   ],[   
+  
      // Troops : These are distributed across all aircraft in the division. These lines are identical to the lines in the group section.
      //  Troop behaviour and side options                    # and type of Troops     Patrol logic |  spawn     |dest |'Patrol' options
   //  [["RESISTANCE","COMBAT","RED","COLUMN"],[[1,"Sniper"],[6,"Rifleman"]],["BoxPatrol",[-70,-1700],[0,0],[0]]],

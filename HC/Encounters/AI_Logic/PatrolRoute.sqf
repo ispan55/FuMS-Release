@@ -23,8 +23,11 @@ _flyheight = _patternOptions select 6;
 _compRadius = 150;
 if (!isNil "_flyheight") then
 {
+    if (_flyheight > 0) then
+    {
     vehicle (leader _group) flyInHeight _flyheight;
     _compRadius = _compRadius + _flyheight;
+    }else {_flyheight = nil;};
 };
 // for each loc in 'destinations' create a MOVE waypoint
 // Add 1st waypoint as 'actionLoc'.
@@ -62,7 +65,7 @@ if (_returntoBase) then
  
  if (_returnToBase) then  // travel back to base
  {
-     _wp = [_group, (getWPPos [_group, 1]),0] call HC_AddWaypoint;
+     _wp = [_group, (getPos (leader _group)),0] call HC_AddWaypoint;
      // set mode and speed for each waypoint.
      _wp SetWaypointSpeed _speed;
      _wp SetWaypointBehaviour _behaviour;
@@ -86,21 +89,23 @@ sleep 10;
              _lastWpIndex = _wp select 1;     
              _curWpIndex = currentWaypoint group _unit;
              
-             while {_lastWpIndex != _curWpIndex and alive _unit} do
+             while {_lastWpIndex > _curWpIndex and alive _unit} do
              { 
                 // diag_log format ["..PatrolRoute:despawn:%3 _lastWp:%1  _curWp:%2",_lastWpIndex, _curWpIndex,_unit];
                  sleep 15;
                  _curWpIndex = currentWaypoint group _unit;  
              };
              // last waypoint is active, now have to wait until complete.
+             /*
              while {_lastWpIndex == _curWpIndex and alive _unit} do
              {
                  sleep 15;
                  _curWpIndex = currentWaypoint group _unit;   
-                // diag_log format ["..PatrolRoute:despawn:%3  _lastWp:%1  _curWp:%2 WAITING for last to complete.",_lastWpIndex, _curWpIndex,_unit];
+                diag_log format ["..PatrolRoute:despawn:%3  _lastWp:%1  _curWp:%2 WAITING for last to complete.",_lastWpIndex, _curWpIndex,_unit];
              };
              // last waypoint has completed. Delete AI.
-            // diag_log format ["..PatrolRoute:despawn:%1 last waypoint completed. Performing cleanup",_unit];
+             */
+          //   diag_log format ["..PatrolRoute:despawn:%1 last waypoint completed. Performing cleanup",_unit];
              if (driver (vehicle _unit) == _unit and alive _unit) then { deleteVehicle (vehicle _unit);};
              if (alive _unit) then {deleteVehicle _unit;             };
          };
@@ -117,7 +122,7 @@ sleep 10;
          if (_x == driver(vehicle _x)) then
          {
              [_x] execVM "HC\Encounters\AI_Logic\VehStuck.sqf";
-             diag_log format ["##PatrolRoute: VehStuck.sqf started for %1 in %2",_x, vehicle _x];
+           //  diag_log format ["##PatrolRoute: VehStuck.sqf started for %1 in %2",_x, vehicle _x];
          };
      }foreach units _group;
  };

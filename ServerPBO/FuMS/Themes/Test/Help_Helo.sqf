@@ -7,7 +7,7 @@
 // Be cautious when editing data.
 _initData =
 [
-["Reinforcments", 200], // Mission Title NOSPACES!, and encounter radius
+["Reinforcements", 200], // Mission Title NOSPACES!, and encounter radius
 ["Test Mission","mil_dot","ELLIPSE","ColorRed","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
 [  
     [   // NOTIFICATION Messages and Map display Control.

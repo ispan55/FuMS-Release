@@ -43,7 +43,7 @@ if (isNil "HC_HAL_NumBuildings") then {HC_HAL_NumBuildings = 0; publicVariableSe
     while {true} do
     {
         // HC heartbeat sent to server every 2 seconds.
-       sleep 2;
+       uiSleep 1;
         HC_HAL_isAlive = "TRUE"; 
         publicVariableServer "HC_HAL_isAlive";
     };

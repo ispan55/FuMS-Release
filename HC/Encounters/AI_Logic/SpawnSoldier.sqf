@@ -10,7 +10,7 @@ AddIt = compile preprocessFileLineNumbers "HC\Encounters\Functions\AddIt.sqf";
 GetChoice = compile preprocessFileLineNumbers "HC\Encounters\LogicBomb\GetChoice.sqf";
 AttachMuzzle = compile preprocessFileLineNumbers "HC\Encounters\AI_Logic\AttachMuzzle.sqf";
 private ["_group","_type","_pos","_themeIndex","_unit","_typeFound","_aiName","_gear","_flags","_skills","_types","_i","_priweapon","_soldierData","_secweapon",
-"_radio", "_numPistolMags","_numRifleMags"];
+"_radio"];
 _group = _this select 0;
 _type = _this select 1;
 _pos = _this select 2;
@@ -28,8 +28,6 @@ if (isNil "_soldierData") exitWith
     diag_log format ["SpawnSoldier: ERROR: no theme specific SoldierData.sqf for theme #%1",_themeIndex];
     diag_log format ["Check options in ThemeData.sqf for theme %1",((FuMS_THEMEDATA select _themeIndex) select 0) select 0];
 };
-_numRifleMags = FuMS_SoldierDefaults select 0;
-_numPistolMags = FuMS_SoldierDefaults select 1;
 
 //diag_log format ["##SpawnSoldier: Index:%2 _soldierData:%1",_soldierData,_themeIndex];
 _typeFound = false;
@@ -66,13 +64,17 @@ _typeFound = false;
         {
             _priweapon = _gear select 0;
             _unit addWeapon _priweapon;
-            _unit addMagazine [(_gear select 1),_numRifleMags];
+            _mag = getArray (configFile >> "CfgWeapons" >> _priweapon >> "magazines") select 0;
+            _unit addMagazines [ _mag, FuMS_SoldierMagCount_Rifle];
+           // _unit addMagazine [(_gear select 1),_numRifleMags];
         }else
         {
             if (_gear != "") then
             {
                 _priweapon= _gear;
                 _unit addWeapon _priweapon;
+                  _mag = getArray (configFile >> "CfgWeapons" >> _priweapon >> "magazines") select 0;
+                _unit addMagazines [ _mag, FuMS_SoldierMagCount_Rifle];
             };
         };   
        // diag_log format ["##SpawnSoldier: Rifle added:%1",_priweapon];
@@ -84,13 +86,17 @@ _typeFound = false;
         {
             _secweapon = _gear select 0;
             _unit addWeapon _secweapon;
-            _unit addMagazine [(_gear select 1),_numPistolMags];
+            _mag = getArray (configFile >> "CfgWeapons" >> _secweapon >> "magazines") select 0;
+            _unit addMagazines [ _mag, FuMS_SoldierMagCount_Pistol];
+            //_unit addMagazine [(_gear select 1),_numPistolMags];
         }else
         {
             if (_gear != "") then
             {
                 _secweapon= _gear;
                 _unit addWeapon _secweapon;
+                  _mag = getArray (configFile >> "CfgWeapons" >> _secweapon >> "magazines") select 0;
+            _unit addMagazines [ _mag, FuMS_SoldierMagCount_Pistol];
             };
         };   
         // Rifle Attachments
@@ -99,7 +105,8 @@ _typeFound = false;
         if ([_gear select 1] call AddIt) then
         { 
             _muzzle = [_priweapon] call AttachMuzzle;
-            if (_muzzle != "None") then
+            //if (_muzzle != "None") then
+            if (!isNil "_muzzle") then
             {
               //  diag_log format ["##SpawnSolder: Adding %1",_muzzle];
                 _unit addPrimaryWeaponItem _muzzle;
@@ -159,7 +166,16 @@ _typeFound = false;
         // Set skills
         _skills = _x select 1;
         _types = ["aimingAccuracy","aimingShake","aimingSpeed","spotDistance","spotTime","courage","reloadSpeed","commanding"];
-        for [ {_i=0},{_i<8},{_i=_i+1}] do { _unit setSkill [ (_types select _i), (_skills select _i)];};
+        for [ {_i=0},{_i<8},{_i=_i+1}] do
+        { 
+            if (FuMS_SoldierSkillsOverride select _i == 0) then
+            {
+                _unit setSkill [ (_types select _i), (_skills select _i)];
+            }else
+            {
+                _unit setSkill [ (_types select _i), (FuMS_SoldierSkillsOverride select _i)];
+            };
+        };
     };   
 }foreach _soldierData;
 if (!_typeFound) then

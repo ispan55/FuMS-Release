@@ -65,13 +65,32 @@ if (_lootOption != "NONE") then
                 {
                     _pos = [_pos, 0, 30, 1,0, 8,0,[],[]] call BIS_fnc_findSafePos; // 1m clear, terraingradient 8 pretty hilly
                 }; //else leave the 3d solution because person making the mission knows what they are doing!
-               diag_log format ["##FillLoot : Creating %1 at %2",_boxtype, _pos];
+    //           diag_log format ["##FillLoot : Creating %1 at %2",_boxtype, _pos];
                 _box = createVehicle [_boxtype, _pos,[],0,"NONE"];
-                if (FuMS_GlobalLootOptions select 1 ) then
+                if (FuMS_LootSmoke ) then
                 { 
-                    _smoke = "SmokeShell" createVehicle (_pos);
-                    _smoke = "SmokeShellRed" createVehicle (_pos);
-                    _smoke = "SmokeShellBlue" createVehicle (_pos);
+                    [_box] spawn
+                    {
+                        private ["_box","_smoke01","_smoke02","_smoke03","_count"];
+                        _box = _this select 0;                       
+                        _count = 1;
+                        while {!isNil "_box"} do
+                        {
+                            if (_count == 1) then
+                            {                       
+                                _smoke01 = "SmokeShell" createVehicle (getPos _box);
+                                _smoke02 = "SmokeShellRed" createVehicle (getPos _box);
+                                _smoke03 = "SmokeShellBlue" createVehicle (getPos _box);                          
+                                _count = 0;
+                                sleep 30;
+                            };
+                            _count = _count +1;
+                        };
+                        deleteVehicle _smoke01;
+                        deleteVehicle _smoke02;
+                        deleteVehicle _smoke03;
+                    };
+                    
                 };
                 clearWeaponCargoGlobal _box;
                 clearMagazineCargoGlobal _box;

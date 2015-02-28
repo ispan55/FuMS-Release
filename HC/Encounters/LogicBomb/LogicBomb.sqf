@@ -11,7 +11,8 @@ Timer = compile preprocessFileLineNumbers "HC\Encounters\LogicBomb\Timer.sqf";
 GetBodyCount = compile preprocessFileLineNumbers "HC\Encounters\LogicBomb\BodyCount.sqf";
 PullData = compile preprocessFileLineNumbers "HC\Encounters\Functions\PullData.sqf";
 AllDeadorGone = compile preprocessFileLineNumbers "HC\Encounters\LogicBomb\AllDeadorGone.sqf";
-HCDEBUG = "LOGICBOMB";
+//HCDEBUG = "LOGICBOMB";
+HCDEBUG = " ";
 private ["_triggerData","_eCenter","_encounterSize","_groups","_vehicles","_missionTheme","_instanceTriggers","_curMission",
 "_triggerArray", "_i","_msnStatus","_missionData","_phaseData","_phase01","_msnObjects","_themeIndex","_buildingData",
 "_groups","_vehicles","_boxes","_phase02","_phase03","_buildings",
@@ -205,10 +206,17 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
     _phase02Status = "NA";
     _phase03Status = "NA";
     
-    
-    while {_msnStatus != "WIN" and _msnStatus !="LOSE"} do
+    _missionKillIndex = count FuMS_ActiveMissions;
+    FuMS_ActiveMissions = FuMS_ActiveMissions + [ [_missionKillIndex, format ["%1:%2", _curMission,_missionTheme]] ];  
+    publicVariable "FuMS_ActiveMissions";
+
+    while {_msnStatus != "WIN" and _msnStatus !="LOSE" and _msnStatus != "KILL"} do
     {
-        private ["_curState","_i","_dt","_dtlist0","_dtlist1","_data","_numAI","_triggerCount","_nearFolks","_range"];        
+        private ["_curState","_i","_dt","_dtlist0","_dtlist1","_data","_numAI","_triggerCount","_nearFolks","_range","_endMission"];     
+
+        _endMission = (FuMS_ActiveMissions select _missionKillIndex) select 1;
+        if (_endMission == "KILL") exitWith {_msnStatus = "KILL";};
+        
         _dtlist1 = [];
         for [{_i=0},{_i < 5},{_i = _i+1}] do // go through each of the states checking status of their triggers
         {
@@ -459,6 +467,7 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
         };  
         sleep 3;
     };
+    FuMS_ActiveMissions set [_missionKillIndex, "COMPLETE"];
     // Exiting mission, so make sure triggers are cleaned up!!!
     {
         HC_HAL_TRIGGERS = HC_HAL_TRIGGERS -[_x];

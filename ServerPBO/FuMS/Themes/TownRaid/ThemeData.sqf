@@ -7,11 +7,12 @@
 _themeData =
 [
     [  // *******Options*********
-        "RaidTown", // Needs to match the folder name!
+        "TownRaid", // Needs to match the folder name!
         1,  //Mission Selection: 1=Random, 2=In order, 3=Random, once only until all missions run
         60, // Respawn delay in seconds
 		true, // Global loot data
-		true // Global soldier data  
+		true, // Global soldier data  
+		false
     ],
     [  //***** Mission List *****
         // List of Missions. Value of '0' indicates random location, otherwise location indicated used for the encounter.
@@ -59,7 +60,8 @@ _themeData =
 			["Less50", "We are taking heavy casualties! Request evac!"],
 			["SitRep", "On station. <#ALIVE> souls, <#DEAD> dead. <STATUS>."],//<--this is the response to Base's '99' call.
 			["Done", "Roger Out."],
-			["Death", "We are taking casualties!"]
+			["Death", "We are taking casualties!"],
+			["DetHostileAI", "Human Mercenaries have been spotted in the area."]
 		],
 		[   // Base to AI chatter
 			["CheckIn", "Base copies all."],
@@ -68,7 +70,8 @@ _themeData =
 			["Less50", "We have you Lima Charlie. Stand bye!"],
 			["SitRep", "99 pass SITREP."], //<-- This is broadcast every 30 minutes.  All groups will respond.
 			["HELP", "Support is on its way!"],
-			["Death", "Copy all. Keep us advised of your status."] 
+			["Death", "Copy all. Keep us advised of your status."],
+			["DetHostileAI", "Roger. Weapons Free, Capture as many as you can."]			
 		]
 	]	
 ];

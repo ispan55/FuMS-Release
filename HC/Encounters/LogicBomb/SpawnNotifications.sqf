@@ -19,6 +19,8 @@ _msnStartText = _notifications select 1;
 _msnSuccessText =_notifications select 2;
 _msnFailureText = _notifications select 3;
 _radionotify = _options select 0;
+_delay = 0;
+_msnText = "";
 
 _radiochannel = _options select 1;
 if (isNil "_radiochannel") then {_radiochannel = "ALL";};
@@ -56,10 +58,13 @@ switch (_msnStatus) do
 // Notify the world of the event, if desired
 if (_radionotify) then
 { 
-   // right now, do not care if radio msg heard!
-    if (count _msnText > 0 ) then  // something in file to transmit.
+    if (!isnil "_msnText") then
     {
-        [_msnText select 2, _radiochannel, _radiorange, _eCenter] call RadioChatter; 
+        // right now, do not care if radio msg heard!
+        if (count _msnText > 0 ) then  // something in file to transmit.
+        {
+            [_msnText select 2, _radiochannel, _radiorange, _eCenter] call RadioChatter; 
+        };
     };
 };   
 if (_notify) then
@@ -77,7 +82,7 @@ if (_notify) then
 };  
 if (_showMap) then 
 { 
-    if (_msnStatus == "WIN" or _msnStatus == "LOSE") then
+    if (_msnStatus == "WIN" or _msnStatus == "LOSE" or _msnStatus == "KILL") then
     {  
         if (_msnStatus == "WIN") then {_mkr1 setMarkerColor "ColorGreen";}
         else {_mkr1 setMarkerColor "ColorBlack";};

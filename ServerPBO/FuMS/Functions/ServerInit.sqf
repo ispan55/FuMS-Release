@@ -4,6 +4,10 @@
 // Executed by server to initialize support functions for headless client
 
 if (!isServer) exitWith {};
+
+
+
+StaticMissionControlLoopCode = preprocessFileLineNumbers "\FuMS\HC\LogicBomb\StaticMissionControlLoop.sqf";
 //Launch HC cleanup process.
 // This script watches for an HC disconnect
 // When identified, server will cleanup objects that where controlled by the HC
@@ -14,6 +18,12 @@ if (!isServer) exitWith {};
     diag_log format ["##Server-HC isAlive heart beat operational"];
     while {true} do
     {
+		// Wait for signal for HC connecting.
+		// initialize the HC
+		// start its heartbeat monitor
+		// need to get ownerid to use as an index ref to all the variables to be cleaned up.
+		// these vars will need to be initialzed where HC ID is established.
+		
         //****start of control code <copy&paste> start here.
         if (! isNil "HC_HAL_isDirty") then //  HC_HAL has completed initialization, at least once during server instance.
         {
@@ -21,32 +31,33 @@ if (!isServer) exitWith {};
             { 
 			    // HC is connected: Need to determine if it has been initialized yet!
 				if (!HC_HAL_Initialized) then
-				{
+                {
                     private ["_handle"];
-					HCHAL_ID = owner HC_HAL_Player;
-					_handle = [HCHAL_ID ] execVM "\FuMS\Functions\FuMsnInit_Server.sqf";
-					// loads HC server level variables.
-					waitUntil {ScriptDone _handle};
-					HC_HAL_Initialized = true;
-					FuMS_ServerInitData = true;
-					HCHAL_ID publicVariableClient "FuMS_ServerInitData";
-				};
+                    HCHAL_ID = owner HC_HAL_Player;
+                    _handle = [HCHAL_ID ] execVM "\FuMS\Functions\FuMsnInit_Server.sqf";
+                    // loads HC server level variables.
+                    waitUntil {ScriptDone _handle};
+                    HC_HAL_Initialized = true;
+                    FuMS_ServerInitData = true;
+                    HCHAL_ID publicVariableClient "FuMS_ServerInitData";
+                    HCHAL_ID publicVariableClient "StaticMissionControlLoopCode";
+                };
                 // HC_HAL_CLEANUP set to false by the HC when it connects and after waiting for it to be set TRUE by this routine.
                 // since the HC is dirty, now need to listen for its heartbeat.
                 // HC when 'reconnecting', will wait until isDirty set to false by this routine before starting its heartbeats.
                 //diag_log format ["##SERVER:HC_HAL: Variable Cleanup Required!, Listening for heartbeats"]; 
                 HC_HAL_isAlive = "FALSE";
-                sleep 2;
+                uiSleep 2;
                 //Wait for 2secs, if value still FALSE, listen for a 2nd heartbeat.  
                 if (HC_HAL_isAlive == "FALSE") then // listening for 2nd heart beat
                 {
                     diag_log format ["##SERVER:HC_HAL: 1st Heart beat missed!!"];    
-                    sleep 2;
+                    uiSleep 2;
                     //Wait 2secs, if value still FALSE, listen for a 3rd heart beat.
                     if (HC_HAL_isAlive == "FALSE") then //listening for the 3rd heart beat.
                     {
                         diag_log format ["##SERVER:HC_HAL: 2nd Heart beat missed!!"];       
-                        sleep 2;                             
+                        uiSleep 2;                             
                         if (HC_HAL_isAlive == "FALSE" ) then // HC_HAL is confirmed disconnected.                            
                         {
                             diag_log format ["##SERVER:HC_HAL: Disconnect detected. Cleaning up the Mess!!!!"];  
@@ -60,18 +71,24 @@ if (!isServer) exitWith {};
                             // Vehicles and Containers
                             diag_log format ["HC_HAL:CLEANUP: %1 vehicles to be checked!",count HC_HAL_Vehicles];
                             { 
-                                _value = _x getVariable "HCTEMP";
-                                diag_log format ["HC_HAL:CLEANPU: %1 being checked.",_x];
-                                if (!(isNil "_value")) then  // if _value 'isNil' then somehow calling on a vehicle not created by the HC!
+                                if (TypeName _x == "ARRAY") then
                                 {
-                                    if (_value != "AI") then
+                                    diag_log format ["##ServerInit: error in HC_HAL_Vehicles: found %1",_x];
+                                }else
+                                {
+                                    _value = _x getVariable "HCTEMP";
+                                    diag_log format ["HC_HAL:CLEANUP: %1 being checked.",_x];
+                                    if (!(isNil "_value")) then  // if _value 'isNil' then somehow calling on a vehicle not created by the HC!
                                     {
-                                        diag_log format ["HC_HAL:CLEANUP: %1 is no longer AI controlled: %2",_x, _value];           
-                                    }else
-                                    {
-                                        diag_log format ["HC_HAL:CLEANUP: %1 deleted",_x];
-                                        deleteVehicle _x;   
-                                        _x = nil;
+                                        if (_value != "AI") then
+                                        {
+                                            diag_log format ["HC_HAL:CLEANUP: %1 is no longer AI controlled: %2",_x, _value];           
+                                        }else
+                                        {
+                                            diag_log format ["HC_HAL:CLEANUP: %1 deleted",_x];
+                                            deleteVehicle _x;   
+                                            _x = nil;
+                                        };
                                     };
                                 };
                             } forEach HC_HAL_Vehicles;
@@ -132,7 +149,25 @@ if (!isServer) exitWith {};
     // End of Listen Loop
 };
 
+"FuMS_RegisterVehicle" addPublicVariableEventHandler
+{
+// for use by non-FuMS addons to register vehicles to keep them from going poof.
+	_vehObj = _this select 1;
+	_vehObj call EPOCH_server_setVToken;
+};
 
+"FuMS_DataValidation" addPublicVariableEventHandler
+{
+	_msg = _this select 1;
+    diag_log format ["-------------------------------------------------------------------------------------"];
+    diag_log format ["----------------            Fulcrum Mission System                    -----------------"];
+    diag_log format ["-------------------------------------------------------------------------------------"];   
+    diag_log format [" Potential fatal errors in FuMS initialization or mission execution.     "];
+    diag_log format ["   check your Headless Client's .rpt for specifics!"];
+    diag_log format ["Offending File: %1",_msg];
+    diag_log format ["-------------------------------------------------------------------------------------"];
+    diag_log format ["-------------------------------------------------------------------------------------"];      
+};
 
 "BuildVehicle_HC" addPublicVariableEventHandler
 {
@@ -169,6 +204,19 @@ if (!isServer) exitWith {};
            // diag_log format ["###EH:GetIn:AI DETECTED: %1 ID entered a vehicle: %2",_idowner,_vehobj];
         }else
         {
+			_typeveh = typeOf _vehobj;
+			_abort = false;
+			{
+				if (_typeveh == _x) exitWith
+				{
+					FuMS_AIONLYVEHICLE = true;
+					_idowner publicVariableClient "FuMS_AIONLYVEHICLE";
+					_owner action ["getOut", _vehobj];
+					_abort = true;
+				};
+			}foreach FuMS_AIONLYVehicles;
+			if (_abort) exitWith {};
+		
             //diag_log format ["###EH:GetIn: %1 with ID:%4 entering %2 on %3",_owner, _vehseat, _vehactual, _idowner];
             FuMS_TEMPVEHICLE = true;
             _idowner publicVariableClient "FuMS_TEMPVEHICLE";

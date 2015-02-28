@@ -7,21 +7,6 @@
 //private ["_hc","_ListofVarNames"];
 //_hc = _this select 0;
 //NOTE: Do not use box_ind_ammoveh_f as a loot option if you use InfiStar's admin tools.
-FuMS_GlobalLootOptions =
-[
-	20, // number of minutes after being accessed that loot box is deleted
-	true, // true= smoke created with box for ease of location.
-	true  // vehicles occupied by players persist through server reset and are sellable!
-];
-FuMS_STORAGE =
-   // each is 3 boxes in canvas that look to be para dropped
-[    
-    "B_supplyCrate_F","O_supplyCrate_F","I_supplyCrate_F","CargoNet_01_box_F"
-]; 
-OTHERSTORAGE =
-[
-    "Pelican_EPOCH"
-];
 
 Backpacks_Assault = ["B_AssaultPack_cbr","B_AssaultPack_dgtl","B_AssaultPack_khk","B_AssaultPack_mcamo","B_AssaultPack_ocamo","B_AssaultPack_rgr",
 "B_AssaultPack_sgg"];

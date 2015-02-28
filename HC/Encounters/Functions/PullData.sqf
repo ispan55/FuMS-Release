@@ -27,7 +27,7 @@ if (_abort) then
     diag_log format ["-------------------------------------------------------------------------------------"];
     diag_log format ["----------------            Fulcrum Mission System                    -----------------"];
     diag_log format ["-------------------------------------------------------------------------------------"];
-    diag_log format ["##FuMsnInit: ERROR in Fulcrum Mission Data. Mission will be aborted."];
+    diag_log format ["##PullData: ERROR in Fulcrum Mission Data. Mission will be aborted."];
     diag_log format ["    Recommend verifying data in file \FuMS\Themes\%1\%2 on your server!",_missionTheme,_missionFileName];        
     diag_log format ["             -ABORT- -ABORT- -FORMAT ERROR- -ABORT- -ABORT-"];   
     diag_log format ["                            Fulcrum Mission System %1 aborted!",_missionFileName];
@@ -35,6 +35,7 @@ if (_abort) then
     diag_log format ["Recommend checking your server's .rpt file for further information"];
     diag_log format ["-------------------------------------------------------------------------------------"];
     diag_log format ["-------------------------------------------------------------------------------------"];   
+    
 }
 else
 {

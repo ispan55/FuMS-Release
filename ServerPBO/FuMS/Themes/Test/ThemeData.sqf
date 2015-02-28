@@ -12,25 +12,27 @@ _themeData =
              // 4=Static: All missions in 'Mission List' will be created at server start!
         60, // Respawn delay in seconds
 		true, // use Global Loot Data (GlobalLootData.sqf)
-		true  // use Global Soldier Data file (GlobalSoldierData.sqf)
+		true,  // use Global Soldier Data file (GlobalSoldierData.sqf)
+		true // ThemeAutoStart: Setting this to 'false' will prevent normal start-up of the Theme! See \Docs\AdminControls.txt
     ],
     [  //***** Mission List *****
     // List of Missions. Value of '0' indicates random location ##NOT [0] ###, otherwise location indicated used for the encounter.
         // The below missions MUST be in the same folder as this file! 
        
 		//["TestMission01",[10700,12200] ] // spawn at the specific location. If '0' take from locations below!
-    //    ["BikeGang"],  // will spawn at any of the locations defined below!
-	      //["TestMission01","Charkia"] // mission will only spawn in the town of Charkia
-         // ["CloneArmy",[8440, 25120]]
-		 //["TestHeloPatrol","Stavros"]
-		 ["MazeTest",[23587,18368.5]],
-		 ["MazeTest2",[12091.3, 10521.1]],
-		 ["MazeTest2",[23300,17800]],
-		 ["MazeTest2",[15500,20000]]
+          ["BikeGang"],  // will spawn at any of the locations defined below!
+	     ["TestMission01","Charkia"],
+		  ["LandPatrol", "Zaros"],// mission will only spawn in the town of Charkia
+		//	["WaterMission"]
+		// ["TestHeloPatrol","Stavros"],
+		["MazeTest",[23587,18368.5]]
+		// ["MazeTest2",[12091.3, 10521.1]],
+		// ["MazeTest2",[23300,17800]],
+		// ["MazeTest2",[15500,20000]]
 		 
     ],
-    [   //***** Locations *****
-	    //Location format ["keyword"] or [x,y,"optional name"]
+    [   //***** Locations ***** !! 2D coords ONLY !!
+	    //Location format ["keyword"] or [[x,y],"optional name"] or [x,y]
 		//  Where the 'optional name' is found, it will be used in place of the MissionName defined in the mission file.
 		// Urban locations will always use their location instead of the mission name.
         // List of Encounter locations to be used if Global random locations are not desired
@@ -38,9 +40,9 @@ _themeData =
 		//  locations from the mission map will be added to the list.
 		// Specific cities can also be included, if not all of a type are desired:
 		// Ex: ["Charkia"], ["Neochori"]
-		
+		//["Marine"]
 		//["Villages"],["Cities"],["Capitals"];  //Encounter will only spawn in urban areas!
-		["Villages"],["Cities"],["Capitals"],[[10715,10175],"AREA51"],[10010,10010],["Charkia"]  
+		//["Villages"],["Cities"],["Capitals"],[[10715,10175],"AREA51"],[10010,10010],["Charkia"]  
 		//Encounter will spawn in all urban areas as well the other points provided.
          // Note these points are NOT offsets, but points specific to ALTIS !!
         

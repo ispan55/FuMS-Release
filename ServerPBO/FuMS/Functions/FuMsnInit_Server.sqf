@@ -26,6 +26,8 @@ _hc = _this select 0;
     FuMS_SOLDIERDATA = []; // Array containing data from \'themename'\SoldierData.sqf    
 
 	FuMS_ActiveThemes = FuMS_ServerData select 3;// array of theme names. Used to locate the theme's mission folder.
+	FuMS_AIONLYVehicles = (FuMS_ServerData select 6) select 4;
+	FuMS_ActiveMissions = []; // [index, "mission:Theme"] combo. to track running missions.
    // load the theme options, loot, and soldier configuration data for each Theme found in BaseServer.sqf
     _themeNumber = 0;
     {
@@ -83,13 +85,14 @@ _hc publicVariableClient "FuMS_SOLDIERDATA";
 sleep 2;
 _hc publicVariableClient "FuMS_GlobalDataIndex";
 
+_hold = []execVM "\FuMS\Themes\AdminData.sqf";
+waitUntil {ScriptDone _hold};
+//diag_log format ["##FuMsnInit: AdminData:%1", FuMS_Users];
+publicVariable "FuMS_Users";
+publicVariable "FuMS_ActiveMissions";
+
+
 FuMS_ServerInitData = true;
 publicVariable "FuMS_ServerInitData";	
 diag_log format ["##FuMsnInit: Global data hand off to Headless Client complete."];
 
-// can probably clean up these variables since the server does not need them now!
-// but leave it. It should not be alot of memory, and will permit HC to restart quicker after a DC.
-//ServerData = [];
-//THEMEDATA = [];
-//LOOTDATA = [];
-//SOLDIERDATA = [];

@@ -12,7 +12,7 @@ _initData =
 [[
 //------------------------------------------------------------------------------------
 //-----Mission Area Setup-----
-    "TestHeloPatrol",  // Mission Title NOSPACES!
+    "HeloPatrolWest",  // Mission Title NOSPACES!
     200                // encounter radius
 ],[ 
 //------------------------------------------------------------------------------------

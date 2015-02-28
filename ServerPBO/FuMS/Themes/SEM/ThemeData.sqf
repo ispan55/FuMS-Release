@@ -11,7 +11,8 @@ _themeData =
         3,  //Mission Selection: 1=Random, 2=In order, 3=Random, once only until all missions run
         60, // Respawn delay in seconds
 		true, // global loot
-		true // global soldier data
+		true, // global soldier data
+		true  // autostart
     ],
     [  
         // List of Missions. Value of '0' indicates random location, otherwise location indicated used for the encounter.
@@ -42,7 +43,8 @@ _themeData =
 			["Less50", "We are taking heavy casualties!"],
 			["SitRep", "On station. <#ALIVE> souls, <#DEAD> dead. <STATUS>"],
 			["Done", "Roger Out."],
-			["Death", "We are under attack!"]
+			["Death", "We are under attack!"],
+			["DetHostileAI", "Human Mercenaries have been spotted in the area."]
 		],
 		[   // Base to AI chatter
 			["CheckIn", "Copy, return to base ASAP"],
@@ -51,7 +53,8 @@ _themeData =
 			["Less50", "We have you Lima Charlie. Stand bye!"],
 			["SitRep", "99 <CALLSIGN> pass SITREP."],
 			["HELP", "Support is on its way!."],
-			["Death", ""]  // no response.
+			["Death", ""],  // no response.
+			["DetHostileAI", "Roger. Weapons Free, Capture as many as you can."]
 		]
 	]	
 	

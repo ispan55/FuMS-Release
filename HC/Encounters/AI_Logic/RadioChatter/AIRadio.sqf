@@ -168,7 +168,7 @@ if (!((FuMS_ServerData select 4) select 0)) exitWith {};
                 // Determine if BaseOps will send Reinforcements done in LogicBomb
                 // exec the mission by passing mission identification to LogicBomb's Reinforcement Trigger.
                 // ASSERT mission center is UNIQUE to any other mission that may be running!
-                diag_log format ["##AI Radio : Call for Help by %1",_callsign];
+                //diag_log format ["##AI Radio : Call for Help by %1",_callsign];
                 FuMS_RC_REINFORCEMENTS = [_pos, _index, _callsign];               
             };
         };

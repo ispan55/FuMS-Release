@@ -35,4 +35,27 @@ publicVariableServer "BuildVehicle_HC";
         };
         _damage       
     }];
+    
+  _veh addEventHandler ["GetIn",
+    {
+        _vehobj = _this select 0;
+        _seatpos = _this select 1;  
+        _unit = _this select 2;   
+        _turretpath = _this select 3;
+        _var = _vehobj getVariable "HCTEMP";
+        //ASSERT this EH only runs on the HC
+        if ( isPlayer _unit and _var != "PLAYER") then
+       {
+            HC_HAL_Vehicles = HC_HAL_Vehicles - [_veh];
+           publicVariableServer "HC_HAL_Vehicles";
+           _var = "PLAYER";
+           _vehobj setVariable ["HCTEMP",_var,false];
+        };
+        _damage       
+    }];  
+    
 _veh
+    
+    
+    
+    

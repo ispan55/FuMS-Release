@@ -23,13 +23,13 @@ _lootData =
 // Loot Option title, and box to be used.  Use of array names is permitted. 
   ["BuildingBox", "Random"],
   [      // All weapons and quantity 
-      [Weapons_ALL, 2]
+      [Rifle_ALL, 2]
   ],
   [// All magazines and quantity
-     [Magazines_ALL, 7]
+     [Ammo_ALL, 7]
   ],
   [// All items and quantity
-      	[Items_ALL, 7]
+      	[Food_ALL, 7]
   ],
   [// All backpacks and quantity
          [Backpacks_ALL, 1]
@@ -40,13 +40,13 @@ _lootData =
 // Loot Option title, and box to be used.  Use of array names is permitted. 
   ["MultiGunBox", "Random"],
   [      // All weapons and quantity 
-      [Weapons_ALL, 2]
+      [Rifle_ALL, 2]
   ],
   [// All magazines and quantity
-     [magazines_ALL, 7]
+     [Ammo_ALL, 7]
   ],
   [// All items and quantity
-      	[Items_ALL, 5]
+      	[Food_ALL, 5]
   ],
   [// All backpacks and quantity
     [Backpacks_ALL, 1]
@@ -76,13 +76,13 @@ _lootData =
   ["SmallGunBox", "Random"],
   [
 	// All weapons and quantity 
-      [Weapons_ALL, 4]
+      [Rifle_ALL, 4]
   ],
   [// All magazines and quantity
-     [magazines_ALL, 2]
+     [Ammo_ALL, 2]
   ],
   [// All items and quantity
-      	[Items_ALL, 2]
+      	[Food_ALL, 2]
   ],
   [// All backpacks and quantity
     [Backpacks_ALL, 1]
@@ -95,13 +95,13 @@ _lootData =
   ["RiflesBox", "Random"],
   [
       // All weapons and quantity 
-      [Weapons_ALL, 2]
+      [Rifle_ALL, 2]
   ],
   [// All magazines and quantity
-     [magazines_ALL, 7]
+     [Ammo_ALL, 7]
   ],
   [// All items and quantity
-      	[Items_ALL, 2]
+      	[Food_ALL, 2]
   ],
   [// All backpacks and quantity
       [Backpacks_ALL, 1]
@@ -113,13 +113,13 @@ _lootData =
   ["SniperBox","Random"],
   [
   // All weapons and quantity  
-  [Weapons_ALL, 3]
+  [Rifle_ALL, 3]
   ],
   [// All magazines and quantity
-     [magazines_ALL, 5]
+     [Ammo_ALL, 5]
   ],
   [// All items and quantity
-      	[Items_ALL, 4]
+      	[Food_ALL, 4]
   ],
   [// All backpacks and quantity
     [Backpacks_ALL, 3]

@@ -5,7 +5,7 @@
 _initData =
 [
 ["BikeGang", 300], // Mission Title NOSPACES!, and encounter radius
-["Bike Gang","mil_dot","ELLIPSE","ColorRed","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
+["Bike Gang","mil_dot","ELLIPSE","ColorYellow","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
 [  
     [// NOTIFICATION Messages and Map display Control.
 	true, "ALL", 0, // Notify players via Radio Message, radio channel, range from encounter center (0=unlimited.
@@ -32,9 +32,9 @@ _initData =
 	] 
 ],
 [  //  Loot Config:  Refer to LootData.sqf for specifics
-["None" , [0,0] ], //[static loot, offset location] - spawns with the mission
+["Random" , [0,0] ], //[static loot, offset location] - spawns with the mission
    // static loot will also spawn if 'NO TRIGGERS' is enabled.
-["CloneHunter" , [0,0] ], // Win loot, offset location - spawns after mission success
+["Random" , [0,0] ], // Win loot, offset location - spawns after mission success
 ["None" , [0,0] ]  // Failure loot, offset location - spawns on mission failure
 ],
 [//BUILDINGS: persist = 0: building deleted at event completion, 1= building remains until server reset.
@@ -66,9 +66,9 @@ _initData =
 [
      [  // Convoy #1                     
     [         // Vehicle                     Offset     Crew (only 1 type!)   CargoLoot (see Loot section below for more detail!)
-           [  "C_Quadbike_01_EPOCH"          ,[-50,3100],[1,"Rifleman"],        "None"      ], 
-           [  "C_Quadbike_01_EPOCH"          ,[-50,3100],[1,"Rifleman"],     "None"      ], 
-           [  "C_Quadbike_01_EPOCH"          ,[-50,3100],[1,"Rifleman"],     "None"      ]
+           [  "C_Quadbike_01_EPOCH"          ,[-50,1000],[],        "None"      ], 
+           [  "C_Quadbike_01_EPOCH"          ,[-50,1000],[],     "None"      ], 
+           [  "C_Quadbike_01_EPOCH"          ,[-50,1000],[],     "None"      ]
 		//   [  "C_Quadbike_01_EPOCH"          ,[-50,-600],[1,"Rifleman"],     "None"      ], 
 		 //  [  "C_Quadbike_01_EPOCH"          ,[-50,-600],[1,"Rifleman"],     "None"      ], 
          //  [  "C_Quadbike_01_EPOCH"          ,[-50,-600],[ 1, "Rifleman"],     "Truck01"]   
@@ -78,12 +78,12 @@ _initData =
       [  
           // "Convoy": spawn at -500,-500, drop off cargo at -50,-50, then return to base. (ie 'Convoy' logic behaviour)
            // Drivers                                                          # and type  |         Patrol     |    spawn   | dest       | 'Patrol' options
-          [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [3, "Driver"]  ],   ["Convoy",[-50,3100],[0,-15],["NORMAL",false,true]   ]]
-         
+          [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [3, "Driver"]  ],   ["Convoy",[-50,1000],[0,-15],["NORMAL",true,false,true]   ]]
+         // proceed to 0,-15, drop off troops, then return to spawn location and despawn!
       ],
       // Troops : These are distributed across all vehicles in this convoy.                                                         
      [      //  Troop behaviour and side options                        # and type of Troops                               Patrol logic |  spawn     |dest |'Patrol' options
-         [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [1,"Sniper"],[2,"Rifleman"]  ],   ["BoxPatrol",[-50,3100],[0,0],[0]   ]]
+         [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [1,"Sniper"],[2,"Rifleman"]  ],   ["BoxPatrol",[-50,1000],[0,0],[100]   ]]
         // [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [1,"Sniper"],[2,"Rifleman"] ],   ["BoxPatrol",[-70,-600],[50,0],[50]   ]],
         // [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [1,"Sniper"],[3,"Rifleman"]  ],   ["BoxPatrol",[-70,-600],[-50,0],[50]   ]]
             // 'dest' for troops is where they will go to perform their 'Patrol Logic' once the disembark the convoy IF their vehicle's driver group is using the 'Convoy' patrol logic.
@@ -92,9 +92,9 @@ _initData =
    ],
       [  // Convoy #2                     
     [         // Vehicle                     Offset         Crew (only 1 type!)   Cargo
-		     [  "C_Quadbike_01_EPOCH"         ,[-50,3000],[1,"Rifleman"],        "None"      ], 
-           [  "C_Quadbike_01_EPOCH"          ,[-50,3000],[1,"Rifleman"],     "None"      ], 
-           [  "C_Quadbike_01_EPOCH"          ,[-50,3000],[1,"Rifleman"],     "None"      ]
+		     [  "C_Quadbike_01_EPOCH"         ,[-50,1000],[],        "None"      ], 
+           [  "C_Quadbike_01_EPOCH"          ,[-50,1000],[],     "None"      ], 
+           [  "C_Quadbike_01_EPOCH"          ,[-50,1000],[],     "None"      ]
 //		   [  "C_Quadbike_01_EPOCH"          ,[-50,-600],[1,"Rifleman"],     "None"      ], 
 //		   [  "C_Quadbike_01_EPOCH"          ,[-50,-600],[1,"Rifleman"],     "None"      ], 
  //          [  "C_Quadbike_01_EPOCH"          ,[-50,-600],[ 1, "Rifleman"],     "Truck01"]   
@@ -103,12 +103,12 @@ _initData =
       ],
       [                 
            // Drivers                                                          # and type  |         Patrol     |    spawn   | dest       | 'Patrol' options
-          [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [3, "Driver"]  ],   ["Convoy",[-50,3000],[-50,50],[true]   ]]
-          
+          [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [3, "Driver"]  ],   ["Convoy",[-50,1000],[-50,50],["NORMAL",false,false,false]   ]]
+            // proceed to -50,50, drop off troops, then begin a box patrol, not staying to roads.
       ],
       // Troops : These are distributed across all vehicles in this convoy.                                                         
      [      //  Troop behaviour and side options                        # and type of Troops                               Patrol logic |  spawn     |dest |'Patrol' options
-        [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [1,"Sniper"],[2,"Rifleman"]  ],   ["BoxPatrol",[-500,3000],[20,0],[0]   ]]
+        [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [1,"Sniper"],[2,"Rifleman"]  ],   ["BoxPatrol",[-500,1000],[20,0],[100]   ]]
  //     [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [1,"Sniper"],[5,"Rifleman"]     ],   ["BoxPatrol",[-600,-200],[20,20],[0]   ]]
             // 'dest' for troops is where they will go to perform their 'Patrol Logic' once the disembark the convoy IF their vehicle's driver group is using the 'Convoy' patrol logic.
              // otherwise troops will remain in vehicle unless it is engaged. Once vehicle destroyed, Troops will move onto their 'Patrol Logic'.
@@ -130,9 +130,10 @@ _initData =
 // index 0:win, 1:lose, 2:phase1, 3:phase2, 4:phase3, 5:ignore triggers
 [ // NOTE: side RESISTANCE for groups == side GUER for Triggers.
     [    //WIN Triggers and Controls
-      ["LowUnitCount", "GUER", 0, 0, [0,0]], // all enemies are dead:  side options "EAST","WEST","GUER","CIV","LOGIC","ANY"
+      ["LowUnitCount", "GUER", 3, 0, [0,0]], // all enemies are dead:  side options "EAST","WEST","GUER","CIV","LOGIC","ANY"
        ["ProxPlayer", [0,0], 50, 1], // 1 player is within 100 meters of encounter center.
-	   ["Reinforce", 25, "Reinforcements"] // %chance when requested, Mission to run
+	   ["Reinforce", 25, "Random"], // %chance when requested, Mission to run
+	   ["Timer", 600] // 10minutes must pass prior to being able to complete the mission (to allow bikes to get there!!!
 	   // Note Reinforce trigger will not impact win/loss logic.
     ],
     [    //LOSE Triggers and Controls
@@ -190,9 +191,9 @@ Def: ["Reinforce", chance, "MsnName"]: Sets up reinforcement logic in the event 
 // The below specified missions will be precompiled into the specified 'calls' when this script runs.
 // The file needs to be located in the same folder as this mission launching them.
 [
-    "NukeDevice",  //Phase01
-    "TestPhase2", //Phase02
-    "TestPhase3" //Phase03
+   // "NukeDevice",  //Phase01
+   // "TestPhase2", //Phase02
+   // "TestPhase3" //Phase03
 ]
 
 

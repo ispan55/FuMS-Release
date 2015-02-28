@@ -62,7 +62,12 @@ else
         _wp setWaypointType "MOVE";
         _wp setWaypointSpeed "NORMAL";
         _wp setWaypointCompletionRadius 50;
-    };
+    }else
+    {
+        // add boxpatrol waypoints.
+        //INPUTS: Group, centroid, radius (meters), rotation, closeout
+       [_group, _destination, 150, 0, true] call BoxPatrol;         
+    }
 };
 // set up special behaviour for all drivers in this group!
 {           

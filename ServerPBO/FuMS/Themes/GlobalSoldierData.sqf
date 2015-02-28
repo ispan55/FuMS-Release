@@ -20,7 +20,8 @@
 _soldierData = 
 [
     [
-        "Sniper",[.08, .9, .1, .5, .5, .1, .1, .5],
+        "Sniper",
+		[.08, .9, .1, .5, .5, .1, .1, .5], // Soldier skill levels
         ["U_O_GhillieSuit",1], // Uniform
         [Vest_Tactical,1], // Vest.
         [Helmet_SF,.7], // Helmet.

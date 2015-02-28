@@ -30,7 +30,7 @@ _soldierData =
         [PistolPairs,.8], // Secondary Weapon.
         [ .8, .9, .5, .3, 9],  // Map, Compass, GPS, Watch, Radio(1-9)
         [ .5, .5, .3 ], // Binoculars, RangeFinders, NVG's
-        [ true, true], // DiverOverWater, UnlimitedAmmo
+        [ true, true, false], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.5],[1,1]], 
 		  [[Drink,.5],[1,2]],
 		  [["FAK",.5],[1,1]],
@@ -46,7 +46,7 @@ _soldierData =
         [PistolPairs,.5], // Secondary Weapon and chance
         [ .3, .3, 0, .1, 9],  // Map, Compass, GPS, Watch, Radio(1-9)
         [ .5, 0, .3 ], // Binoculars, RangeFinders, NVG's
-        [ true, true], // DiverOverWater, UnlimitedAmmo
+        [ true, true, true], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.1],[1,1]],[[Drink,.1],[1,1]],[["FAK",.1],[1,1]],[[Grenades_Smoke,.8],[1,1]],[[Grenades_Hand,.3],[1,1]]    ] 
     ],[
         "LMG",[.40, .80, .80, .90, .90, .85, .80, .90],
@@ -59,7 +59,7 @@ _soldierData =
         [PistolPairs,.5], // Secondary Weapon and chance
         [ .3, .3, 0, .1, 9],  // Map, Compass, GPS, Watch, Radio(1-9)
         [ .5, 0, .3 ], // Binoculars, RangeFinders, NVG's
-        [ true, true], // DiverOverWater, UnlimitedAmmo
+        [ true, true, true], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.1],[1,1]],[[Drink,.1],[1,1]],[["FAK",.1],[1,1]],[[Grenades_Smoke,.8],[1,1]],[[Grenades_Hand,.3],[1,1]]              ] 
     ],[
         "Hunter",[.30, .70, .80, .90, .90, .85, .80, .90],
@@ -72,7 +72,7 @@ _soldierData =
         [PistolPairs,.3], // Secondary Weapon and chance
         [ .3, .3, 0, .1, 0],  // Map, Compass, GPS, Watch, Radio(1-9)
         [ .5, 0, .3 ], // Binoculars, RangeFinders, NVG's
-        [ true, true], // DiverOverWater, UnlimitedAmmo
+        [ true, true, false], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.1],[1,1]], [[Drink,.1],[1,1]],[["FAK",.1],[1,1]],[[Grenades_Smoke,.8],[1,1]]            ] 
     ],[
         "Diver",[.30, .70, .80, .90, .90, .85, .80, .90],
@@ -85,7 +85,7 @@ _soldierData =
         [PistolPairs,.2], // Secondary Weapon and chance
         [ .3, .3, 0, .1, 9],  // Map, Compass, GPS, Watch, Radio(1-9)
         [ .5, 0, .3 ], // Binoculars, RangeFinders, NVG's
-        [ true, true], // DiverOverWater, UnlimitedAmmo
+        [ true, true, false], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.1],[1,1]], [[Drink,.1],[1,1]],[["20Rnd_556x45_UW_mag",1],[2,3]]             ] 
     ],[
         "Driver",[.30, .70, .80, .90, .90, .85, .80, .90],
@@ -98,7 +98,7 @@ _soldierData =
         [PistolPairs,.9], // Secondary Weapon and chance
         [ .3, .3, 0, .1, 9],  // Map, Compass, GPS, Watch, Radio(1-9)
         [ .5, 0, .3 ], // Binoculars, RangeFinders, NVG's
-        [ true, true], // DiverOverWater, UnlimitedAmmo
+        [ true, true, true], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.1],[1,1]], [[Drink,.1],[1,1]],[["FAK",.1],[1,1]],[[Grenades_Smoke,.8],[1,1]]                ] 
     ],[
         "Pilot",[.30, .70, .80, .90, .90, .85, .80, .90],
@@ -111,7 +111,7 @@ _soldierData =
         [PistolPairs,1], // Secondary Weapon and chance
         [ .3, .3, 0, .1, 9],  // Map, Compass, GPS, Watch, Radio(1-9)
         [ .5, 0, .3 ], // Binoculars, RangeFinders, NVG's
-        [ true, true], // DiverOverWater, UnlimitedAmmo
+        [ true, true, false], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.1],[1,1]], [[Drink,.1],[1,1]],[["FAK",.1],[1,1]],[[Grenades_Smoke,.8],[1,1]]                ]
     ],[
         "CivCombat",[.30, .70, .80, .90, .90, .85, .80, .90],
@@ -124,7 +124,7 @@ _soldierData =
         [PistolPairs,.5], // Secondary Weapon and chance
         [ .1, 0, 0, .1, 0],  // Map, Compass, GPS, Watch, Radio(1-9)
         [ .1, 0, 0 ], // Binoculars, RangeFinders, NVG's
-        [ true, true], // DiverOverWater, UnlimitedAmmo
+        [ true, true, false], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.8],[1,1]], [[Drink,.8],[1,1]],[["FAK",.05],[1,1]],[[Grenades_Smoke,.3],[1,1]]                ] 
     ],[
         "CivNonCombat",[.30, .70, .80, .90, .90, .85, .80, .90],
@@ -137,7 +137,7 @@ _soldierData =
         [PistolPairs,1], // Secondary Weapon and chance
         [ .1, 0, 0, .1, 0],  // Map, Compass, GPS, Watch, Radio(1-9)
         [ 0, 0, 0 ], // Binoculars, RangeFinders, NVG's
-        [ true, true], // DiverOverWater, UnlimitedAmmo
+        [ true, true, false], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.05],[1,1]], [[Drink,05],[1,1]]             ] 
     ],[
         "CivNoGun",[.30, .70, .80, .90, .90, .85, .80, .90],
@@ -150,7 +150,7 @@ _soldierData =
         [PistolPairs,0], // Secondary Weapon and chance
         [ .1, 0, 0, .1, 0],  // Map, Compass, GPS, Watch, Radio(1-9)
         [ 0, 0, 0 ], // Binoculars, RangeFinders, NVG's
-        [ true, true], // DiverOverWater, UnlimitedAmmo
+        [ true, true, false], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.05],[1,1]],[[Drink,.05],[1,1]]             ]
         
     ]

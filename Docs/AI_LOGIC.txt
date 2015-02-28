@@ -47,6 +47,7 @@ syntax: ["CONVOY",    [spawnloc], [actionloc], [speed, FlagRTB, FlagRoads, FlagD
 -actionloc: offset or specific map location at which unit will perform its drop-off or evacuation.
 -speed: "NORMAL", "FULL", or "LIMITED" - limited and normal will provide better 'convoy' effects
 -FlagRTB: true=group will return to 'spawnloc' upon completing its action at 'actionloc'.
+          false=group will drop off its cargo, then begin a boxpatrol pattern around their drop off location.
 -FlagRoads: true=group's vehicles will spawn on a road, and drivers will attempt to use roads to get too 'actionloc'
 -FlagDespawn: true=group, its vehicles, and its occupants will despawn upon returning to 'spawnloc'
 -convoyType: "XFILL"= see below

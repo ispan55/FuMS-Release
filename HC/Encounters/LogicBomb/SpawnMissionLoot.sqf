@@ -5,18 +5,20 @@
 //OUTPUTS: loot box filled.
 XPos = compile preprocessFileLineNumbers "HC\Encounters\Functions\XPos.sqf";
 FillLoot = compile preprocessFileLineNumbers "HC\Encounters\LogicBomb\FillLoot.sqf";
-private ["_lootConfig","_eCenter","_option","_staticLoot","_winLoot","_pos","_themeIndex","_box","_boxes","_loseLoot","_loot"];
+private ["_lootConfig","_eCenter","_option","_staticLoot","_winLoot","_pos","_themeIndex","_box","_boxes","_loseLoot","_loot","_abort"];
 _lootConfig = _this select 0;
 _eCenter = _this select 1;
 _option = _this select 2;
 _themeIndex = _this select 3;
+_boxes = _this select 4;
 if (!isNil "_lootConfig") then  // if no loot data then no loot for mission!
 {
     _staticLoot = _lootConfig select 0;
     _winLoot = _lootConfig select 1;
     _loseLoot = _lootConfig select 2;
-    _boxes = [];
-    
+  //  _boxes = [];
+    _abort = false;
+    _option = toupper _option;
     if (_option == "NO TRIGGERS") then {_option ="STATIC";};
     switch (_option) do
     {
@@ -32,7 +34,9 @@ if (!isNil "_lootConfig") then  // if no loot data then no loot for mission!
         {
             _loot = _loseLoot;
         };
+        default {_abort = true;};
     };
+    if (_abort) exitWith {_boxes};
     if (typeName (_loot select 0) == "STRING") then
     {    
         _pos = [_eCenter, _loot select 1] call XPos;

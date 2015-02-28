@@ -9,11 +9,12 @@ private ["_hc"];
 _hc = _this select 0;
 FuMS_ServerData =
 [
-    [
+    [ // Map Definition
         [15440, 15342, 0],    // Map Center
-        17000                 // Map Range in meters
+        17000,                 // Map Range in meters
+		true				//Enable AdminControls! See Docs\AdminControls.txt
     ],
-    [  
+    [  // Exclusion Areas
         // Areas to be excluded from Global Random generation of mission spawn points
         // Points listed are for the upper left and lower right corners of a box.
         [[13000,15000,0],[14000,14000,0]],	// Middle spawn near Stavros
@@ -21,10 +22,11 @@ FuMS_ServerData =
         [[18200,14500,0],[18800,14100,0]],   // East spawn
         [[23400,18200,0],[23900,17700,0]]   //Cloning Lab
     ],
-    [
+    [ // Default Areas
         // default positions to use if locations being randomly generated
         // These positions will be used if a random safe location is not found.
         // Note: The below locations are for use by BIS_fnc_findSafePos !!!
+		
         //  If you have specific locations you want to use for your mission set, place those
         //  locations in the specific themedata.sqf.
         
@@ -35,12 +37,12 @@ FuMS_ServerData =
         // A folder matching the names below needs to exist in the ..\Encounters folder.
         // use this block to easily turn off/on your various mission sets.
        // "StressTest",
-		//"Test",
-		//"HeloPatrols",
+		"Test",
+		"HeloPatrols",
 	    "SEM",
-        "TownRaid"
-		//"Small"
-        //"CloneHunters"
+        "TownRaid",
+		"Small",
+		"Aquatic"
     ],
     [  // Event and AI Radio messsage behavior
         true, // EnableRadioChatterSystem: turns on the system, allowing below options to function
@@ -49,7 +51,44 @@ FuMS_ServerData =
         false, // RadioFollowTheme: Conforms with Theme radio channel choices. False:any radio works for all channels.
         true, 800 // EnableAIChatter: enables random radio chatter between AI when players get within the specified range (meters) as default.
               // NOTE: Theme 'Radio Range' will override this setting.
-    ]
+    ],
+	[ // Soldier Defaults
+
+		3, // default number of rifle magazines for each AI
+		3, // default number of pistol magazines
+		true, // Turns ON VCOM_Driving V1.01 = Genesis92x for all land/boat vehicle drivers
+		      //http://forums.bistudio.com/showthread.php?187450-VCOM-AI-Driving-Mod
+		  //Skill Override options:
+		  // Values here will override values for individual units defined in SoldierData.
+		  // values ranges 1.0 -0.0      0= uses SoldierData setting.
+		  // defaults 'stock' ai based around values indicated below.
+		  // if unique AI are desired, modify these numbers in GlobalSoldierData.sqf or SoldierData.sqf as applicable.
+		  // values here OVERRIDE any value set in the other files! (value of zero = use other files values).
+		[
+		0, // aimingAccuracy .05 : target lead, bullet drop, recoil
+		0,	// aimingShake .9 : how steady AI can hold a weapon
+		0,	// aimingSpeed .1 : how quick AI can rotate and stabilize its aim and shoot.
+		0,	// spotDistance .5 : affects ability to spot visually and audibly and the accuracy of the information
+		0,	// spotTime .5 : affects how quick AI reacts to death, damage or observing an enemy.
+		0,	// courage .1 : affects unit's subordinates morale
+		0,	// reloadSpeed .5 :affects delay between weapon switching and reloading
+		0	// commanding .5 : how quickly recognized targets are shared with the AI's group.
+		]	
+
+	],
+	[ // Loot Defaults
+
+		20, // number of minutes after mission completion before deleting a loot box.
+		// NOTE: This is not based on when the box is spawned, but WHEN the mission completes!
+		true, // true= smoke created with box for ease of location.
+		true,  // vehicles occupied by players persist through server reset and are sellable!
+		// List of box types used by "Random" in LootData and GlobalLootData files.
+		["B_supplyCrate_F","O_supplyCrate_F","I_supplyCrate_F","CargoNet_01_box_F"],
+		// List of vehicles prohibited to use by players. This list allows them to be on the map for AI use
+		// but will prevent players from entering the vehicle.
+		["I_UGV_01_rcws_F"]
+	]
+
 ];
 
 _hc publicVariableClient "FuMS_ServerData";
