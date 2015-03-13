@@ -2,7 +2,7 @@
 // Horbin
 // 12/31/14
 // Based upon drsubo Mission Scripts
-_initData =
+
 [
 ["BanditCamp", 200], // Mission Title NOSPACES!, and encounter radius
 ["Bandit Camp","mil_objective", "ELLIPSE","ColorRed","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
@@ -89,8 +89,3 @@ _initData =
 ]
 
 ];
-//*******************************************************************************
-//******* Do not change this!                  **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";

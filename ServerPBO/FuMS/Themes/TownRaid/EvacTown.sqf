@@ -2,7 +2,7 @@
 // Horbin
 // 1/21/15
 // Based upon drsubo Mission Scripts
-_initData =
+
 [
 ["EvacTown", 200], // Mission Title NOSPACES!, and encounter radius
 ["Evac","mil_objective","ELLIPSE","ColorRed","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
@@ -185,8 +185,3 @@ Def: ["Detected", groups, vehicles]; TRUE when player is detected by encounter A
 ]
 
 ];
-//*******************************************************************************
-//******* Do not change this!                                       **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";

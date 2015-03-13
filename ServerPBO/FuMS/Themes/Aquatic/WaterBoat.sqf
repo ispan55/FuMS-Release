@@ -2,7 +2,7 @@
 // Horbin
 // 2/26/15
 // Based upon drsubo Mission Scripts
-_initData =
+
 [
 ["WaterMission", 100], // Mission Title NOSPACES!, and encounter radius
 ["Ship Wreck","mil_objective","ELLIPSE","ColorBlue","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
@@ -168,8 +168,5 @@ Def: ["Detected", groups, vehicles]; TRUE when player is detected by encounter A
 ]
 
 ];
-//*******************************************************************************
-//******* Do not change this!                                       **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";
+
+

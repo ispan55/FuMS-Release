@@ -2,7 +2,7 @@
 // Horbin
 // 1/20/15
 // Be cautious when editing data.
-_initData =
+
 [
 ["LandPatrol", 300], // Mission Title NOSPACES!, and encounter radius
 ["Land Patrol","mil_dot","ELLIPSE","ColorYellow","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
@@ -173,8 +173,3 @@ Def: ["Reinforce", chance, "MsnName"]: Sets up reinforcement logic in the event 
 
 
 ];
-//*******************************************************************************
-//******* Do not change this!                                       **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";

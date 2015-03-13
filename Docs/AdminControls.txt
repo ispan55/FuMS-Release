@@ -5,26 +5,6 @@ Turing on admin Controls in the BaseServerData.sqf will make the following varia
 From these variables an Admin will be able to construct their own scripts to control the behaviour of themes and 
 their associated missions.
 
-
-FuMS_ActiveThemes[] - global array that contains list of themes operating on the server. Active theme is defined as a theme specified in the ServerData.sqf AND that passes FuMS data integrity checking. This list will be different from the list in ServerDtaa.sqf if a format error is found in one of a theme's files!
-
-FuMS_AdminThemeOn[] - for each theme, controls the condition of that theme's control loop.  If 'OFF' the theme is not actively monitoring or spawning new missions.
-Note: Any theme designated as a 'static' spawn theme (ie option 4 in the ThemeData.sqf) will typically be seen in the OFF state because it has completed its job of 
-spawning its missions.  Turning an option 4 Theme on will result in it re-spawnining its configured missions.
-
-FuMS_AdminThemeSpawnLoc[] - modifiable by the admin, this contains the location missions should spawn when a Theme is turned back on.  ONLY missions with no 'fixed' location configured (in ThemeData.sqf) will use this loc. Missions with static locations configured (ie ["TestMission01",[1234,43320]]) will honor the static location.
-
-FuMS_AdminUsers [] - array of authorized users. This is stored on the server in \FuMS\Themes\AdminData.sqf. See this file for usage!
-
-FuMS_ActiveMissions[] - [index, "mission:Theme"] - set by a mission when it starts. Setting the "mission:theme" component to "KILL" will force the mission to terminate and conduct asset cleanup. Once a mission is completed the mission sets this value to "COMPLETE".
-
-Upon modifying any of these variables a PV call must be made to update the info on the headless client!
-Example:
-
-FuMS_ActiveThemeOn set [2, false];
-publicVariable "FuMS_ActiveThemeOn";
-
-This will cause theme #2 (3rd theme in the FuMS_ActiveThemes array) to stop. Once its current mission completes no further missions from this theme will spawn. Setting it back to true, and broadcasting it will turn the theme back on.
 *******************************************************************************************
 FuMS Admin controls:
 By default FuMS comes with  set of basic admin controls. Turning on admin controls in the BaseServer.sqf will provide access to these menus.
@@ -33,10 +13,30 @@ Once 'enabled' access to the control menu is determined by adding a player's GUI
 Toggle Theme:
 ON - Theme is operational
 OFF - Theme is off, if a current mission is in progress, no further missions will spawn
-STATIC - Toggling this mission will result in the creation of multiple missions across the map.(set with Mission Selection=4 in the ThemeData.sqf)
+  If a theme is set with option 4 or 5 in its ThemeData.sqf, it will always show as 'OFF' in this menu. Toggling the theme to on
+  will result in the theme running and spawning all of its missions again according to option 4 or 5 behavior (see ThemeData.sqf)
 
 Kill Mission:
 Forces the selected mission to immediately terminate and mission assets to be removed from the server. 
 Note: If a mission creates other missions through phasing, these 'phased' missions should be killed 1st to ensure proper unit cleanup.
+
+Spawn Mission:
+Creates the selected encounter at the Anchor's location, using the selected resource spawner (HC or Server).
+NOTE:!!!!! If the theme this mission is attached too has a respawn timer (see ThemeData.sqf) less than the server reset time,
+there is the potential that the mission will respawn again when the timer expires.
+If it is your desire to simply spawn a mission once, put your mission in the 'Admin' theme's folder. This theme is configured
+to only spawn a mission once per server reset.
+
+Set Anchor:
+Allows selection of an active player as a spawn location for the 'Spawn Mission' option.  Position displayed will update every 5 seconds, and
+mission will spawn at players current location upon activation of 'Spawn Mission'.
+
+Set Mission:
+Allows selection of mission from all missions in FuMS. This mission will be used when 'Spawn Mission' is selected.
+
+Set Spawner:
+Allows selection of a spawning resource, or system the AI will be controlled from. Current options are ony Headless Clients and the Server.
+
+
 
 

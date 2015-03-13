@@ -2,10 +2,10 @@
 // Horbin
 // 1/11/15
 // Based upon drsubo Mission Scripts
-_initData =
+
 [
 ["VanCrash", 100], // Mission Title NOSPACES!, and encounter radius
-["Van Crash","mil_objective","ELLIPSE","ColorRed","FDiagonal",200],    
+["Van Crash","mil_objective","ELLIPSE","ColorGreen","FDiagonal",200],    
    
 [  
     [// NOTIFICATION Messages and Map display Control.
@@ -89,8 +89,3 @@ _initData =
 ]
 
 ];
-//*******************************************************************************
-//******* Do not change this!                  **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";

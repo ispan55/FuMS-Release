@@ -5,9 +5,9 @@
 // No triggers and no loot for this mission, just Troops!
 // Units will spawn 250m to the east and proceed to within 75mn of the encounter and patrol!
 // Be cautious when editing data.
-_initData =
+
 [
-["Reinforcments", 200], // Mission Title NOSPACES!, and encounter radius
+["Reinforcements", 200], // Mission Title NOSPACES!, and encounter radius
 ["Test Mission","mil_dot","ELLIPSE","ColorRed","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
 [  
     [   // NOTIFICATION Messages and Map display Control.
@@ -81,8 +81,4 @@ _initData =
 ]
 
 ];
-//*******************************************************************************
-//******* Do not change this!                                       **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";
+

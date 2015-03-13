@@ -6,7 +6,7 @@ FuMS_Users =
 [
 //name | GUID      |        admin level| Options
   ["Horbin","76561198074623284",1,       ["<ALL>"]], // able to toggle all themes
-  ["Miller","76561197997766935",1,       ["<ALL>"]],
+  ["Miller","0000000000000000",1,       ["<ALL>"]],
   ["test","0000000000000000",   2,       ["Test"]]      // only able to toggle the 'Test' theme
 
 ];
@@ -14,9 +14,10 @@ FuMS_Users =
 diag_log format ["##AdminData: FuMS_Users:%1",FuMS_Users];
 
 
+//**NOTE: NO True options at this time. You either have full access or you don't.  
+// More flexability to be developed later.
 //Admin Level
 // 1 = Toggle Theme, Kill Mission, Set Anchor, Spawn Mission
-// 2 = Toggle Theme
 
 // Options
 // <ALL> = able to control all themes

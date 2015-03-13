@@ -10,6 +10,7 @@ FuMS_MapRange scalar
 FuMS_BlackList	[]
 FuMS_Defaultpos	[]
 FuMS_ActiveThemes	[]	List of active themes loaded
+FuMS_ActiveThemesHC [] HC id the theme should run on: 0=server, -1= all HC's and Not server, 1=just 1st HC, 2=just 2nd HC.
  
 FuMS_GlobalDataIndex	scalar	Always equals count FuMS_ActiveThemes+1-index of globalloot and globalsoldier data
  FuMS_RC_EnableRadioChatterSystem	bool
@@ -55,18 +56,59 @@ FuMS_MSNTAG [theme, mission]
 FuMS_PERSIST	bool	set on buildings created by FuMS.
 HCTEMP	string	vehicles, set to "PLAYER" 1st time a player gets into vehicle.
 
+FuMS_ListofHCs	array of numbers that contain the _hcID's for each HC connected.
 
 FuMS Admin Controls
-FuMS_AdminCoontrolsEnabled	bool
-public broadcasted:
+*FuMS_AdminCoontrolsEnabled	bool
+*public broadcasted:
 FuMS_AdminUsers[] 
-FuMS_ActiveThemes[]  - defined above, string array list of active themes. Active theme is defined as a theme specified
+*FuMS_ActiveThemes[]  - defined above, string array list of active themes. Active theme is defined as a theme specified
 in the ServerData.sqf AND that passes FuMS data integrity checking. This list will be different from the list in
 ServerDtaa.sqf if a format error is found in one of a theme's files!
-FuMS_AdminThemeSpawnLoc[] - if null or empty uses normal selection methods. If a value is here, this location will
+*FuMS_AdminThemeSpawnLoc[] - if null or empty uses normal selection methods. If a value is here, this location will
   override any random generated location. This will NOT override a static location for a mission (ie ["testmission",[x,y]]
   that is defined in for the mission in the ThemeData.sqf.
-FuMS_AdminThemeOn[] - turns theme loop on, if it was off.
+*FuMS_AdminThemeOn[] - turns theme loop on, if it was off.
 
-FuMS_ActiveMissions - list of missions currently running
+*FuMS_ActiveMissions - list of missions currently running
    [index, "mission:Theme"]   setting "mission:Theme" to "KILL" will terminate the mission.
+*FuMS_ListofMissions[] - list of all FuMS missions.
+   [themeIndex] [missionIndex]  goes to array that is ["MissionName","MissionCode"]
+FuMS_Anchor = object a player currently has set as his anchor. all missions spawned by this player will occur at the 'anchor's location.
+FuMS_AnchorLoc = location of the 'anchor'. This is updated every 5 seconds once an anchor is set.
+FuMS_MissionSet	      - mission to be spawned.
+FuMS_MissionResource 	- HC id that mission will be spawned with
+FuMS_PlayerList = list of players used to ref in Anchor code.
+FuMS_AdminSpawnMission - PVEH, data sent from Admin client, to server. Server then retransmits to 1st HC (in multi-HC setup)
+
+
+FuMS_HCID's	array that holds the ID for each HC.  [0] is the server.
+  value of -1 implies this 'slot' not used.
+FuMS_HCNames 'player shortname' for each HC.
+FuMS_HCThemeControlID = slot reference used to determine order in which an HC connects to the server.
+	this value is used by ThemeData.sqf in control of themes on specific HC's.
+FuMS_HC_SlotNumber = variable used by HC to know its own ID.
+
+FuMS_AdminIDs
+FuMS_AdminNames
+
+FuMS_AdminUpdateData - set and called by HC to push data from server to Admins
+      data: [HC's slot, "VarName", data]
+	  where "VarName" is one of :[,"AdminThemeSpawnLoc","AdminListofMissions"];
+	  "AdminActiveThemes","AdminThemeOn","AdminActiveMissionList"
+FuMS_AdminThemeOnServer :Admin->Server  ServerName, ThemeName
+FuMS_AdminThemeOn   : 
+FuMS_AdminMenuOpen	PVEH to server to request updated variables when menu is opened - set to 'player' on pass to server.
+FuMS_AdminActiveMissionList
+FuMS_AdminActiveThemes
+FuMS_AdminThemeOn
+FuMS_AdminThemeSpawnLoc
+FuMS_AdminListofMissions
+
+FuMS_Anchor, FuMS_AnchorLoc, FuMS_MissionSet (index,themename,missionname), FuMS_MissionResource - used in spawning missions!
+FuMS_anchorNameTxt, FuMS_anchorLocTxt, FuMS_missionTxt, FuMS_resourceTxt
+				   
+				   
+				   
+   
+   

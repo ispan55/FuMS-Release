@@ -2,7 +2,7 @@
 // Horbin
 // 1/21/15
 // 
-_initData =
+
 [
 ["RaidTown", 200], // Mission Title NOSPACES!, and encounter radius
 ["Town","mil_objective","ELLIPSE","ColorRed","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
@@ -159,8 +159,3 @@ _initData =
 ]
 
 ];
-//*******************************************************************************
-//******* Do not change this!                                       **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";

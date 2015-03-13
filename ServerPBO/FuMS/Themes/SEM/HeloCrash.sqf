@@ -2,10 +2,10 @@
 // Horbin
 // 1/11/15
 // Based upon drsubo Mission Scripts
-_initData =
+
 [
 ["HeloCrash", 100], // Mission Title NOSPACES!, and encounter radius
-["Helicopter Crash","mil_objective","ELLIPSE","ColorBlue","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
+["Helicopter Crash","mil_objective","ELLIPSE","ColorGreen","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
    // type is "mil_objective"
 [  
     [// NOTIFICATION Messages and Map display Control.
@@ -90,8 +90,3 @@ _initData =
 ]
 
 ];
-//*******************************************************************************
-//******* Do not change this!                  **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";

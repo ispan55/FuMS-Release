@@ -24,7 +24,7 @@ Note: Reinforce trigger is not considered in the WIN conditions of the WIN state
 ["BodyCount", numAI] 
 ["Timer", seconds]
 ["AllDeadorGone"]
-
+["Reinforce", chance, "mission"] <-- only use in Win State trigger area!
 
 Defined Trigges
 ["LowUnitCount", side, numAI, radius, offset]

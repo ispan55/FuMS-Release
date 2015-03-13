@@ -57,20 +57,8 @@ FuMS Installation:
 
 4) Modify your 'descriptions.ext':
 
-If CfgSounds and/or RscTitles are already defined in your descriptions.ext, then just add the code between the //************  comments to the appropriate 'class' code.
-class CfgSounds
-{
-//*******************
-    sounds[] = {};
-    class radio1
-    {
-        name = "radio01";
-        // filename, volume, pitch
-        sound[] = {"radio01.ogg",1,1};
-        titles[] = {0,""};
-    };
-//**********************
-};
+If RscTitles is already defined in your descriptions.ext, then just add the code between the //************  comments to the appropriate 'class' code.
+
 class RscTitles
 {
 //************************

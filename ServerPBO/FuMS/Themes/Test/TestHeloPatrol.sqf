@@ -8,7 +8,7 @@
 // Ex: [12100,11000,0] is a specific point on the map.
 // absolute 3d locations can be subsituted for any offset within this file!
 
-_initData =
+
 [[
 //------------------------------------------------------------------------------------
 //-----Mission Area Setup-----
@@ -159,8 +159,3 @@ _initData =
    ]
   ]
 ];
-//*******************************************************************************
-//******* Do not change this!                                       **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";

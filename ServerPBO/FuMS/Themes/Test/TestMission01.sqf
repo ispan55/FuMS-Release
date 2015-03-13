@@ -7,8 +7,6 @@
 // Ex: [15,20] is an offset 15m east, 20m north of the encounter center
 // Ex: [12100,11000,0] is a specific point on the map.
 // absolute 3d locations can be subsituted for any offset within this file!
-
-_initData =
 [[
 //------------------------------------------------------------------------------------
 //-----Mission Area Setup-----
@@ -103,7 +101,7 @@ _initData =
 // **Start 'copy'****Spawn a Group of AI Config Data *********
 // 3 rifleman that will spawn NW of encounter center and patrol all buildings within 70m
 // Example below shows how town names can be used in place of spawn locations and offsets!
-[["RESISTANCE","COMBAT","RED","LINE"],[[3,"Rifleman"]],["Buildings",["Stavros"],["Stavros"],[70] ]], // 3 rifleman that will patrol all buildings within 70m for unlimited duration
+    [["RESISTANCE","COMBAT","RED","LINE"],[[3,"Rifleman"]],["Buildings",[0,0],[0,0], [70] ]], // 3 rifleman that will patrol all buildings within 70m for unlimited duration
 // **End 'copy'******(see Patrol Options below for other AI behaviour)
 // Example of a 3D map location. This loc is specific to ALTIS
 [["RESISTANCE","COMBAT","RED","LINE"],[[5,"Rifleman"]],["BoxPatrol",[21520,11491.9,0],[0,0],[70] ]],
@@ -276,5 +274,3 @@ _initData =
 //*******************************************************************************
 //******* Do not change this!                                       **********************************
 //*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";

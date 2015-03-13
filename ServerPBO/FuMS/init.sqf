@@ -3,25 +3,28 @@
 // 2/7/15
 //
 // Server side init for FuMS.pbo addon
-private ["_handle"];
 if (!isServer) exitWith {};
+private ["_handle"];
+FuMS_HCIDs = [];
+FuMS_HCNames = [];
+FuMS_HCIDs set [0,0]; // set the 1st slot to be the actual server's ID.
+FuMS_HCNames set [0, "SERVER"];
+FuMS_AdminListofMissions = []; //Full list of all missions on the server. [themeIndex, themeName, missionName] format.
 
-diag_log format ["##FuMS Server module initializing##"];
+_handle = [] execVM "\FuMS\Menus\init.sqf";
+waitUntil {ScriptDone _handle};
 
-// initialize server side functions
-_handle = [] execVM "\FuMS\Functions\ServerInit.sqf";
-waitUntil {scriptDone _handle};
+// Preprocess all HC files and prepare variables for transfer of HC files to HC's as they connect
+_handle = [] execVM "\FuMS\HC\LoadScriptsForHCv2.sqf";
+waitUntil {ScriptDone _handle};
 
-// all server functions and variables initialized. Notify everyone!
+_handle = [] execVM "\FuMS\Functions\PVEH.sqf";
+waitUntil {ScriptDone _handle};
+
+_handle = [] execVM "\FuMS\Functions\LoadCommonData.sqf";
+waitUntil {ScriptDone _handle};
+
+diag_log format ["##\FuMS\Init.sqf:  Server side FuMS initialized and operational."];
 FuMS_Server_Operational = true;
 publicVariable "FuMS_Server_Operational";
-
-
-// wait for notification that the headless client is connected and requested to initialize
-// send the HC all global variables it will need
-// begin initialization of all themes
-
-
-
-// Global variable so other scripts can check if VEMF is running
-
+FuMS_ServerIsClean = true;

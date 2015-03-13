@@ -1,18 +1,15 @@
 //BaseServer.sqf
 // Horbin
 // 1/10/25
-// Inputs: None
-// Outputs: Fulcrum Mission data specific for the map being used
 // Data specifc to your server's map.
 // ALTIS
-private ["_hc"];
-_hc = _this select 0;
 FuMS_ServerData =
 [
-    [ // Map Definition
+    [ // Map Definition and FuMS configuration
         [15440, 15342, 0],    // Map Center
         17000,                 // Map Range in meters
-		true				//Enable AdminControls! See Docs\AdminControls.txt
+		true,				//Enable AdminControls! See Docs\AdminControls.txt
+         15   //minimum Server FPS. Below this FPS FuMS will not load new missions. 
     ],
     [  // Exclusion Areas
         // Areas to be excluded from Global Random generation of mission spawn points
@@ -36,13 +33,13 @@ FuMS_ServerData =
         // ActiveThemes
         // A folder matching the names below needs to exist in the ..\Encounters folder.
         // use this block to easily turn off/on your various mission sets.
-       // "StressTest",
-		"Test",
-		"HeloPatrols",
-	    "SEM",
-        "TownRaid",
-		"Small",
-		"Aquatic"
+        // ["StressTest",-1],
+        ["Test",-1],
+        ["HeloPatrols",-1],
+        ["SEM",-1],
+        ["TownRaid",-1],
+        ["Small",-1],
+        ["Aquatic",-1]
     ],
     [  // Event and AI Radio messsage behavior
         true, // EnableRadioChatterSystem: turns on the system, allowing below options to function
@@ -80,7 +77,12 @@ FuMS_ServerData =
 
 		20, // number of minutes after mission completion before deleting a loot box.
 		// NOTE: This is not based on when the box is spawned, but WHEN the mission completes!
-		true, // true= smoke created with box for ease of location.
+		[  // SMOKE BOX Options
+            true, // true= smoke created with box for ease of location.
+            100,  // proximity character has to get to box before smokes start. 0=unlimited
+            ["Red","White","Blue"],  // colors of smoke
+             5     // Duration, in minutes, smoke lasts once triggered.
+          ],
 		true,  // vehicles occupied by players persist through server reset and are sellable!
 		// List of box types used by "Random" in LootData and GlobalLootData files.
 		["B_supplyCrate_F","O_supplyCrate_F","I_supplyCrate_F","CargoNet_01_box_F"],
@@ -91,4 +93,6 @@ FuMS_ServerData =
 
 ];
 
-_hc publicVariableClient "FuMS_ServerData";
+
+
+

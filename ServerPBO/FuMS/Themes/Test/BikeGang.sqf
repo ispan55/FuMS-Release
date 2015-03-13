@@ -2,7 +2,7 @@
 // Horbin
 // 1/20/15
 // Be cautious when editing data.
-_initData =
+
 [
 ["BikeGang", 300], // Mission Title NOSPACES!, and encounter radius
 ["Bike Gang","mil_dot","ELLIPSE","ColorYellow","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
@@ -142,14 +142,14 @@ _initData =
     ],   
     [    //Phase01 Triggers and Controls
 //        ["Timer", 180]  // Mission Ends in 180 seconds
-//      ["Detected",0,0]    //Launch mission if any group or vehicle detects a player
+      ["Detected",0,0]    //Launch mission if any group or vehicle detects a player
       //   ["ProxPlayer", [0,0], 100, 1] // 1 player is within 100 meters of encounter center.
     ],
     [    //Phase02 Triggers and Controls
-    
+		["Timer", 180]
     ],
     [    //Phase03 Triggers and Controls
-    
+		["ProxPlayer", [0,0], 50, 1]
     ],
     [    // NO TRIGGERS: Uncomment the line below to simply have this mission execute. Mission triggers from a mission that
           // launched this mission will continue to be observed.
@@ -191,16 +191,12 @@ Def: ["Reinforce", chance, "MsnName"]: Sets up reinforcement logic in the event 
 // The below specified missions will be precompiled into the specified 'calls' when this script runs.
 // The file needs to be located in the same folder as this mission launching them.
 [
-   // "NukeDevice",  //Phase01
-   // "TestPhase2", //Phase02
-   // "TestPhase3" //Phase03
+    "NukeDevice",  //Phase01
+    "TestPhase2", //Phase02
+    "TestMission01Enemy" //Phase03
 ]
 
 
 
 ];
-//*******************************************************************************
-//******* Do not change this!                                       **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";
+

@@ -8,7 +8,7 @@
 // Ex: [12100,11000,0] is a specific point on the map.
 // absolute 3d locations can be subsituted for any offset within this file!
 
-_initData =
+
 [[
 //------------------------------------------------------------------------------------
 //-----Mission Area Setup-----
@@ -18,7 +18,7 @@ _initData =
 //------------------------------------------------------------------------------------
 //-----Notification Configuration-----
 //--Map Marker Config.
-    "Test Mission",  // Name, set to "" for nothing
+    "Maze Test",  // Name, set to "" for nothing
      "mil_dot", // icon type:                                     https://community.bistudio.com/wiki/cfgMarkers for other options.
                      // mil_triangle, mil_objective, mil_box, group1, loc_Power, etc.
      "ELLIPSE", // "RECTANGLE". do not use "ICON", two markers are used in making each mission indicator.
@@ -345,8 +345,3 @@ _initData =
 ]
     
 ];
-//*******************************************************************************
-//******* Do not change this!                                       **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";

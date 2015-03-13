@@ -2,10 +2,10 @@
 // Horbin
 // 1/11/15
 // Based upon drsubo Mission Scripts
-_initData =
+
 [
 ["NukeDevice", 100], // Mission Title NOSPACES!, and encounter radius
-["Nuclear Device","mil_objective","ELLIPSE","ColorRed","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
+["Nuclear Device","mil_objective","ELLIPSE","ColorGreen","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
    // type is "mil_objective"
 [  
     [// NOTIFICATION Messages and Map display Control.
@@ -91,8 +91,3 @@ _initData =
 ]
 
 ];
-//*******************************************************************************
-//******* Do not change this!                  **********************************
-//*******************************************************************************
-MissionData = _initData;
-HCHAL_ID publicVariableClient "MissionData";

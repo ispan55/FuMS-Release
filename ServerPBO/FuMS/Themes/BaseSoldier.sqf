@@ -7,8 +7,6 @@
 // NOTE: If you do not include the name, the HC will never learn of the new variable's data!!!
 
 #include "BaseLoot.sqf";
-private ["_hc","_ListOfVarNames"];
-_hc = _this select 0;
 
 Outfit_Military = ["U_O_CombatUniform_ocamo","U_O_PilotCoveralls","U_OG_Guerilla1_1","U_OG_Guerilla2_1",
 "U_OG_Guerilla2_3","U_OG_Guerilla3_1","U_OG_Guerilla3_2","U_OG_leader"];
@@ -134,7 +132,7 @@ Muzzles =[
 //Push data to the HC
 // NOTE: If you create any of your own custom 'Arrays', make sure the name of the array is also included in the list below.
 // NOTE: If you do not include the name, the HC will never learn of the new variable's data!!!
-_ListofVarNames =
+FuMS_ListofGlobalItems =
 [
 "Backpacks_Assault","Backpacks_Carryall","Backpacks_Field","Backpacks_Kit",
 "Backpacks_Tactical","Backpacks_Small","Backpacks_Other","Backpacks_All","Explosives","Gems","RareMetal","Medical",
@@ -146,11 +144,9 @@ _ListofVarNames =
 "RifleAssault762","RifleAssault65","RifleAssault556","RifleSniper","RifleLMG","RifleLnchr","RifleAssault",
 "Rifle_ALL","Pistols","WeaponAttachments_Optics","WeaponAttachments_Muzzle","WeaponAttachments_Other"
 ];
-{ 
-  _hc publicVariableClient (format ["%1",_x]);
-}foreach _ListofVarNames;
 
-_ListofVarNames =
+
+FuMS_ListofGlobalGear =
 [
 "Outfit_Military","Outfit_WetSuit","Outfit_Civilian","Outfit_Ghillie","Outfit_Female","Outfit_Any",
 "Outfit_AnyMilitary","Helmet_ECH","Helmet_Combat","Helmet_SF","Helmet_Mich","Helmet_Crew",
@@ -160,6 +156,5 @@ _ListofVarNames =
 "Vest_LBV","Vest_Rebreather","Vest_Any","RifleSniperPairs","RifleLMGPairs",
 "RifleAssaultPairs","RifleOtherPairs","RifleWaterPairs","PistolPairs","Muzzles"
 ];
-{ 
-  _hc publicVariableClient (format ["%1",_x]);
-}foreach _ListofVarNames;
+
+    
