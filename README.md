@@ -19,27 +19,29 @@ to me!
 # 2 second delay added to mission creation after buildings are placed to provide opportunity for them to initialize and be positioned prior to creation of units.
 # modified 'halo/para drop' code to fix a bug that resulted in AI sometimes never realizing they reached the ground.  
 + Smoke Box options - see BaseServer.sqf
-	Trigger range - smoke now activates on player proximity (0=unlimited)
-	Colors - smoke color can now be customized
-	Duration - duration of smoke now independent of loot box cleanup timer
+	+ Trigger range - smoke now activates on player proximity (0=unlimited)
+	+ Colors - smoke color can now be customized
+	+ Duration - duration of smoke now independent of loot box cleanup timer
 # fixed reliability of admin menu, and enhanced it to support multiple HC's and server-side spawning (non-HC) configuration.
 + 5 Theme Options now availible via the ThemeData.sqf:
-	1: Create random mission from theme's list each control loop cycle.
-   	2: Create missions 'in order' found in the ThemeData.sqf
-   	3: Create random mission, until all in the theme's list have been spawned.
-   	4: Spawn all missions in the theme's list immediately. Use the theme's respawn delay to 'regenerate the mission when it is complete.
-   	5: Spawn all missions in the theme's list ONLY once!  
+	+ 1: Create random mission from theme's list each control loop cycle.
+   	+ 2: Create missions 'in order' found in the ThemeData.sqf
+   	+ 3: Create random mission, until all in the theme's list have been spawned.
+   	+ 4: Spawn all missions in the theme's list immediately. Use the theme's respawn delay to 'regenerate the mission when it is complete.
+   	+ 5: Spawn all missions in the theme's list ONLY once!  
 + Additional option added to enhance Admin use of dynamic events.   
-****************
-** Admin Note **
-** To support migration to server side script storage and Multiple-HC support all mission files need to undergo the following changes:
--remove 'initData ='
--remove 'MissionData = _initData;'
--remove 'HCHAL_ID publicVariableClient "MissionData";
-**
-+SmokeBox options array replaces true/false flag in BaseServer.sqf
-*****Missions packaged with FuMS are ready to go!
-**FRESH INSTALL RECOMMENDED**
++ ****************
++ ** Admin Note **
++ ** To support migration to server side script storage and Multiple-HC support all mission files need to undergo the following changes:
++ -remove 'initData ='
++ -remove 'MissionData = _initData;'
++ -remove 'HCHAL_ID publicVariableClient "MissionData";
++ **
++ SmokeBox options array replaces true/false flag in BaseServer.sqf
++ *****Missions packaged with FuMS are ready to go!
++ **FRESH INSTALL RECOMMENDED**
++ 
+
 v1.3
 +Headless Client Installation!
 	Install instructions now include basic instructions for setting up your Headless Client
