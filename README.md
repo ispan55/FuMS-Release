@@ -24,12 +24,12 @@ to me!
 	Duration - duration of smoke now independent of loot box cleanup timer
 # fixed reliability of admin menu, and enhanced it to support multiple HC's and server-side spawning (non-HC) configuration.
 + 5 Theme Options now availible via the ThemeData.sqf:
-   1: Create random mission from theme's list each control loop cycle.
-   2: Create missions 'in order' found in the ThemeData.sqf
-   3: Create random mission, until all in the theme's list have been spawned.
-   4: Spawn all missions in the theme's list immediately. Use the theme's respawn delay to 'regenerate the mission when it is complete.
-   5: Spawn all missions in the theme's list ONLY once!  
-  Additional option added to enhance Admin use of dynamic events.   
+	1: Create random mission from theme's list each control loop cycle.
+   	2: Create missions 'in order' found in the ThemeData.sqf
+   	3: Create random mission, until all in the theme's list have been spawned.
+   	4: Spawn all missions in the theme's list immediately. Use the theme's respawn delay to 'regenerate the mission when it is complete.
+   	5: Spawn all missions in the theme's list ONLY once!  
++ Additional option added to enhance Admin use of dynamic events.   
 ****************
 ** Admin Note **
 ** To support migration to server side script storage and Multiple-HC support all mission files need to undergo the following changes:
