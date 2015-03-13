@@ -1,10 +1,10 @@
 #Fulcrum Mission System (FuMS)
 v1.4
-+HC disconnect/reconnect greatly optimized!
-+Multiple Headless Client support. FuMS now properly cleans up AI when controlled from multiple HC's.
++ HC disconnect/reconnect greatly optimized!
++ Multiple Headless Client support. FuMS now properly cleans up AI when controlled from multiple HC's.
   See BaseServer.sqf on how to set Themes to run on specific HC's. Coming soon, server side spawning!
   
-+AdminTools: SetPlayer, SetMission are now functioning properly. Admins will be able to designate a player and then spawn in any FuMS mission on that player's location.
++ AdminTools: SetPlayer, SetMission are now functioning properly. Admins will be able to designate a player and then spawn in any FuMS mission on that player's location.
 + Mission Syntax pre-compiler Complete!
    Headless client now scans and pre-compiles all missions.  If an error is found the mission will not be used as part of the theme, and a message
    will be inserted into the HC's .rpt log.   
