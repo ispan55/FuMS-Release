@@ -1,4 +1,44 @@
 #Fulcrum Mission System (FuMS)
+v 1.4 - Full Reinstall of FuMS required.
++HC disconnect/reconnect greatly optimized!
++Multiple Headless Client support. FuMS now properly cleans up AI when controlled from multiple HC's.
+  See BaseServer.sqf on how to set Themes to run on specific HC's. Coming soon, server side spawning!
+  
++AdminTools: SetPlayer, SetMission are now functioning properly. Admins will be able to designate a player and then spawn in any FuMS mission on that player's location.
++ Mission Syntax pre-compiler Complete!
+   Headless client now scans and pre-compiles all missions.  If an error is found the mission will not be used as part of the theme, and a message
+   will be inserted into the HC's .rpt log.   
++ Syntax checker should also eliminate any .sqf errors or crashes due to misconfiguration. If you experience any of these, please forward your .RPT
+to me!  
++ 80% reduction in Mission .pbo footprint for FuMS (now less than 30kb)!
++ All HC files moved to server side PBO. HC's now download all their scripts and data from the server upon connecting.
++ BaseServer MinFrameRate
+  Option added to BaseServer.sqf to limit HC interaction with server if FPS drops below the specified amount.
+- Removed radiochatter sound file.  Functionality still there, but unique static sound no longer packaged with FuMS.
+**(Admins may need to remove the CfgSounds definition in description.ext from the previous install)
+# 2 second delay added to mission creation after buildings are placed to provide opportunity for them to initialize and be positioned prior to creation of units.
+# modified 'halo/para drop' code to fix a bug that resulted in AI sometimes never realizing they reached the ground.  
++ Smoke Box options - see BaseServer.sqf
+	Trigger range - smoke now activates on player proximity (0=unlimited)
+	Colors - smoke color can now be customized
+	Duration - duration of smoke now independent of loot box cleanup timer
+# fixed reliability of admin menu, and enhanced it to support multiple HC's and server-side spawning (non-HC) configuration.
++ 5 Theme Options now availible via the ThemeData.sqf:
+   1: Create random mission from theme's list each control loop cycle.
+   2: Create missions 'in order' found in the ThemeData.sqf
+   3: Create random mission, until all in the theme's list have been spawned.
+   4: Spawn all missions in the theme's list immediately. Use the theme's respawn delay to 'regenerate the mission when it is complete.
+   5: Spawn all missions in the theme's list ONLY once!  
+  Additional option added to enhance Admin use of dynamic events.   
+****************
+** Admin Note **
+** To support migration to server side script storage and Multiple-HC support all mission files need to undergo the following changes:
+-remove 'initData ='
+-remove 'MissionData = _initData;'
+-remove 'HCHAL_ID publicVariableClient "MissionData";
+**
++SmokeBox options array replaces true/false flag in BaseServer.sqf
+*****Missions packaged with FuMS are ready to go!
 **FRESH INSTALL RECOMMENDED**
 v1.3
 +Headless Client Installation!
