@@ -51,6 +51,9 @@ FuMS Installation:
 #Assumes you have your headless client up and running
 1) place the 'HC' folder and all its subfolders into your mpmissions mission folder. (ie your Mission pbo)
 2) Modify your 'init.sqf'
+    add the line below in a section of the init that is run by both players and servers (best to put it near the top, if
+    your server has alot of mods and you are not familiar with coding)
+    
              [] execVM "HC\Init.sqf";  
 
 3)Update your BattlEye filters form the included BattlEye_Filters.txt
