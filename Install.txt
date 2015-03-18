@@ -39,6 +39,7 @@ Note: If your HC is on a different virtual or physical machine from the server, 
 	};
 
 Note: HC_HAL will be used as the HC's name in game. This is the name you will be able to use to 'kick' the HC if needed.
+Note: Placing the HC in the 1st slot will disable the 'slots' view on the left of the Lobby. Players in game will still show in the right panel of the lobby.  If you want the 'slots' to show up, the above code can be placed at 'class item100'. Just make sure to also set 'items=101'.
 
 3) Make a copy of C:\Games\Arma3\arma3server.exe and rename it to HCserver.exe
 
@@ -98,6 +99,13 @@ class RscTitles
     };
 //***********************************
 };
+
+
+class CfgSounds
+{
+	#include "HC\Zombies\infectedsounds.hpp"
+};
+
 
 
 5) Place FuMS.pbo located in github/FuMS_HC/ServerPBO into your SERVER's @EpochHive\Addons folder.

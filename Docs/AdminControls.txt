@@ -24,8 +24,7 @@ Spawn Mission:
 Creates the selected encounter at the Anchor's location, using the selected resource spawner (HC or Server).
 NOTE:!!!!! If the theme this mission is attached too has a respawn timer (see ThemeData.sqf) less than the server reset time,
 there is the potential that the mission will respawn again when the timer expires.
-If it is your desire to simply spawn a mission once, put your mission in the 'Admin' theme's folder. This theme is configured
-to only spawn a mission once per server reset.
+If it is your desire to simply spawn a mission once, put your mission in the 'Admin' theme's folder. This theme is configured to only spawn a mission once per server reset.
 
 Set Anchor:
 Allows selection of an active player as a spawn location for the 'Spawn Mission' option.  Position displayed will update every 5 seconds, and

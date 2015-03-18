@@ -41,7 +41,7 @@ Behaviour: When the number of units on a 'side' exceeds 'numAI' within 'radius' 
 -offset: centroid of the trigger. Supports 2D offset, or 3D map absolute positions.
 -range: range from 'offset' the count is counducted.
 -numPlayers:  the number of 'players' the number of players to count.
-Behaviour: When 'numPlayers' are detected within 'range' of 'offset' the trigger registers TRUE.
+Behaviour: When at least 'numPlayers' are detected within 'range' of 'offset' the trigger registers TRUE.
 
 ["Detected", group#, vehicle#]
 -group# : group that is performing the 'detection' check. 1st group is indexed at 0.

@@ -48,6 +48,7 @@ FuMS_LootSmoke = false;
 FuMS_LootSaveVehicle = false;
 FuMS_STORAGE	[]
 FuMS_AIONLYVehicles	[]  serverdata 6-4
+FuMS_VehicleZeroAmmo	bool	true = ammo zeroized 1st time player gets into vehicle.
 
 AI Global 'setvariable' values:
 FuMS_AILOGIC [patrolType, msnCenter, spawnLoc, patrolLoc, patrolpatternoptions]
@@ -108,7 +109,9 @@ FuMS_AdminListofMissions
 FuMS_Anchor, FuMS_AnchorLoc, FuMS_MissionSet (index,themename,missionname), FuMS_MissionResource - used in spawning missions!
 FuMS_anchorNameTxt, FuMS_anchorLocTxt, FuMS_missionTxt, FuMS_resourceTxt
 				   
+FuMS_ZombieNoise = GVEH used to pass zombie sounds data from HC to server, then server to clients that can hear the noise.
 				   
+
 				   
    
    

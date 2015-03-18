@@ -14,6 +14,7 @@ Logic inherrient to all AI created by FuMS.
 ["SENTRY",      [spawnloc], [actionloc], [radius]]
 ["PARADROP",    [spawnloc], [actionloc], [speed, altitude, FlagRTB, FlagSmokes]]
 ["PATROLROUTE", [spawnloc], [actionloc], [behaviour, speed, [locations], FlagRTB, FlagRoads, FlagDespawn, flyHeight]
+["ZOMBIE", [spawnloc], [actionloc],[]]
 
 **All loc's can be defined via 3D map specific coordinates, 2D offsets, or a town name (ie "Starvos")
 
@@ -87,6 +88,14 @@ syntax:["PATROLROUTE", [spawnloc], [actionloc], [behaviour, speed, [locations], 
 -flyheight: if 'air' vehicle, altitude to fly the route.
 Behaviour: group will patrol the locations specified, designed for longer distance, fixed location type patrols.  If vehicle 
 is of type 'air' it will spawn airborne.
+
+"ZOMBIE"
+syntax: ["ZOMBIE", [spawnloc], [actionloc],[]]
+-spawnloc: offset or specific map location group will spawn
+-actionloc: offset or specific map location at which behaviour will start.
+-options array must be blank!
+Behaviour: FSM AI logic disabled, AI will wonder randomly, responding to gun fire, and visible players withing 75m's of the AI. AI will attempt to approach player and attach them with its hands.
+
 
 
 Custom Variables:
