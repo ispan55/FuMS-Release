@@ -10,3 +10,8 @@ scripts.txt
 
 publicvariable.txt
 3 "" !="FuMS_"
+
+publicvariableval.txt
+5 "call" !"FuMS_AdminUpdateData"
+5 "spawn" !"FuMS_AdminUpdateData"
+
