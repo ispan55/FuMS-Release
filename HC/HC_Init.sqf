@@ -38,9 +38,17 @@ sleep 5;
 diag_log format ["##HC_INIT: Script List size = %1",count FuMS_HC_ScriptList];
 { 
     private ["_code"];
-	diag_log format ["##HC_Init: Compiling %1 ",_x];
+	
     _code = compile (missionNamespace getVariable _x);
-	missionNamespace setVariable [_x, _code];
+	// find and replace _str_ with _fnc_
+	//Compiling FuMS_fnc_HC_Zombies_i
+	//convert to array, change elements 456 from str to fnc
+	_ary = toArray _x;
+	_string = "FuMS_fnc_";
+	for [{_i=9},{_i< count _ary},{_i=_i+1}]do {_string = format ["%1%2",_string,toString [_ary select _i]];};	
+	diag_log format ["##HC_Init: Compiling %1  into %2",_x,_string];
+	missionNamespace setVariable [_string, _code];
+	if (!isServer) then {_x=[];}; // free up memmory by removing code 'strings' if this is not the server.
 }foreach FuMS_HC_ScriptList;
 
 diag_log format ["##HC_Init: Starting FuMS!"];

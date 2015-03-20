@@ -48,9 +48,11 @@ while {true} do
             _update = FuMS_THEMEDATA select 0;
             _update set [0,"<FuMS_OFFLINE>"];
             FuMS_THEMEDATA set [0, _update];
-            
-            FuMS_DataValidation = format[ "%1",_file];
-            publicVariableServer "FuMS_DataValidation";    
+            if (!isServer) then
+            {
+                FuMS_DataValidation = format[ "%1",_file];
+                publicVariableServer "FuMS_DataValidation";    
+            };
             _critical = true;
         };        
     };      
@@ -67,8 +69,11 @@ if ( _critical and _abort) then
     diag_log format ["             	    CRITICAL ERROR: FuMS OFFLINE! "];
     diag_log format ["REASON: %1",_msg];
     diag_log format ["-------------------------------------------------------------------------------------"];
-    diag_log format ["-------------------------------------------------------------------------------------"];      
-    FuMS_DataValidation = format ["%1",_file];
-    publicVariableServer "FuMS_DataValidation";
+    diag_log format ["-------------------------------------------------------------------------------------"];   
+    if (!isServer) then
+    {
+        FuMS_DataValidation = format ["%1",_file];
+        publicVariableServer "FuMS_DataValidation";
+    };
 }else { diag_log format ["------ Theme Data validation complete. %1secs----",time -_start];_abort=false;};
 _abort

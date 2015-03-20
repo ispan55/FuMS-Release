@@ -15,6 +15,9 @@ FuMS_missionTxt = "None";
 FuMS_resourceTxt = "None";
 
 FuMS_AdminMenu = compile FuMS_fnc_Menu_AdminMenu; 
+FuMS_INF_nextSound = compile FuMS_str_HC_Zombies_INF_fnc_nextSound;
+[] call FuMS_INF_nextSound;
+
 waituntil {!isnull (finddisplay 46)};
 //waituntil {player == player};
 sleep 10;

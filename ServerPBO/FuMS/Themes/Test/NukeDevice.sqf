@@ -4,8 +4,8 @@
 // Based upon drsubo Mission Scripts
 
 [
-["NukeDevice", 200], // Mission Title NOSPACES!, and encounter radius
-["Nuclear Device","mil_objective","ELLIPSE","ColorRed","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
+["Zombies", 200], // Mission Title NOSPACES!, and encounter radius
+["Zombies","mil_objective","ELLIPSE","ColorRed","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
    // type is "mil_objective"
 [  
     [// NOTIFICATION Messages and Map display Control.
@@ -36,7 +36,7 @@
 ],
 [  //  Loot Config:  Refer to LootData.sqf for specifcs
 ["None" , [18,-9] ], //[static loot, offset location] - spawns with the mission
-["RANDOM" , [5,5] ], // Win loot, offset location - spawns after mission success
+["Random" , [5,5] ], // Win loot, offset location - spawns after mission success
 ["None" , [0,0] ]  // Failure loot, offset location - spawns on mission failure
 ],
 [//BUILDINGS: persist = 0: building deleted at event completion, 1= building remains until server reset.
@@ -45,7 +45,7 @@
 [ // AI GROUPS. Only options marked 'Def:' implemented.
 //   [["RESISTANCE","COMBAT","RED","COLUMN"],   [  [1,"Sniper"],[2,"Rifleman"],[2,"Hunter"]  ],   ["BoxPatrol",[0,75],[0,0],[0]   ]],
 //    [["RESISTANCE","COMBAT","RED","LINE"],   [  [3,"Rifleman"]                                         ],   ["Guard",[-20,10],[0,0],[70] ]],
-[["EAST","COMBAT","RED","LINE"],   [  [3,"Sniper"]           ],     ["BoxPatrol",[50,250],[0,0],[150]     ]]
+[["ZOMBIE","CARELESS","RED","LINE"],   [  [1,"Zombie"]           ],     ["Zombie",[0,0],[0,0],[]     ]]
 //[["RESISTANCE","COMBAT","RED","LINE"],   [  [3,"Rifleman"],[1,"LMG"] ],   ["Explore",[6,6],[0,0],[150]     ]],
 //[["RESISTANCE","COMBAT","RED","LINE"],   [  [3,"Rifleman"]           ],   ["BoxPatrol",[-6,-6],[0,0],[0]     ]]
 ],
@@ -82,9 +82,9 @@
 // index 0:win, 1:lose, 2:phase1, 3:phase2, 4:phase3, 5:ignore triggers
 [ // NOTE: side RESISTANCE for groups == side GUER for Triggers.
     [    //WIN Triggers and Controls
- //     ["LowUnitCount", "GUER", 0, 0, [0,0]], // all enemies are dead:  side options "EAST","WEST","GUER","CIV","LOGIC","ANY"
-      ["ProxPlayer", [0,0], 20, 1], // 1 player is within 20 meters of encounter center.
-	  ["Reinforce", 100, "Random"] // %chance when requested, Mission to run
+      ["LowUnitCount", "EAST", 0, 0, [0,0]], // all enemies are dead:  side options "EAST","WEST","GUER","CIV","LOGIC","ANY"
+      ["ProxPlayer", [0,0], 20, 1] // 1 player is within 20 meters of encounter center.
+	//  ["Reinforce", 100, "Random"] // %chance when requested, Mission to run
     ],
     [    //LOSE Triggers and Controls
 //      ["HighUnitCount", "GUER",10,40,[0,0]] // 10 enemies get within 40m's of encounter center

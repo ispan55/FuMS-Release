@@ -2,12 +2,16 @@
 // Horbin
 // 2/28/15
 // Collection of Server side PVEH's.
+FuMS_RegisterVehicle_Server =
+{
+    // for use by non-FuMS addons to register vehicles to keep them from going poof.
+    [_this select 0] call EPOCH_server_setVToken;
+};
+
 
 "FuMS_RegisterVehicle" addPublicVariableEventHandler
 {
-// for use by non-FuMS addons to register vehicles to keep them from going poof.
-	_vehObj = _this select 1;
-	_vehObj call EPOCH_server_setVToken;
+    [_this select 1] spawn FuMS_RegisterVehicle_Server;
 };
 
 "FuMS_DataValidation" addPublicVariableEventHandler
@@ -23,10 +27,12 @@
     diag_log format ["-------------------------------------------------------------------------------------"];      
 };
 
-"BuildVehicle_HC" addPublicVariableEventHandler
+
+FuMS_BuildVehicle_Server =
 {
-    //        diag_log format ["##HC_HAL: BuildVehicle_HAL fired!"];   
-  _vehObj = _this select 1;
+      //        diag_log format ["##HC_HAL: BuildVehicle_HAL fired!"];  
+    private ["_vehObj"];
+  _vehObj = _this select 0;
 
     _vehObj setVariable ["HCTEMP", "AI", true]; // HCTEMP set to "PLAYER" once a player enters.
 
@@ -88,26 +94,38 @@
 				publicVariable "EPOCH_VehicleSlotCount";
 				 _vehObj setVariable["VEHICLE_SLOT",_slot,true];
 				_vehObj call EPOCH_server_save_vehicle;
+                
+                if (FuMS_VehicleZeroAmmo) then {_vehobj setvehicleAmmo 0;};
 				//_vehObj call EPOCH_server_vehicleInit;
 			};
             //diag_log format ["###EH:GetIn: HCTEMP = %1", _value];
             _vehobj setVariable ["HCTEMP", "PLAYER", true];
         };       
     }];   
- 
+
 };
 
-"FuMS_RADIOCHATTER_Server" addPublicVariableEventHandler
+"FuMS_BuildVehicle_HC" addPublicVariableEventHandler
+{
+    [_this select 1] spawn FuMS_BuildVehicle_Server;
+};
+
+FuMS_RadioChatter_Server =
 {
     private["_data","_msg","_receivers"];
-    _data = _this select 1;
+    _data = _this select 0;
     _msg = _data select 0;
     _receivers = _data select 1;
     //diag_log format ["#FuMsnInit: RadioChatter for:%1",_receivers];
     FuMS_RADIOCHATTER = _msg;
     {
         (owner (vehicle _x)) publicVariableClient "FuMS_RADIOCHATTER";
-    }foreach _receivers;
+    }foreach _receivers; 
+};
+
+"FuMS_RADIOCHATTER_Distro" addPublicVariableEventHandler
+{
+    [_this select 1] spawn FuMS_RadioChatter_Server;
 };
 
 
@@ -129,8 +147,26 @@ FuMS_HeartMonitor = compile preprocessFileLineNumbers "\FuMS\Functions\HeartMoni
     FuMS_ServerIsClean = true;
 };
 
+FuMS_ZombieNoise_Server =
+{
+    private ["_data","_sound","_zombie","_players"];
+    _data = _this select 0;
+    _sound = _data select 0;
+    _zombie = _data select 1;
+    _players = _data select 2;
+    diag_log format ["##PVEH %1 is pushing sound %2 to %3",_zombie, _sound, _players];
+    {
+        FuMS_ZombieNoise = [_sound, _zombie];
+        (owner _x) publicVariableClient "FuMS_ZombieNoise";      
+        //"FuMS_ZombieNoise" addPublicVariableEventHandler
+        publicVariable "FuMS_ZombieNoise";
+    }foreach _players;
+};
 
-
+"FuMS_ZombieNoise" addPublicVariableEventHandler
+{
+    [_this select 1] spawn FuMS_ZombieNoise_Server;    
+};
 
 
 

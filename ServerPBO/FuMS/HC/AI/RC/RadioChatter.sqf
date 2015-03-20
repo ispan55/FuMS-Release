@@ -74,8 +74,15 @@ if (isNil "_msg") then
         };
         // send it to server to be able to utilize 'owner' function
         //  diag_log format ["##RadioChatter: sent to PVEH: %1 :: %2",_msg,_receivers];
-        FuMS_RADIOCHATTER_Server = [_msg, _receivers];
-        publicVariableServer "FuMS_RADIOCHATTER_Server";
+        if (isServer) then
+        {
+            [[_msg, _receivers]] spawn FuMS_RadioChatter_Server;
+        }
+        else
+        {
+            FuMS_RADIOCHATTER_Distro = [_msg, _receivers];
+            publicVariableServer "FuMS_RADIOCHATTER_Distro";
+        };
         if (count _receivers > 0) then { _messageheard = true;};
     };
 };

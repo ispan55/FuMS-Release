@@ -10,7 +10,7 @@ _prefix = "FuMS_HC_HAL_";
 for [{_i=1},{_i<count FuMS_HCIDs},{_i=_i+1}]do
 {
     diag_log format ["##HC_DataCleanup: FuMS_HCIDs:%1",FuMS_HCIDs];
-        diag_log format ["##HC_DataCleanup: FuMS_HCNames:%1",FuMS_HCNames];
+    diag_log format ["##HC_DataCleanup: FuMS_HCNames:%1",FuMS_HCNames];
     if (FuMS_HCIDs select _i == _hcID) then
     { 
         FuMS_HCIDs set [_i,-1];

@@ -23,8 +23,8 @@ _soldierData =
         "Sniper",
 		[.08, .9, .1, .5, .5, .1, .1, .5], // Soldier skill levels
         ["U_O_GhillieSuit",1], // Uniform
-        [Vest_Tactical,1], // Vest.
-        [Helmet_SF,.7], // Helmet.
+        [Vest_Tactical,.5], // Vest.
+        [Helmet_SF,.5], // Helmet.
         [Backpacks_All,1], // Backpack and chance to have it
         [RifleSniperPairs,1], // PriWeapon
         [ 1, .3 , 0], // scope, muzzle, flashlight:  percent chance of having one appropriate to the rifle.
@@ -39,8 +39,8 @@ _soldierData =
     ],[
         "Rifleman",[.05, .9, .1, .5, .5, .1, .1, .5],
         [Outfit_AnyMilitary,1], // Uniform
-        [Vest_Carrier,1], // Vest.
-        [Helmet_ECH,.8], // Helmet
+        [Vest_Carrier,.5], // Vest.
+        [Helmet_ECH,.5], // Helmet
         [Backpacks_All,.5], // Backpack and chance.
         [RifleAssaultPairs,1], // PriWeapon and chance
         [ .5, .3 , .5], // scope, muzzle, flashlight:  percent chance of having one appropriate to the rifle.
@@ -52,8 +52,8 @@ _soldierData =
     ],[
         "LMG",[.05, .9, .1, .5, .5, .1, .1, .5],
         [Outfit_AnyMilitary,1], // Uniform
-        [Vest_Carrier,1], // Vest.
-        [Helmet_Mich,.8], // Helmet.
+        [Vest_Carrier,.5], // Vest.
+        [Helmet_Mich,.5], // Helmet.
         [Backpacks_All,.5], // Backpack and chance.
         [RifleLMGPairs,1], // PriWeapon and chance
         [ .2, .1 , .5], // scope, muzzle, flashlight:  percent chance of having one appropriate to the rifle.
@@ -65,7 +65,7 @@ _soldierData =
     ],[
         "Hunter",[.03, .9, .1, .5, .5, .1, .1, .5],
         ["U_O_CombatUniform_ocamo",1], // Uniform
-        [Vest_Bandolier,1], // Vest.
+        [Vest_Bandolier,.2], // Vest.
         [Hat_Boonie,.8], // Helmet.
         [Backpacks_All,.1], // Backpack and chance.
         [RifleAssaultPairs,1], // PriWeapon and chance
@@ -91,7 +91,7 @@ _soldierData =
     ],[
         "Driver",[.05, .9, .1, .5, .5, .1, .1, .5],
         [Outfit_AnyMilitary,1], // Uniform
-        [Vest_ChestRig,1], // Vest.
+        [Vest_ChestRig,.1], // Vest.
         [Hat_Military,.8], // Helmet
         [Backpacks_All,.1], // Backpack and chance.
         [RifleOtherPairs,.8], // PriWeapon and chance
@@ -104,7 +104,7 @@ _soldierData =
     ],[
         "Pilot",[.05, .9, .1, .5, .5, .1, .1, .5],
         ["U_O_PilotCoveralls",1], // Uniform
-        [Vest_ChestRig,1], // Vest.
+        [Vest_ChestRig,.8], // Vest.
         [Helmet_Pilot,1], // Helmet
         [Backpacks_All,.1], // Backpack and chance.
         [RifleOtherPairs,.5], // PriWeapon and chance
@@ -117,7 +117,7 @@ _soldierData =
     ],[
         "CivCombat",[.02, .7, .1, .5, .5, .08, .1, .5],
         [Outfit_Civilian,1], // Uniform
-        [Vest_Bandolier,.3], // Vest.
+        [Vest_Bandolier,.5], // Vest.
         [Hat_Civilian,.8], // Helmet
         [Backpacks_All,.1], // Backpack and chance.
         [RifleOtherPairs,.9], // PriWeapon and chance
@@ -154,8 +154,21 @@ _soldierData =
         [ true, true, false], // DiverOverWater, UnlimitedAmmo
         [ [[Food_Canned,.05],[1,1]],[[Drink,.05],[1,1]]             ]
         
+    ],
+    [
+        "Zombie",[1,1,1,1,1,1,1,1],
+        ["U_C_Scientist",1], // Uniform
+        ["",0], // Vest.
+        [Hat_Civilian,0], // Helmet
+        ["",0], // Backpack and chance.
+        [RifleOtherPairs,0], // PriWeapon and chance
+        [ 0, 0 , 0], // scope, muzzle, flashlight:  percent chance of having one appropriate to the rifle.
+        [PistolPairs,0], // Secondary Weapon and chance
+        [ 0, 0, 0, 0, 0],  // Map, Compass, GPS, Watch, Radio(1-9)
+        [ 0, 0, 0 ], // Binoculars, RangeFinders, NVG's
+        [ false, false, false], // DiverOverWater, UnlimitedAmmo
+        [ [[Food_Canned,.05],[1,1]],[[Drink,.05],[1,1]]             ]
     ]
-    
     
 ];
 FuMS_SOLDIERDATA set [_this select 0, _soldierData];

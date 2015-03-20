@@ -3,14 +3,26 @@
 // 1/8/15
 // Main Initialization for Fulcrum Mission System
 // If on the headless client
-if !(hasInterface or isServer) then
+if !(hasInterface) then
 {   
     private ["_serverOptions","_themeNumber","_radchat","_i","_abort","_msg","_dat","_dat2"];  
 	
     diag_log format ["##FuMsnInit: Script Transfer complete: FuMS Initializing!"];    
-    //ASSERT BaseServer, BaseLoot, and BaseSoldier data now on HC
+    //ASSERT BaseServer, BaseLoot, and BaseSoldier data now on HC  
+    if (!isServer) then
+    {
+        FuMS_THEMEDATA = FuMS_BaseTHEMEDATA;
+        FuMS_LOOTDATA = FuMS_BaseLOOTDATA;
+       FuMS_SOLDIERDATA = FuMS_BaseSOLDIERDATA;
+        FuMS_ListofMissions = FuMS_BaseListofMissions;
+       // FuMS_BaseTHEMEDATA = [];
+       // FuMS_BaseLOOTDATA = [];
+       // FuMS_BaseSOLDIERDATA = [];
+       // FuMS_BaseListofMissions = [];
+        diag_log format ["##FuMsnInit: ThemeData: %1",FuMS_THEMEDATA];
+        diag_log format ["##FuMsnInit: ListofMissions: %1", FuMS_ListofMissions];
+    };
     //ASSERT ServerData, THEMEDATA, LOOTDATA,SOLDIERDATA fully initialized at this point!   
-    
        
         [] call FuMS_fnc_HC_Menus_initHCMenus;
     // init admin xxxxHCID vars, and add mission spawnining PVEH.
@@ -73,7 +85,8 @@ if !(hasInterface or isServer) then
     if (FuMS_AdminControlsEnabled) then
     {     
         private ["_slot","_onOff","_spawnLoc"];
-         _slot = FuMS_HCThemeControlID;
+        FuMS_ThemeControlID = FuMS_HCThemeControlID;
+         _slot = FuMS_ThemeControlID;
         _onOff =[];
         _spawnLoc=[];                  
         for [{_i=0},{_i < count FuMS_ActiveThemes},{_i=_i+1}] do
@@ -82,21 +95,24 @@ if !(hasInterface or isServer) then
             _spawnLoc set [_i, []];          
         };      
         missionNameSpace setVariable [format["FuMS_AdminActiveThemes%1",_slot],FuMS_ActiveThemes];
-        FuMS_AdminUpdateData = [FuMS_HCThemeControlID, "AdminActiveThemes", FuMS_ActiveThemes];
-        publicVariableServer "FuMS_AdminUpdateData";
-        
         missionNameSpace setVariable [format["FuMS_AdminActiveThemesHC%1",_slot],FuMS_ActiveThemes];
-        FuMS_AdminUpdateData = [FuMS_HCThemeControlID, "AdminActiveThemesHC", FuMS_ActiveThemes];
-        publicVariableServer "FuMS_AdminUpdateData";
-        
         missionNameSpace setVariable [format["FuMS_AdminThemeOn%1",_slot],_onOff];
-        FuMS_AdminUpdateData = [FuMS_HCThemeControlID, "AdminThemeOn", _onOff];
-        publicVariableServer "FuMS_AdminUpdateData";
-        
         missionNameSpace setVariable [format["FuMS_AdminThemeSpawnLoc%1",_slot],_spawnLoc];
-         FuMS_AdminUpdateData = [FuMS_HCThemeControlID, "AdminThemeSpawnLoc",_spawnLoc];
-        publicVariableServer "FuMS_AdminUpdateData";                 
-      
+        
+        if (!isServer) then
+        {
+            FuMS_AdminUpdateData = [FuMS_ThemeControlID, "AdminActiveThemes", FuMS_ActiveThemes];
+            publicVariableServer "FuMS_AdminUpdateData";
+            
+            FuMS_AdminUpdateData = [FuMS_ThemeControlID, "AdminActiveThemesHC", FuMS_ActiveThemes];
+            publicVariableServer "FuMS_AdminUpdateData";
+            
+            FuMS_AdminUpdateData = [FuMS_ThemeControlID, "AdminThemeOn", _onOff];
+            publicVariableServer "FuMS_AdminUpdateData";
+            
+            FuMS_AdminUpdateData = [FuMS_ThemeControlID, "AdminThemeSpawnLoc",_spawnLoc];
+            publicVariableServer "FuMS_AdminUpdateData";                 
+        };
         diag_log format ["##FuMsnInit: Admin On: %1",FuMS_AdminControlsEnabled];        
        // diag_log format ["##FuMsnInit: Theme is on: %1",FuMS_AdminThemeOn];
         //diag_log format ["##FuMsnInit: Theme spawn locs: %1",FuMS_AdminThemeSpawnLoc];
@@ -158,22 +174,39 @@ if !(hasInterface or isServer) then
        _prefix = "FuMS_HC_isAlive";
        _var = format ["%1%2_init",_prefix, FuMS_HC_SlotNumber];
        missionNamespace setVariable [_var, true];
-       publicVariableServer _var; 
+       if (!isServer) then {publicVariableServer _var; };
          
     // Start AI RadioChatter Operations Center. Done before control loops to permit error checking on RadioChatter data.    
-	[] spawn FuMS_fnc_HC_AI_RC_BaseOps;
-    // Start any other addons here!
-    if (FuMS_SoldierVCOM_Driving) then {[] execVM "HC\VCOM_Driving\init.sqf";diag_log format ["Genesis92x VCOM_Driving V1.01 Initialized."];};        
-    // end custom addons
-    sleep 3;        
-    _themeNumber = 0;
-    {
-        private ["_themeData","_fault"];
+       [] spawn FuMS_fnc_HC_AI_RC_BaseOps;
+       // Start any other addons here!
+       if (FuMS_SoldierVCOM_Driving) then
+       {
+           [] execVM "HC\VCOM_Driving\init.sqf";
+           diag_log format ["Genesis92x VCOM_Driving V1.01 Initialized."];
+       };   
+       
+       FuMS_RoamingZombieGroup = createGroup east;
+       FuMS_RoamingZombieGroup setCombatMode "CARELESS";
+       FuMS_RoamingZombieGroup setSpeedMode "LIMITED";
+       diag_log format ["##Zombies/init.sqf Zombie Groups initialized!"];
+       FuMS_AttackingZombieGroup = createGroup east;
+       FuMS_AttackingZombieGroup setCombatMode "CARELESS";
+       FuMS_AttackingZombieGroup setSpeedMode "FULL";
+       ["AIGroups",FuMS_RoamingZombieGroup] call FuMS_fnc_HC_Util_HC_AddObject;
+       ["AIGroups",FuMS_AttackingZombieGroup] call FuMS_fnc_HC_Util_HC_AddObject;
+       
+      // _hold = spawn FuMS_fnc_HC_Zombies_Init;
+      // waitUntil {ScriptDone _hold};
+       // end custom addons
+       sleep 3;        
+       _themeNumber = 0;
+       {
+           private ["_themeData","_fault"];
         _fault = false;
         _themeData = FuMS_THEMEDATA select _themeNumber;
         if (!isNil "_themeData") then
         {
-            waituntil {diag_fps > 25};
+            waituntil {diag_fps >FuMS_FPSMinimum};
           //  [_x, _themeNumber ] execVM "HC\Encounters\ControlLoop.sqf";
 		  [_x, _themeNumber] spawn FuMS_fnc_HC_MsnCtrl_ControlLoop;
         //    diag_log format ["*********************************************************************"];

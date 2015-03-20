@@ -94,7 +94,7 @@ while {true} do
     _sec = "Loot Defaults:";
     _dat2 = _dat select 6; // Loot Defautls
     if (TypeName _dat2 != "ARRAY")exitWith {_abort = true;_msg = format ["%1  should array of settings, found %2",_sec, _dat2];}; 
-    if (count _dat2 !=5) exitWith {_abort = true;_msg = format ["%1  Missing variables. Expecting 5, found %2",_sec,_dat2];};      
+    if (count _dat2 !=6) exitWith {_abort = true;_msg = format ["%1  Missing variables. Expecting 6, found %2",_sec,_dat2];};      
     if (TypeName (_dat2 select 0) != "SCALAR" ) exitWith {_abort = true;_msg = format ["%1 exepecting numeric value, found %2",_sec,_dat2 select 0];};   
     // SmokeBox Options
     _dat3 = _dat2 select 1;
@@ -115,11 +115,12 @@ while {true} do
         if (TypeName _x != "STRING") exitWith {_abort = true;_msg = format ["%1 container types should be text strings, found %2",_sec,_x];};    
     }foreach (_dat2 select 3);
     if (_abort) exitWith {};  
-    if (TypeName (_dat2 select 4) != "ARRAY" ) exitWith {_abort = true;_msg = format ["%1 exepecting array of text values found %2",_sec,_dat2 select 3];}; 
+    if (TypeName (_dat2 select 4) != "ARRAY" ) exitWith {_abort = true;_msg = format ["%1 exepecting array of text values found %2",_sec,_dat2 select 4];}; 
     {
         if (TypeName _x != "STRING") exitWith {_abort = true;_msg = format ["%1 vehicle types should be text strings, found %2",_sec,_x];};    
-    }foreach (_dat2 select 3);
+    }foreach (_dat2 select 3);    
     if (_abort) exitWith {};  
+    if (TypeName (_dat2 select 5) != "BOOL") exitWith {_abort = true;_msg = format ["%1 VehicleAmmoOnOccupy should be true or false, found %2",_sec,_dat2 select 5];}; 
     if (true) exitWith{};
 };
 if (_abort) then
@@ -132,8 +133,11 @@ if (_abort) then
     diag_log format ["                          Fulcrum Mission System offline!"];
     diag_log format ["REASON: %1",_msg];
     diag_log format ["-------------------------------------------------------------------------------------"];
-    diag_log format ["-------------------------------------------------------------------------------------"];      
-    FuMS_DataValidation = "\FuMS\Themes\BaseServerData.sqf";
-    publicVariableServer "FuMS_DataValidation";
+    diag_log format ["-------------------------------------------------------------------------------------"];  
+    if (!isServer) then
+    {
+        FuMS_DataValidation = "\FuMS\Themes\BaseServerData.sqf";
+        publicVariableServer "FuMS_DataValidation";
+    };
 }else { diag_log format ["------ Server Data validation complete %1 secs-----", time - _start];};
 _abort

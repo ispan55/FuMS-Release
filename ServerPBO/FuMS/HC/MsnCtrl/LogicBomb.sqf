@@ -208,14 +208,14 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
     
     _missionKillIndex = count FuMS_ActiveMissions;
     FuMS_ActiveMissions = FuMS_ActiveMissions + [ [_missionKillIndex, format ["%1:%2", _curMission,_missionTheme]] ];  
-    missionNameSpace setVariable [format["FuMS_AdminActiveMissionList%1",FuMS_HCThemeControlID],FuMS_ActiveMissions];
-    FuMS_AdminUpdateData = [FuMS_HCThemeControlID, "AdminActiveMissionList",FuMS_ActiveMissions];
+    missionNameSpace setVariable [format["FuMS_AdminActiveMissionList%1",FuMS_ThemeControlID],FuMS_ActiveMissions];
+    FuMS_AdminUpdateData = [FuMS_ThemeControlID, "AdminActiveMissionList",FuMS_ActiveMissions];
     publicVariableServer "FuMS_AdminUpdateData";
 
     while {_msnStatus != "WIN" and _msnStatus !="LOSE" and _msnStatus != "KILL"} do
     {
         private ["_curState","_i","_dt","_dtlist0","_dtlist1","_data","_numAI","_triggerCount","_nearFolks","_range","_endMission"];     
-        FuMS_ActiveMissions = missionNameSpace getVariable format ["FuMS_AdminActiveMissionList%1",FuMS_HCThemeControlID];
+        FuMS_ActiveMissions = missionNameSpace getVariable format ["FuMS_AdminActiveMissionList%1",FuMS_ThemeControlID];
         _endMission = (FuMS_ActiveMissions select _missionKillIndex) select 1;
         if (_endMission == "KILL") exitWith {_msnStatus = "KILL";};
         
@@ -509,8 +509,8 @@ if (count (_triggerData select 5) == 0)  then // NO TRIGGERS is commented out so
         sleep 3;
     };
     FuMS_ActiveMissions set [_missionKillIndex, "COMPLETE"];
-    missionNameSpace setVariable [format["FuMS_AdminActiveMissionList%1",FuMS_HCThemeControlID],FuMS_ActiveMissions];
-    FuMS_AdminUpdateData = [FuMS_HCThemeControlID, "AdminActiveMissionList",FuMS_ActiveMissions];
+    missionNameSpace setVariable [format["FuMS_AdminActiveMissionList%1",FuMS_ThemeControlID],FuMS_ActiveMissions];
+    FuMS_AdminUpdateData = [FuMS_ThemeControlID, "AdminActiveMissionList",FuMS_ActiveMissions];
     publicVariableServer "FuMS_AdminUpdateData";
     // Exiting mission, so make sure triggers are cleaned up!!!
     {

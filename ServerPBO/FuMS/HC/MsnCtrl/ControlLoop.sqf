@@ -9,7 +9,7 @@
 //FuMS_C1_PullData = compile FuMS_S_PullData;
 private ["_missionTheme","_respawnDelay","_encounterLocations","_msnDone","_missionList","_spawnedByAdmin",
 "_pos","_activeMission","_missionSelection","_trackList","_missionTheme","_themeIndex","_themeOptions","_themeData",
-"_locationAdditions","_missionNameOverride"];
+"_locationAdditions","_missionNameOverride","_activeThemeIndex", "_controlledByThisHC"];
 _missionTheme = _this select 0;
 _themeIndex = _this select 1;
 _spawnedByAdmin = _this select 2;
@@ -22,13 +22,15 @@ _missionSelection = _themeOptions select 1;
 _respawnDelay = _themeOptions select 2;
 //diag_log format ["##ControlLoop: %1 Missions Initializing##", _missionTheme];
 // Look for keyword locations. If found, add them to the provided list of _encounterLocations
-_activeThemeIndex = FuMS_ActiveThemes find _missionTheme;
-_controlledByThisHC = FuMS_ActiveThemesHC select _activeThemeIndex;
-if (  !(_controlledByThisHC == -1 or _controlledByThisHC == FuMS_HCThemeControlID)  ) exitWith
+diag_log format ["##ControlLoop: _missionTheme:%1  ActiveThemes:%2",_missionTheme, FuMS_ActiveThemes];
+
+_activeThemeIndex = FuMS_ActiveThemes find _missionTheme; // returns a ["theme", index] pair
+//diag_log format ["##ControlLoop: _activeThemeIndex =====%1",_activeThemeIndex];
+_controlledByThisHC =  (FuMS_ActiveThemes select _activeThemeIndex) select 1;
+if (  !(_controlledByThisHC == -1 or _controlledByThisHC == FuMS_ThemeControlID)  ) exitWith
 {
     // this theme not under control of the HC...so exit...
-    diag_log format ["##ControlLoop: %1 not started. It is under HC#%2 control. Check BaseServer.sqf to reconfigure!",_missionTheme, _controlledByThisHC];
-    
+    diag_log format ["##ControlLoop: %1 not started. It is under HC#%2 control. Check BaseServer.sqf to reconfigure!",_missionTheme, _controlledByThisHC];    
 };
 _locationAdditions = [];
 {
@@ -126,7 +128,7 @@ while {true} do
 		{
 			waitUntil
 			{
-				_onOff = missionNameSpace getVariable format["FuMS_AdminThemeOn%1",FuMS_HCThemeControlID];
+				_onOff = missionNameSpace getVariable format["FuMS_AdminThemeOn%1",FuMS_ThemeControlID];
 			//  diag_log format ["##ControlLoop:  _themeIndex:%1  _onOff : %2",_themeIndex, _onOff];
 				sleep 2; 
 				(_onOff select _themeIndex)
@@ -178,15 +180,17 @@ while {true} do
     if (_missionSelection == 4) then
     {
         _activeMission = _trackList;
+        diag_log format ["##ControlLoop: Calling StaticMissionControlLoop with mission List:%1",_activeMission];
         [_activeMission,_themeIndex,_missionTheme] call FuMS_fnc_HC_MsnCtrl_StaticMissionControlLoop;
         if (FuMS_AdminControlsEnabled) then
         {
             private ["_onOff"];
             //FuMS_AdminThemeOn set[ _themeIndex,false];
-            _onOff = missionNameSpace getVariable format["FuMS_AdminThemeOn%1",FuMS_HCThemeControlID];
+            _onOff = missionNameSpace getVariable format["FuMS_AdminThemeOn%1",FuMS_ThemeControlID];
             _onOff set [_themeIndex, false];
-            missionNameSpace setVariable [format["FuMS_AdminThemeOn%1",FuMS_HCThemeControlID],_onOff];
-            FuMS_AdminUpdateData = [FuMS_HCThemeControlID, "AdminThemeOn", _onOff];
+            missionNameSpace setVariable [format["FuMS_AdminThemeOn%1",FuMS_ThemeControlID],_onOff];
+            // tell other admins of status change.
+            FuMS_AdminUpdateData = [FuMS_ThemeControlID, "AdminThemeOn", _onOff];
             publicVariableServer "FuMS_AdminUpdateData";
             //  staticcontrol loop will launch each mission on its own loop. So this theme loop can be shutdown.                                    
         };
@@ -207,9 +211,38 @@ while {true} do
                 _minRange = 0;
                 _waterMode = 0;// 0=not in water, 1=either, 2=in water
                 _terrainGradient = 2;  //10 is mountainous, 4 is pretty damn hilly too.
-                _shoreMode = 0; // 0= either, 1=on shore	
-                _pos = [FuMS_MapCenter, _minRange, FuMS_MapRange, _minRange, _waterMode, _terrainGradient, 
-                _shoreMode, FuMS_BlackList, FuMS_Defaultpos] call BIS_fnc_findSafePos;
+                _shoreMode = 0; // 0= either, 1=on shore	  
+                
+                private ["_attempts","_folksHome","_playerList","_plotPoleList"];
+                _attempts = 15;
+                while {_attempts > 0} do
+                {    
+                    // uncomment to force 'random' encounters to cluster for testing!
+                   // FuMS_MapCenter = [23525, 19325];
+                   // FuMS_MapRange = 200;
+                    _pos = [FuMS_MapCenter, _minRange, FuMS_MapRange, _minRange, _waterMode, _terrainGradient, 
+                    _shoreMode, FuMS_BlackList, FuMS_Defaultpos] call BIS_fnc_findSafePos;                
+                    _plotPoleList = nearestObjects [_pos, ["PlotPole_EPOCH"], 200];
+                    if (count _plotPoleList != 0 ) then // find a plot pole, check for players at home or base raiding.
+                    {
+                        diag_log format ["##ControlLoop: Plotpoles located:%1",_plotPoleList];
+                        _folksHome = false;
+                        {
+                            _playerList = _x nearEntities ["Man",200];
+                            diag_log format ["##ControlLoop: Players located:%1",_playerList];   
+                            if (count _playerList > 0) exitwith {_folksHome = true;}; // plot pole, but no players home!
+                        }foreach _plotPoleList;
+                        if (!_folksHome) then {_attempts=-1;};//no one home, position is good!
+                    }
+                    else {_attempts=-1;}; // no plot poles, so position is good.                
+                };
+                if (_attempts == 0) then
+                {
+                     diag_log format ["##ControlLoop: Unable to find good position for %1/%2, spawning near players: %3!!", _missionTheme, _activeMission, _playerList];
+                };
+
+                
+                                   
     //            diag_log format ["##ControlLoop: BiS_fnc_findSafePos = %1",_pos];
             }else
             {
@@ -243,13 +276,16 @@ while {true} do
                // _msnDone = [_dataFromServer, [_pos, _missionTheme, _themeIndex, 0, _missionNameOverride]] execVM "HC\Encounters\LogicBomb\MissionInit.sqf";                                     
 				_msnDone = [_dataFromServer, [_pos, _missionTheme, _themeIndex, 0, _missionNameOverride]] spawn FuMS_fnc_HC_MsnCtrl_MissionInit;
                 //_activeMissionFile = format ["HC\Encounters\%1\%2.sqf",_missionTheme,_missionFileName];
-                diag_log format ["##ControlLoop:  Theme: %1 : HC:%4 now starting mission %2 at %3",_missionTheme, _missionFileName, _pos, FuMS_HCThemeControlID];
+              //  diag_log format ["##ControlLoop:  Theme: %1 index:%4 : HC:%4 now starting mission %2 at %3",_missionTheme, _missionFileName, _pos, FuMS_ThemeControlID,_themeIndex];
+             //   diag_log format ["############"];
+             //   diag_log format ["############ThemeData: %1", FuMS_ThemeData];
+              //  diag_log format ["############BaseThemeData: %1", FuMS_BaseThemeData];
                 // setting _phaseID = 0 implies this mission is a 'root parent' (it has no parents itself!)
                 // _msnDone =[[_pos, _missionTheme, _themeIndex, 0, _missionNameOverride]] execVM _activeMissionFile;
                 _msnDoneList = _msnDoneList + [_msnDone];
             }else
             {
-                diag_log format ["##ControlLoop: Theme: %1 : HC:%3 skipped mission %2 check your Server .rpt file.",_missionTheme, _missionFileName, FuMS_HCThemeControlID];
+                diag_log format ["##ControlLoop: Theme: %1 : HC:%3 skipped mission %2 check your Server .rpt file.",_missionTheme, _missionFileName, FuMS_ThemeControlID];
             };
         }foreach _activeMission; 
         // wait for ALL missions started to complete, before restarting all missions that where started, or selecting a new one.

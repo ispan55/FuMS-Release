@@ -15,8 +15,15 @@ _mode = _this select 4;
 _veh = createVehicle [_type, _pos, _markers, _dist, _mode];
  
 //initialize everything that is needed on the server side!
-BuildVehicle_HC = _veh;
-publicVariableServer "BuildVehicle_HC";
+if (isServer) then
+{ 
+    [_veh] spawn FuMS_BuildVehicle_Server;
+}
+else
+{
+    FuMS_BuildVehicle_HC = _veh;
+    publicVariableServer "FuMS_BuildVehicle_HC";
+};
 
 ["Vehicles",_veh] call FuMS_fnc_HC_Util_HC_AddObject;
   _veh addEventHandler ["HandleDamage",

@@ -51,7 +51,7 @@ _themeData =
     //0=Quartz, 1=Garnet, 2=Citrine, 3=Amethyst, 4=Topaz, 5=Sapphire, 6=Onyx, 7=Emerald, 8=Ruby, 9=Jade
 			false, // silent Check-in =true: AI squads will NOT check-in with BaseOps when they spawn.
 			true, // AI death messages enabled.
-			1500, // Radio Range (for AI. BaseOps's high power radio has unlimited range)
+			1500, // Radio Range for AI and Base Ops.
 			"AVALANCHE",    // AI callsign, groups will be numbered..ie Bear01, Bear02
 			"HUMMER" // BaseOps call sign
 		],

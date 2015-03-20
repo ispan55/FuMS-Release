@@ -71,9 +71,12 @@ while {true} do
             FuMS_THEMEDATA set [0, _update];
             diag_log format ["REASON: %1",_msg];
             diag_log format ["-------------------------------------------------------------------------------------"];
-            diag_log format ["-------------------------------------------------------------------------------------"];      
-            FuMS_DataValidation = format ["%1",_file];
-            publicVariableServer "FuMS_DataValidation";                         	
+            diag_log format ["-------------------------------------------------------------------------------------"]; 
+            if (!isServer) then
+            {
+                FuMS_DataValidation = format ["%1",_file];
+                publicVariableServer "FuMS_DataValidation";                         	
+            };
         };               
     };
     if (true) exitWith{};
@@ -89,8 +92,11 @@ if (_critical and _abort) then
     diag_log format ["                         FuMS offline!"];       
     diag_log format ["REASON: %1",_msg];
     diag_log format ["-------------------------------------------------------------------------------------"];
-    diag_log format ["-------------------------------------------------------------------------------------"];      
-    FuMS_DataValidation = format ["%1",_file];
-    publicVariableServer "FuMS_DataValidation";  
+    diag_log format ["-------------------------------------------------------------------------------------"];   
+     if (!isServer) then
+    {
+        FuMS_DataValidation = format ["%1",_file];
+        publicVariableServer "FuMS_DataValidation";  
+    };
 }else { diag_log format ["------ Loot Data validation complete  %1secs-----", time - _start];_abort=false;};
 _abort

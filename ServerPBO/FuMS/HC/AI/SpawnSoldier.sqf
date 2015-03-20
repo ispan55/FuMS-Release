@@ -37,12 +37,49 @@ _typeFound = false;
     if (_type == _aiName) then
     {
         _typeFound = true;
- //       diag_log format ["##SpawnSoldier: Found:%1",_x];
+     //  diag_log format ["##SpawnSoldier: Found:%1",toupper _type];
         // Basic AI creation
-        _unit = _group createUnit["I_Soldier_EPOCH", _pos, [], 25, "FORM"];
+        if (toupper _type == "ZOMBIE") then
+        {        
+            //_unit = _group createUnit["A3L_Zombie", _pos, [], 25, "FORM"];
+            _unit = _group createUnit["I_Soldier_EPOCH", _pos, [], 25, "FORM"];    // swap when skins available            
+            _unit disableAI "FSM";
+            _unit disableAI "AUTOTARGET";
+            _unit disableAI "TARGET";
+            _unit setBehaviour "CARELESS";
+            _unit enableFatigue false;
+            _unit setVariable ["BIS_noCoreConversations", true];	
+            _unit setVariable ["BIS_enableRandomization", false]; // to permit skins to work
+           // _textureList = getObjectTextures _unit;
+          //  diag_log format ["##SpawnSoldier: Zombie: textures pre-skin:%1",_textureList];
+           // _unit setObjectTextureGlobal [0, "HC\Zombies\zskin.jpg"];
+            // _unit setObjectTextureGlobal [0, "zskin.jpg"];
+            //diag_log format ["##SpawnSoldier: Zombie: textures post-skin:%1",_textureList];
+            _unit setMimic "hurt";
+            _unit addEventHandler ["hit",
+            {
+                //[[_this select 0,"hurt"], "FuMS_INF_fnc_NextSound"] call BIS_fnc_MP;
+                [_this select 0, "hurt"] spawn FuMS_fnc_HC_Zombies_Logic_Znoise;
+		       (_this select 0) lookAt (_this select 1);
+		       _nextTarget = [] + [_this select 1];
+                missionNamespace setVariable [format ["%1_nextTarget",_this select 0], _nextTarget];
+            }];    
+            _unit addEventHandler ["firedNear",
+            {
+                diag_log format ["##Roam: %1 has heard a sound from %2",_this select 0, _this select 1];
+                if ((str (_this select 4)) in ["muzzle_snds_H","muzzle_snds_L","muzzle_snds_M","muzzle_snds_B","muzzle_snds_H_MG"]) exitwith {};
+                [_this select 0, _this select 1] spawn FuMS_fnc_HC_Zombies_Logic_Investigating;
+            }];
+
+        }
+        else
+        {
+            _unit = _group createUnit["I_Soldier_EPOCH", _pos, [], 25, "FORM"];
+        };
         // NOTE if I_Soldier_EPOCH type is changed, AllDeadorGone.sqf will need to be modified
         removeUniform _unit;
         removeHeadgear _unit;
+        removeVest _unit;
         removeAllWeapons _unit;
         _unit removeweapon "ItemWatch";
         _unit removeweapon "EpochRadio0";
@@ -53,6 +90,7 @@ _typeFound = false;
         // If a port to server only occurs, this will possibly need to be modified to MP to support server notifications.
         _unit addEventHandler ["killed",{[(_this select 0), (_this select 1)] spawn FuMS_fnc_HC_AI_AIKilled;}];
         _gear = [_x select 2] call FuMS_fnc_HC_Loot_GetChoice;if (_gear != "") then {_unit forceAddUniform _gear;};
+      //  if (toupper _type == "ZOMBIE")then { _unit setObjectTextureGlobal [0, "HC\Zombies\zskin.jpg"];};
         _gear = [_x select 3] call FuMS_fnc_HC_Loot_GetChoice;if (_gear != "") then {_unit addVest _gear;};
         _gear = [_x select 4] call FuMS_fnc_HC_Loot_GetChoice;if (_gear != "") then {_unit addHeadgear _gear;};
         _gear = [_x select 5] call FuMS_fnc_HC_Loot_GetChoice;if (_gear != "") then {_unit addBackpack _gear;};
@@ -150,7 +188,14 @@ _typeFound = false;
         // in water, so give them scuba gear!
         if (_flags select 0) then{if (surfaceIsWater _pos) then{_unit forceAddUniform "U_B_Wetsuit" ;_unit addVest "V_19_EPOCH";};};
         // give them unlimited ammo!
-        if (_flags select 1) then{_unit addeventhandler ["fired", {(_this select 0) setvehicleammo 1;}];};
+        if (_flags select 1) then
+        {
+            _unit addeventhandler ["fired",
+            {
+                 _gunDevice = vehicle (_this select 0); // if in a vehicle and firing, refill vehicle's ammo. _gunDevice is the AI if not in a vehicle.
+                _gunDevice setvehicleammo 1;
+            }];
+        };
         // give them some RPG's!
         _rpg = _flags select 2;
         if (!isNil "_rpg") then

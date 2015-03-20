@@ -15,7 +15,7 @@
 
 // OUTPUTS list of groups crated
 
- private ["_data","_side","_behaviour","_combat","_form","_units","_patrol","_spawnpos","_patternOptions","_silentcheckin","_validOptions",
+ private ["_data","_side","_behaviour","_combat","_form","_units","_patrol","_spawnpos","_patternOptions","_silentcheckin",
 "_aiLogic","_patrolSpawnLoc","_patrolPatrolLoc","_groupData","_groups","_eCenter","_group","_encounterSize","_themeIndex", "_missionName"];
 _groupData = _this select 0;
 _eCenter = _this select 1;
@@ -49,13 +49,14 @@ if (!isNil "_groupData") then
             _spawnpos =[_eCenter, _patrolSpawnLoc] call FuMS_fnc_HC_MsnCtrl_Util_XPos;
 			_side = toupper _side;
             switch (_side) do 
-            {
+            {                
                 case "RESISTANCE":{ _group = createGroup RESISTANCE;};//RESISTANCE
-				case "GUER": {_group = createGroup RESISTANCE;};
+                case "GUER": {_group = createGroup RESISTANCE;};
                 case "WEST": {_group = createGroup WEST;};
                 case "EAST": {_group = createGroup EAST;};
                 case "CIV" : {_group = createGroup CIVILIAN;};
-				case "CIVILIAN":{_group = createGroup CIVILIAN;};
+                case "CIVILIAN":{_group = createGroup CIVILIAN;};
+                case "ZOMBIE":{_group = createGroup EAST;};
                 default { _group = [];};
             };
             if (isNil "_group") exitWith {diag_log format ["#Spawn Group: ###ERROR###: Invalid _side: %1. No group created!",_side];};
@@ -76,9 +77,9 @@ if (!isNil "_groupData") then
                 [_x] spawn FuMS_fnc_HC_AI_Logic_AIEvac;
                 
             }foreach units _group;    
-            _validOptions = [_group] call FuMS_fnc_HC_Val_Msn_ValidateAILOGIC; 
-            if (_validOptions) then
-            {
+           // _validOptions = [_group] call FuMS_fnc_HC_Val_Msn_ValidateAILOGIC; 
+           // if (_validOptions) then
+           // {
                 switch (_patrol) do
                 {
                     private ["_patrolRadius","_patrolDuration"];
@@ -150,9 +151,14 @@ if (!isNil "_groupData") then
                         //[_group, _patrolPatrolLoc, _patternOptions] execVM "HC\Encounters\AI_Logic\PatrolRoute.sqf";
 						 [_group, _patrolPatrolLoc, _patternOptions] spawn FuMS_fnc_HC_AI_Logic_PatrolRoute;
                     };
-                    case "XCountry":{};
+                    case "ZOMBIE":
+                    {
+                        {
+                            [_x, _patrolPatrolLoc] spawn FuMS_fnc_HC_Zombies_Logic_Roam;
+                        }foreach units _group;                     
+                    };
                 };
-            };
+          //  };
             // _wp available here to permit further customization of the group's behavior at each waypoint.
             // _wp is set to the 1st waypiont the AI are to move too (ie not their spawn loc!))
             // ##For behavior that execVM's##: no wp modification is available.    

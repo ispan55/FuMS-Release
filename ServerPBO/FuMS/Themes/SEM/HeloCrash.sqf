@@ -64,7 +64,7 @@
     ],
     [    //LOSE Triggers and Controls
 //      ["HighUnitCount", "GUER",10,40,[0,0]] // 10 enemies get within 40m's of encounter center
-     ["TIMER", 1500]   // Encounter fails after 1500 seconds (25 minutes)
+ //    ["TIMER", 15000]   // Encounter fails after 15000 seconds (250 minutes)
     ],   
     [    //Phase01 Triggers and Controls
 //      ["Detected",0,0]    //Launch mission if any group or vehicle detects a player

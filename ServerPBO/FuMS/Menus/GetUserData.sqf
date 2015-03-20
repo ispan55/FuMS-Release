@@ -6,6 +6,7 @@ private ["_data","_pUID","_dataUID","_player"];
 _player = _this select 0;
 _data = [];
 _pUID = getPlayerUID _player;
+waitUntil {!isNil "FuMS_Users"};  // hold here at server start for list to become defined. 
 diag_log format ["##GetUserData   Player:%1 with Guid:%2",_player, _pUID];
 {
     diag_log format ["##GetUserData examining:%1",_x];

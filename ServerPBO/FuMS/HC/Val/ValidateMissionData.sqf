@@ -52,9 +52,12 @@ while {true} do
                             diag_log format ["                          Mission %1 in Theme %2 offline!", _mission, _theme];
                             diag_log format ["REASON: %1",_msg];
                             diag_log format ["-------------------------------------------------------------------------------------"];
-                            diag_log format ["-------------------------------------------------------------------------------------"];    
-                            FuMS_DataValidation = format[ "%1",_file];
-                            publicVariableServer "FuMS_DataValidation";                                                                                              
+                            diag_log format ["-------------------------------------------------------------------------------------"];   
+                             if (!isServer) then
+                            {
+                                FuMS_DataValidation = format[ "%1",_file];
+                                publicVariableServer "FuMS_DataValidation";     
+                            };
                         };
                     };
                 };
@@ -73,9 +76,12 @@ if (_critical) then
     diag_log format ["                         FuMS offline!"];       
     diag_log format ["REASON: %1",_msg];
     diag_log format ["-------------------------------------------------------------------------------------"];
-    diag_log format ["-------------------------------------------------------------------------------------"];      
-    FuMS_DataValidation = format ["%1",_file];
-    publicVariableServer "FuMS_DataValidation";      
+    diag_log format ["-------------------------------------------------------------------------------------"];     
+     if (!isServer) then
+    {
+        FuMS_DataValidation = format ["%1",_file];
+        publicVariableServer "FuMS_DataValidation";      
+    };
 }else { diag_log format ["------ Mission Data validation complete. %1secs----",time -_start];_abort=false;}; 
 _abort
 

@@ -14,6 +14,7 @@ _mission = (_missionList select _index ) select 1;
 _killMsg = [_index, "KILL"];
 _missionList set [_index, _killMsg];
 missionNamespace setVariable [format ["%1",_varName], _missionList];
+diag_log format ["##ActionKillMission: _slot:%3 _varName:%1  _missionList:%2",_varName,_missionList, _slot];
 FuMS_AdminUpdateData = [_slot, _var,_missionList, 0];
 publicVariableServer "FuMS_AdminUpdateData";
 

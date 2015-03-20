@@ -40,9 +40,10 @@ _varList = ["AdminActiveMissionList","AdminActiveThemes","AdminThemeOn","AdminAc
 
 FuMS_AdminIDs = [];
 
-"FuMS_AdminMenuOpen" addPublicVariableEventHandler
+FuMS_AdminMenuOpen_Server =
 {
-    _owner = _this select 1;
+    private ["_owner","_id","_varList","_slot"];
+       _owner = _this select 0;
     _id = owner _owner;
     _varList = ["AdminActiveMissionList","AdminActiveThemes","AdminThemeOn","AdminActiveThemesHC"];
     //spawnloc and ListofMissions removed. Not required in loop code.
@@ -60,6 +61,12 @@ FuMS_AdminIDs = [];
     };
 };
 
+
+"FuMS_AdminMenuOpen" addPublicVariableEventHandler
+{
+    [_this select 1] spawn FuMS_AdminMenuOpen_Server;
+};
+
 "FuMS_AdminUpdateData" addPublicVariableEventHandler
 {
     _var = _this select 1;
@@ -68,11 +75,17 @@ FuMS_AdminIDs = [];
     _data = _var select 2;
     _toHC = false;
     if (count _var == 4) then {_toHC = true;};
+    
+    diag_log format ["##FuMS:Menus:init.sqf  AdminUpdateData:%1",_var];
+    
     missionNamespace setVariable [format["FuMS_%1%2",_string,_slot],_data];
     if (_toHC) then
     {
-      //  diag_log format ["##Menus:init.sqf AdminUpdateData: To HC:%2 FuMS_%1%2   with :%3",_string,_slot,_data]; 
-        (FuMS_HCIDs select _slot) publicVariableClient format ["FuMS_%1%2",_string,_slot];
+        if (_slot != 0) then // value already set here on server, so only need to do something if going back to an HC.
+        {
+              diag_log format ["##Menus:init.sqf AdminUpdateData: To HC:%2 FuMS_%1%2   with :%3",_string,_slot,_data]; 
+            (FuMS_HCIDs select _slot) publicVariableClient format ["FuMS_%1%2",_string,_slot];
+        };
     }else
     {
      //   diag_log format ["##Menus:init.sqf AdminUpdateData: fromHC:%2 FuMS_%1%2   with :%3",_string,_slot,_data];
@@ -96,6 +109,7 @@ FuMS_AdminIDs = [];
 
 "FuMS_Admin_SpawnMission" addpublicVariableEventHandler
 {
+    // called by a player client.....
     FuMS_Admin_SpawnMissionHC=[];
     _data = _this select 1; //[Location, [ themeIndex, themeName, missionName  ], resource]
     _loc = _data select 0;
@@ -104,9 +118,17 @@ FuMS_AdminIDs = [];
     _themeName = _data2 select 1;
     _missionName = _data2 select 2;
     _resource = _data select 2;
-    
-    FuMS_Admin_SpawnMissionHC = [_loc, _themeIndex, _themeName, _missionName];
-    _resource publicVariableClient "FuMS_Admin_SpawnMissionHC";
+
+    if (_resource==0) then
+    {
+        // spawn it directly here! since request came in from a player client!
+        [[_loc, _themeIndex, _themeName, _missionName]] spawn FuMS_Admin_SpawnMissionHC_Server;
+    }
+    else
+    {    
+        FuMS_Admin_SpawnMissionHC = [_loc, _themeIndex, _themeName, _missionName];
+        _resource publicVariableClient "FuMS_Admin_SpawnMissionHC";
+    };
     //FuMS_AdminThemeSpawnLoc = _data select 3;
     //[_missionName, _themeIndex, _themeName] call FuMS_fnc_HC_MsnCtrl_StaticMissionControlLoop;
  //   diag_log format ["##FuMsnInit: PVEH: Admin Spawn to HC:%1 with Data : %2",_resource, FuMS_Admin_SpawnMissionHC];

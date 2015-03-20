@@ -14,7 +14,7 @@ _playerList = [];
 
 // _anchorName = format to be readable FuMS_Anchor
 //Get the player's name.   
-FuMS_anchorNameTxt = [FuMS_Anchor] call compile FuMS_fnc_HC_Util_GetShortName;
+FuMS_anchorNameTxt = [FuMS_Anchor] call FuMS_fnc_HC_Util_GetShortName;
 // _anchorLoc =  format location to be readable FuMS_AnchorLoc
 if (count FuMS_AnchorLoc > 1) then
 {
@@ -30,7 +30,7 @@ FuMS_PlayerList = [];
 for [{_ii=0},{_ii < count _playerList},{_ii=_ii+1}] do
 {
   //  diag_log format ["##SetAnchor: Adding %1 to the list",_playerList select _ii];
-    _playername = [_playerList select _ii] call compile FuMS_fnc_HC_Util_GetShortName;
+    _playername = [_playerList select _ii] call FuMS_fnc_HC_Util_GetShortName;
     // _playername is 'simple', with no group tags.        
    // diag_log format ["##SetAnchor: found player: %1",_playername];
     

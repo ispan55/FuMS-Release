@@ -88,8 +88,9 @@ FuMS_HCID's	array that holds the ID for each HC.  [0] is the server.
 FuMS_HCNames 'player shortname' for each HC.
 FuMS_HCThemeControlID = slot reference used to determine order in which an HC connects to the server.
 	this value is used by ThemeData.sqf in control of themes on specific HC's.
+FuMS_ThemeControlID = slot number being used by the HC. slot=0 for the server.	
 FuMS_HC_SlotNumber = variable used by HC to know its own ID.
-
+FuMS_FPSMinimum	scalar	minimum FPS below witch FuMS will not spawn missions/initialize connecting HC's.
 FuMS_AdminIDs
 FuMS_AdminNames
 
@@ -112,6 +113,13 @@ FuMS_anchorNameTxt, FuMS_anchorLocTxt, FuMS_missionTxt, FuMS_resourceTxt
 FuMS_ZombieNoise = GVEH used to pass zombie sounds data from HC to server, then server to clients that can hear the noise.
 				   
 
+BaseData:
+  FuMS_THEMEDATA
+  FuMS_LOOTDATA
+  FuMS_SOLDIERDATA
+  FuMS_ListofMissions
+  
+  FuMS_BaseListofMissions
 				   
    
    

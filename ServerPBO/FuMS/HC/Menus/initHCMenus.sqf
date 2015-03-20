@@ -18,10 +18,9 @@ _varList = ["AdminActiveMissionList","AdminActiveThemes","AdminThemeOn","AdminAc
     missionNamespace setVariable [format["%1%2%3",_prefix,_x,_slot],[]];
 }foreach _varList;
 
-
-"FuMS_Admin_SpawnMissionHC" addpublicVariableEventHandler   
+FuMS_Admin_SpawnMissionHC_Server =
 {
-    _data = _this select 1;
+     _data = _this select 0;
     _loc = _data select 0;
     _themeIndex = _data select 1;
     _themeName = _data select 2;
@@ -29,5 +28,12 @@ _varList = ["AdminActiveMissionList","AdminActiveThemes","AdminThemeOn","AdminAc
     if (isNil "_loc") then {FuMS_AdminSPAWNLOC = [];}
     else {FuMS_AdminSPAWNLOC = _loc;};
     diag_log format ["##initHCMenus:  %1 %2 %3 at %4",_themeIndex, _themeName, _missionName, FuMS_AdminSPAWNLOC];
-    [[_missionName],_themeIndex,_themeName, true] spawn FuMS_fnc_HC_MsnCtrl_StaticMissionControlLoop;        
+    [[_missionName],_themeIndex,_themeName, true] spawn FuMS_fnc_HC_MsnCtrl_StaticMissionControlLoop;    
+};
+
+
+"FuMS_Admin_SpawnMissionHC" addpublicVariableEventHandler   
+{
+    [_this select 1] spawn FuMS_Admin_SpawnMissionHC_Server;
+
 };

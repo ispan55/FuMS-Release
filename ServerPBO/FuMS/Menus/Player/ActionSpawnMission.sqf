@@ -18,6 +18,7 @@ else
 	FuMS_AnchorLoc = getPos FuMS_Anchor;
 	systemChat format["FuMS:Admin:Mission ,%1 was started using Admin set location.",FuMS_MissionSet];
 };
+
 	FuMS_Admin_SpawnMission = [FuMS_AnchorLoc, FuMS_MissionSet, FuMS_MissionResource];
 //	diag_log format ["##ActionSpawnMission: passing %1 to server",FuMS_Admin_SpawnMission];
 	publicVariableServer "FuMS_Admin_SpawnMission";

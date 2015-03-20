@@ -5,11 +5,15 @@
 private ["_player","_id"];
 _player = _this select 0;
 diag_log format ["##InitMenu: Checking for Admin Access for %1",_player];
+_id = owner _player;
+// Pass for ALL PLAYERS!
+_id publicVariableClient "FuMS_str_HC_Zombies_INF_fnc_nextSound";
+
 
 if ([_player] call FuMS_HasAdminAccess) then
 {
   //  diag_log format ["##InitMenu: %1 found, passing scripts!",_player];
-	_id = owner _player;
+//	_id = owner _player;
     _adminQuePos = count FuMS_AdminIDs;
     FuMS_AdminIDs pushback _id;
 //    FuMS_AdminNames pushback [_player] FuMS_GetShortName;
@@ -36,7 +40,7 @@ if ([_player] call FuMS_HasAdminAccess) then
     _id publicVariableClient "FuMS_fnc_Menu_Action_KillMission";
     _id publicVariableClient "FuMS_fnc_Menu_Action_ToggleTheme";
     _id publicVariableClient "FuMS_fnc_Menu_Action_SetAnchor";
-    _id publicVariableClient "FuMS_fnc_HC_Util_GetShortName";
+    _id publicVariableClient "FuMS_str_HC_Util_GetShortName";
     _id publicVariableClient "FuMS_AdminListofMissions"; //This is defined in BuildThemeMissionList.sqf
  //   diag_log format ["##InitMenu: AdminListofMissions: %1",FuMS_AdminListofMissions];
                  //[themeIndex, themeName, missionName]

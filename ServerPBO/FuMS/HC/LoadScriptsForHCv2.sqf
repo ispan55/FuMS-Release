@@ -146,8 +146,7 @@ _scripts =
                     "MissionBuildingConfig.sqf", 
                     "MissionLootConfig.sqf", 
                     "MissionTriggerConfig.sqf", 
-                    "MissionVehicleConfiguration.sqf", 
-                    "ValidateAILogic.sqf",
+                    "MissionVehicleConfiguration.sqf",                   
                     "ValidateBuildings.sqf", 
                     "VerifyAILogic.sqf",
                     "VerifyMission.sqf"
@@ -160,7 +159,25 @@ _scripts =
                     "VerifyLocation.sqf"
                 ]
             ]
+        ],
+        [
+            "Zombies",
+            [
+                "Logic",
+                [
+                    "attack.sqf",
+                    "contact.sqf",
+                    "investigating.sqf",
+                    "roam.sqf",
+                    "roaming.sqf",
+                    "ZNearestTarget.sqf",
+                    "Znoise.sqf"
+                ]
+            ],
+            "INF_fnc_nextSound.sqf",
+            "init.sqf"
         ]
+    
 ];
                             
 FuMS_GetVarName =
@@ -219,7 +236,7 @@ FuMS_ProcessVarName =
             {
                 _var = format ["%1%2",_var, toString [_x]];
             };
-			if (_pos == 4) then { _var = format ["%1%2",_var,"_fnc"];};
+			if (_pos == 4) then { _var = format ["%1%2",_var,"_str"];};
         };
         _pos = _pos + 1;
     }foreach _ary;

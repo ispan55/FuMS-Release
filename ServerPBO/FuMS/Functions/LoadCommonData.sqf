@@ -19,8 +19,17 @@ FuMS_THEMEDATA = []; // Array containing data from \'themename'\ThemeData.sqf
 FuMS_LOOTDATA = [];  // Array containing data from \'themename'\LootData.sqf
 FuMS_SOLDIERDATA = []; // Array containing data from \'themename'\SoldierData.sqf    
 FuMS_ListofMissions = []; // Array of ["Name", "string of preprocessed code"];
+// 4 arrays above used by Server for running FuMS server side!
+FuMS_BaseTHEMEDATA = [];
+FuMS_BaseLOOTDATA = [];
+FuMS_BaseSOLDIERDATA = [];
+FuMS_BaseListofMissions = [];
+// 4 arrays above used as data source for info passed to connecting headlesss clients
+// ASSERT above 4 arrays will be static based upon data read in from files!
+
+
 FuMS_ActiveThemesHC = []; // scalar value of what HC the theme should run on...
-FuMS_ActiveThemes = [];
+FuMS_ActiveThemes = []; // array list of ["theme", configoption] pairs
 
 _themeListData = FuMS_ServerData select 3;
 {
@@ -59,6 +68,7 @@ _themeNumber = 0;
         };
         
         [_themeNumber] call FuMS_BuildThemeMissionList; 
+        FuMS_BaseListofMissions = +FuMS_ListofMissions;
         {
             diag_log format ["##LoadCommonData: %1:%2",_themeNumber,_x];
         }foreach (FuMS_ListofMissions select _themeNumber);
@@ -68,24 +78,28 @@ _themeNumber = 0;
     };
     _themeNumber = _themeNumber + 1;
 }foreach FuMS_ActiveThemes;
+FuMS_BaseTHEMEDATA = +FuMS_THEMEDATA;
+
+diag_log format ["##LoadCommonData: THEMEDATA: %1", FuMS_BaseTHEMEDATA];
 
 if (_themeNumber == 0 ) exitWith { diag_log format ["FuMsnInit:  ERROR: NO Themes Found! Exiting!"];};
 
 _hold = [_themeNumber] execVM format ["\FuMS\Themes\GlobalLootData.sqf"];
 if (isNil "_hold") exitWith { diag_log format ["##FuMsnInit: ERROR in GlobalLootData.sqf: Exiting!"];};
 waitUntil { scriptDone _hold};
+FuMS_BaseLOOTDATA = +FuMS_LOOTDATA;
 //diag_log format ["##FuMsnInit: #setpos:%2 GlobalLootData: %1 ",FuMS_LOOTDATA select _themeNumber, _themeNumber];
 
 _hold = [_themeNumber] execVM format ["\FuMS\Themes\GlobalSoldierData.sqf"];
 if (isNil "_hold") exitWith { diag_log format ["##FuMsnInit: ERROR in GlobalSoldierData.sqf: Exiting!"];};
 waitUntil { scriptDone _hold};
+FuMS_BaseSOLDIERDATA = +FuMS_SOLDIERDATA;
 //diag_log format ["##FuMsnInit: #setpos:%2 GlobalSoldierData: %1",FuMS_SOLDIERDATA select _themeNumber, _themeNumber];
 
 FuMS_GlobalDataIndex = _themeNumber;	
 FuMS_FPSMinimum = (FuMS_ServerData select 0 ) select 3;
 FuMS_FPSVariance = .3; // max 30% fps drop acceptable
-
-
+FuMS_VehicleZeroAmmo = (FuMS_ServerData select 6) select 5;
 
 _hold = []execVM "\FuMS\Themes\AdminData.sqf";
 waitUntil {ScriptDone _hold};

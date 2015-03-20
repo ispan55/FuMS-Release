@@ -30,6 +30,7 @@ _themeData =
 			//["WaterMission"],
 		// ["TestHeloPatrol","Stavros"],
 		//["MazeTest",[23587,18368.5]],
+          ["NukeDevice"],
 		 ["MazeTest2"]
 		// ["MazeTest2",[23300,17800]],
 		// ["MazeTest2",[15500,20000]]

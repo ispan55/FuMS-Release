@@ -38,8 +38,8 @@ if ( _missionNameOverride != "") then
 }
 else { _curMission = _missionArea select 0;};
 _encounterSize = _missionArea select 1;
-_mkr1 = format ["%4%3_%1_%2_1",_missionTheme, _curMission,_eCenter,FuMS_HC_SlotNumber];
-_mkr2 = format ["%4%3_%1_%2_2",_missionTheme, _curMission,_eCenter,FuMS_HC_SlotNumber];
+_mkr1 = format ["%3_%1_%2_1",_missionTheme select 0, _curMission, _eCenter,FuMS_HC_SlotNumber];
+_mkr2 = format ["%3_%1_%2_2",_missionTheme select 0, _curMission ,_eCenter,FuMS_HC_SlotNumber];
 createMarker [_mkr1, [0,0]];
 createMarker [_mkr2, [0,0]];
 
@@ -190,7 +190,7 @@ diag_log format ["##MissionInit: Preparing to delete loot: %1",_boxes];
                         };
                     }else
                     {                       
-                        ["Vehicles",_x] call FuMS_fnc_HC_Utili_HC_RemoveObject;
+                        ["Vehicles",_x] call FuMS_fnc_HC_Util_HC_RemoveObject;
                         deleteVehicle _x;
                     };
                 };

@@ -33,17 +33,20 @@ FuMS_ServerData =
         // ActiveThemes
         // A folder matching the names below needs to exist in the ..\Encounters folder.
         // use this block to easily turn off/on your various mission sets.
+        // -1 = all HC's.  0= Server only,  1=1st HC to connect, 2=2nd, etc.
+        //  Note: Server option not currenty operational.
         // ["StressTest",-1],
-        ["Test",-1],
-        ["HeloPatrols",-1],
+        ["Test",1],
+        ["HeloPatrols",1],
         ["SEM",-1],
-        ["TownRaid",-1],
+        ["TownRaid",1],
         ["Small",-1],
-        ["Aquatic",-1]
+        ["Aquatic",-1],
+        ["MadScience",-1]
     ],
     [  // Event and AI Radio messsage behavior
         true, // EnableRadioChatterSystem: turns on the system, allowing below options to function
-        true, // EnableRadioAudio: turns on 'audio' effects for radio chatter
+        false, // EnableRadioAudio: turns on 'audio' effects for radio chatter
         true, // RadioRequired: if false, messages are heard without a radio on the player's belt.
         false, // RadioFollowTheme: Conforms with Theme radio channel choices. False:any radio works for all channels.
         true, 800 // EnableAIChatter: enables random radio chatter between AI when players get within the specified range (meters) as default.
@@ -57,19 +60,19 @@ FuMS_ServerData =
 		      //http://forums.bistudio.com/showthread.php?187450-VCOM-AI-Driving-Mod
 		  //Skill Override options:
 		  // Values here will override values for individual units defined in SoldierData.
-		  // values ranges 1.0 -0.0      0= uses SoldierData setting.
+		  // values ranges 1.0 -0.0      0= uses GlobalSoldierData.sqf setting for each soldier.
 		  // defaults 'stock' ai based around values indicated below.
 		  // if unique AI are desired, modify these numbers in GlobalSoldierData.sqf or SoldierData.sqf as applicable.
 		  // values here OVERRIDE any value set in the other files! (value of zero = use other files values).
 		[
-		0, // aimingAccuracy .05 : target lead, bullet drop, recoil
-		0,	// aimingShake .9 : how steady AI can hold a weapon
-		0,	// aimingSpeed .1 : how quick AI can rotate and stabilize its aim and shoot.
-		0,	// spotDistance .5 : affects ability to spot visually and audibly and the accuracy of the information
-		0,	// spotTime .5 : affects how quick AI reacts to death, damage or observing an enemy.
-		0,	// courage .1 : affects unit's subordinates morale
-		0,	// reloadSpeed .5 :affects delay between weapon switching and reloading
-		0	// commanding .5 : how quickly recognized targets are shared with the AI's group.
+		.8, // aimingAccuracy .05 : target lead, bullet drop, recoil
+		.9,	// aimingShake .9 : how steady AI can hold a weapon
+		.5,	// aimingSpeed .1 : how quick AI can rotate and stabilize its aim and shoot.
+		.9,	// spotDistance .5 : affects ability to spot visually and audibly and the accuracy of the information
+		.8,	// spotTime .5 : affects how quick AI reacts to death, damage or observing an enemy.
+		.9,	// courage .1 : affects unit's subordinates morale
+		.5,	// reloadSpeed .5 :affects delay between weapon switching and reloading
+		.8	// commanding .5 : how quickly recognized targets are shared with the AI's group.
 		]	
 
 	],
@@ -88,7 +91,8 @@ FuMS_ServerData =
 		["B_supplyCrate_F","O_supplyCrate_F","I_supplyCrate_F","CargoNet_01_box_F"],
 		// List of vehicles prohibited to use by players. This list allows them to be on the map for AI use
 		// but will prevent players from entering the vehicle.
-		["I_UGV_01_rcws_F"]
+		["I_UGV_01_rcws_F"],
+          true  //VehicleAmmoFlag true= sets vehicle ammo to zero when an AI vehicle is 1st occupied by a player.
 	]
 
 ];

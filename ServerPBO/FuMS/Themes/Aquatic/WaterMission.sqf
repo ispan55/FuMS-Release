@@ -5,7 +5,7 @@
 
 [
 ["WaterMission", 100], // Mission Title NOSPACES!, and encounter radius
-["Ship Wreck","mil_objective","ELLIPSE","ColorBlue","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
+["Ship Wreck","c_ship","ELLIPSE","ColorBlue","FDiagonal",200],    // Map Markers ["MapText", "SHAPE", "COLOR", "FILL", size];
    // type is "mil_objective"
 [  
     [// NOTIFICATION Messages and Map display Control.
