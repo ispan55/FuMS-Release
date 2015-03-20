@@ -1,4 +1,43 @@
 #Fulcrum Mission System (FuMS)
+v1.5
+-----v1.5-------- 
++CrazedClone AI Logic added
+ based upon Gulozwood scripting.
+ 
+ +MadScience Theme
+  At server start 9 random towns are chosen as infected zones.
+  When a player gets near the center of an infected town, the crazed clones materialize. crazed clones WILL attack AI too.
+
+  +SafeBase Code added
+  When an encounter is created at a random location, FuMS now checks for plot poles within 200m of the location. If any are found
+  FuMS then searches for players within 200m of each plot pole. If players are found, a new position is generated. If after
+  15 attempts a good position can not be found, the mission will spawn ignoring these plot pole, player checks.
+  
+ +AI controlled vehicle ammo now follows AI's unlimitedAmmo flag defined in GlobalSoldierData.sqf
+ +BaseServer Option:
+     Added option in Loot section to zero out vehicle ammo the 1st time players occupy/capture an AI controlled vehicle.
+ 
+ +ServerSide FuMS enabled!
+ Due to the large potential load that FuMS can place on a server, some of the themes packaged with FuMS have been set to HC only. The 
+ following themes will spawn as part of the default config. If additional themes are desired the BaseServer.sqf will need to be modified
+ by an admin:
+      SEM, Small, Aquatic, MadScience - default to run on Server AND HC's
+	  HeloPatrols, TownRaid, Test - default to run on 1st HC's only
+	  
+Note: ServerSide FuMS support is ENABLED by default. To turn OFF Serverside FuMS change line 14 of \FuMS\init.sqf to:
+   FuMS_ServerFuMSEnable = false;
+      OR ensure no theme is configured to run on the server (no values of -1 or 0 in BaseServer.sqf). 
+	  Default to ENABLED was set to support a larger range of players.
+   
+Note: For initial SA map notification for the MadScience theme is on to allow admins to see how things will look, and to locate towns 
+to do their own testing. It is recommended that when you move to a live server to set line 14 of \FuMS\Themes\MadScience\SpawnTrigger.sqf
+to false to hide the 'infected' towns from players.
+
+Note: Themes set with a -1 value in BaseServer.sqf will run on BOTH the server and all HC's that connect to the server. This will result
+in dramatic scaling of the number of missions running. As an example, the Aquatic theme spawns 3 water encounters and maintains 3 up at all times.
+This theme is configured to run on both the Server and HC's, so when an HC conncect, another 3 (total 6) aquatic encounters will be maintained.
+If/when the HC disconnects, FuMS will reduce the number of aquatic missions back down to 3.
+  Basically Themes with -1 set will run in duplicate, once on the server, once on the HC. (see BaseServer.sqf)
 v1.4
 + HC disconnect/reconnect greatly optimized!
 + Multiple Headless Client support. FuMS now properly cleans up AI when controlled from multiple HC's.
