@@ -10,3 +10,10 @@ scripts.txt
 
 publicvariable.txt
 3 "" !="FuMS_"
+
+publicvariableval.txt
+5 "call"
+5 "spawn" !"SpawnTrigger"
+
+NOTE: If you have themes or missions which contain 'spawn' or 'call' they will trigger BE if you attempt to kill those missions through the admin tool. Either add additional filters to 'publicvariableval.txt' or don't use themes/missions containing 'spawn' or 'call' in their names.
+
